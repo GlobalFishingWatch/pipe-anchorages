@@ -14,7 +14,7 @@ class AnchorageOptions(PipelineOptions):
 
         required.add_argument('--message_table', required=True,
                             help='Messages table to pull data from')
-        required.add_argument('--segments_table', required=True,
+        required.add_argument('--segments_table',
                             help='Segments table to pull data from')
         required.add_argument('--output_table', required=True,
                             help='Output table to write results to.')
