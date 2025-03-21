@@ -132,7 +132,7 @@ class CreatePortVisits(beam.PTransform):
                 visit_events = visit_events[-1:]
             elif evt.event_type == "PORT_ENTRY":
                 # We should no longer be able to get a PORT_ENTRY in the midst of events
-                assert len(visit_events) == 1
+                assert len(visit_events) == 1, len(visit_events)
         # Yield any open visits when we reach end of track
         yield from self.possibly_yield_visit(id_, visit_events)
 

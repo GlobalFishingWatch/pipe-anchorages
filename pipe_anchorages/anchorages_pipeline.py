@@ -3,7 +3,7 @@ import logging
 
 import apache_beam as beam
 from apache_beam.options.pipeline_options import GoogleCloudOptions
-from apache_beam.runners import PipelineState
+from apache_beam.runners.runner import PipelineState
 from pipe_anchorages import common as cmn
 from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
 from pipe_anchorages.options.anchorage_options import AnchorageOptions
@@ -143,10 +143,10 @@ def run(options):
 
     queries = create_queries(known_args)
 
-    p = beam.Pipeline(options=options)
+    p = beam.Pipeline(options=options)  # pyright: ignore
 
-    fishing_vessels = p | beam.io.ReadFromText(known_args.fishing_ssvid_list)
-    fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
+    fishing_vessels = p | beam.io.ReadFromText(known_args.fishing_ssvid_list) # pyright: ignore
+    fishing_vessel_list = beam.pvalue.AsList(fishing_vessels) # pyright: ignore
 
     source = [
         (p | f"Source_{i}" >> QuerySource(query, cloud_options))
@@ -167,7 +167,7 @@ def run(options):
         fishing_vessel_list,
     )
 
-    (
+    _ = (
         anchorage_points
         | AnchorageSink(known_args.output_table, known_args, cloud_options)
     )

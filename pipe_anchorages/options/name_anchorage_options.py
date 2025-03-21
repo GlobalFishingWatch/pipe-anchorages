@@ -25,5 +25,5 @@ class NameAnchorageOptions(PipelineOptions):
         optional.add_argument(
             "--shapefile",
             default="EEZ_Land_v3_202030.shp",
-            help="path to configuration file",
+            help="path to EEZ shapefile file",
         )
