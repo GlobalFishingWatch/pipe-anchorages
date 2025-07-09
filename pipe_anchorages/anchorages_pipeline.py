@@ -51,14 +51,14 @@ def create_queries(args, thin_to_m=1):
             WHERE ndx = 1
         )
 
-        SELECT ssvid as ident,
-               lat,
-               lon,
-               timestamp,
-               null as destination,
-               speed
-        FROM position_messages
-        """
+    SELECT ssvid as ident,
+            lat,
+            lon,
+            timestamp,
+            null as destination,
+            speed
+    FROM position_messages
+    """
     else:
         template = """
         WITH
@@ -103,16 +103,16 @@ def create_queries(args, thin_to_m=1):
             WHERE ndx = 1
         )
 
-        SELECT ssvid as ident,
-               lat,
-               lon,
-               timestamp,
-               destination,
-               speed
-        FROM position_messages
-        JOIN destinations
-        USING (seg_id, table_suffix)
-        """
+    SELECT ssvid as ident,
+            lat,
+            lon,
+            timestamp,
+            destination,
+            speed
+    FROM position_messages
+    JOIN destinations
+    USING (seg_id, table_suffix)
+    """
     start_window = datetime.datetime.strptime(args.start_date, '%Y-%m-%d')
     end_window = datetime.datetime.strptime(args.end_date, '%Y-%m-%d')
 
@@ -149,10 +149,10 @@ def run(options):
 
     queries = create_queries(known_args)
 
-    p = beam.Pipeline(options=options)  # pyright: ignore
+    p = beam.Pipeline(options=options)
 
-    fishing_vessels = p | beam.io.ReadFromText(known_args.fishing_ssvid_list) # pyright: ignore
-    fishing_vessel_list = beam.pvalue.AsList(fishing_vessels) # pyright: ignore
+    fishing_vessels = p | beam.io.ReadFromText(known_args.fishing_ssvid_list)
+    fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
 
     source = [
         (p | f"Source_{i}" >> QuerySource(query, cloud_options))
@@ -163,7 +163,7 @@ def run(options):
         source
         | cmn.CreateVesselRecords()
         | "FilterOutInfo" >> beam.Filter(has_location_record)
-        | cmn.CreateTaggedRecords(config['min_required_positions'])
+        | cmn.CreateTaggedRecords(config["min_required_positions"])
     )
 
     anchorage_points = tagged_records | FindAnchoragePoints(
