@@ -104,17 +104,17 @@ def create_queries(args, thin_to_m=1):
         )
 
     SELECT ssvid as ident,
-            lat,
-            lon,
-            timestamp,
-            destination,
-            speed
+           lat,
+           lon,
+           timestamp,
+           destination,
+           speed
     FROM position_messages
     JOIN destinations
     USING (seg_id, table_suffix)
     """
-    start_window = datetime.datetime.strptime(args.start_date, '%Y-%m-%d')
-    end_window = datetime.datetime.strptime(args.end_date, '%Y-%m-%d')
+    start_window = datetime.datetime.strptime(args.start_date, "%Y-%m-%d")
+    end_window = datetime.datetime.strptime(args.end_date, "%Y-%m-%d")
 
     queries = []
     start = start_window
