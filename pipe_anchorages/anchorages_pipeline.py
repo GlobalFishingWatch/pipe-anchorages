@@ -167,18 +167,6 @@ def run(options):
     )
 
     anchorage_points = tagged_records | FindAnchoragePoints(
-        datetime.timedelta(minutes=config['stationary_period_min_duration_minutes']),
-        config['stationary_period_max_distance_km'],
-        config['min_unique_vessels_for_anchorage'],
-        fishing_vessel_list,
-    )
-
-    _ = (
-        anchorage_points
-        | AnchorageSink(known_args.output_table, known_args, cloud_options)
-    )
-
-    anchorage_points = tagged_records | FindAnchoragePoints(
         datetime.timedelta(minutes=config["stationary_period_min_duration_minutes"]),
         config["stationary_period_max_distance_km"],
         config["min_unique_vessels_for_anchorage"],
