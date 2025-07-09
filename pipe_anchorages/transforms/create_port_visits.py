@@ -31,9 +31,7 @@ class CreatePortVisits(beam.PTransform):
 
     def compute_confidence(self, events):
         event_types = set(x.event_type for x in events)
-        has_stop = ("PORT_STOP_BEGIN" in event_types) or (
-            "PORT_STOP_END" in event_types
-        )
+        has_stop = ("PORT_STOP_BEGIN" in event_types) or ("PORT_STOP_END" in event_types)
         has_gap = ("PORT_GAP_BEGIN" in event_types) or ("PORT_GAP_END" in event_types)
         has_entry = "PORT_ENTRY" in event_types
         has_exit = "PORT_EXIT" in event_types
@@ -45,9 +43,7 @@ class CreatePortVisits(beam.PTransform):
             return 2
         if has_entry or has_exit:
             return 1
-        raise ValueError(
-            f"`events` missing expected event types. Has {set(event_types)}"
-        )
+        raise ValueError(f"`events` missing expected event types. Has {set(event_types)}")
 
     def prune_events(self, events):
         if len(events) > self.MAX_EMITTED_EVENTS:
@@ -63,9 +59,9 @@ class CreatePortVisits(beam.PTransform):
             visit_events[0].lon,
             visit_events[0].lat,
         )
-        duration_hrs = (
-            visit_events[-1].timestamp - visit_events[0].timestamp
-        ).total_seconds() / (60 * 60)
+        duration_hrs = (visit_events[-1].timestamp - visit_events[0].timestamp).total_seconds() / (
+            60 * 60
+        )
         return PortVisit(
             visit_id=hashlib.md5(six.ensure_binary(raw_visit_id)).hexdigest(),
             ssvid=str(ssvid),
@@ -113,28 +109,20 @@ class CreatePortVisits(beam.PTransform):
 
         visit_events = []
         for i, evt in enumerate(ordered_events):
+            has_large_gap = (
+                self.has_large_interseg_dist(visit_events[-1], evt) if visit_events else False
+            )
+            if evt.event_type in "PORT_ENTRY" or has_large_gap:
+                yield from self.possibly_yield_visit(id_, visit_events)
+                visit_events = []
             if evt.event_type not in self.EVENT_TYPES:
                 logging.error(f'Unknown event type "{evt.event_type}", discarding.')
                 continue
-
-            if visit_events:
-                has_large_gap = self.has_large_interseg_dist(visit_events[-1], evt)
-            else:
-                has_large_gap = False
-
             visit_events.append(evt)
-
-            if evt.event_type == "PORT_EXIT":
+            is_last = i == len(ordered_events) - 1
+            if (evt.event_type == "PORT_EXIT") or is_last:
                 yield from self.possibly_yield_visit(id_, visit_events)
                 visit_events = []
-            elif has_large_gap:
-                yield from self.possibly_yield_visit(id_, visit_events[:-1])
-                visit_events = visit_events[-1:]
-            elif evt.event_type == "PORT_ENTRY":
-                # We should no longer be able to get a PORT_ENTRY in the midst of events
-                assert len(visit_events) == 1, len(visit_events)
-        # Yield any open visits when we reach end of track
-        yield from self.possibly_yield_visit(id_, visit_events)
 
     def expand(self, grouped_records):
         return grouped_records | beam.FlatMap(self.create_port_visits)

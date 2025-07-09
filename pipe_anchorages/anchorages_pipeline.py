@@ -11,6 +11,12 @@ from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.transforms.sink import AnchorageSink
 from pipe_anchorages.transforms.source import QuerySource
 
+from pipe_anchorages import common as cmn
+from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
+from pipe_anchorages.options.anchorage_options import AnchorageOptions
+from pipe_anchorages.records import VesselLocationRecord
+from pipe_anchorages.transforms.sink import AnchorageSink
+from pipe_anchorages.transforms.source import QuerySource
 
 def create_queries(args, thin_to_m=1):
     if args.segments_table is None:
@@ -172,16 +178,20 @@ def run(options):
         | AnchorageSink(known_args.output_table, known_args, cloud_options)
     )
 
+    anchorage_points = tagged_records | FindAnchoragePoints(
+        datetime.timedelta(minutes=config["stationary_period_min_duration_minutes"]),
+        config["stationary_period_max_distance_km"],
+        config["min_unique_vessels_for_anchorage"],
+        fishing_vessel_list,
+    )
+
+    (anchorage_points | AnchorageSink(known_args.output_table, known_args, cloud_options))
+
     result = p.run()
 
     success_states = set(
-        [
-            PipelineState.DONE,
-            PipelineState.RUNNING,
-            PipelineState.UNKNOWN,
-            PipelineState.PENDING,
-        ]
+        [PipelineState.DONE, PipelineState.RUNNING, PipelineState.UNKNOWN, PipelineState.PENDING]
     )
 
-    logging.info('returning with result.state=%s' % result.state)
+    logging.info("returning with result.state=%s" % result.state)
     return 0 if result.state in success_states else 1
