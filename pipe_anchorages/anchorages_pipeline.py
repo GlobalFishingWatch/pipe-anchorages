@@ -123,7 +123,7 @@ def create_queries(args, thin_to_m=1):
         end = min(start + datetime.timedelta(days=999), end_window)
         queries.append(
             template.format(
-                position_table=args.message_table,
+                position_table=args.messages_table,
                 segment_table=args.segments_table,
                 start=start,
                 end=end,

@@ -7,6 +7,7 @@ import apache_beam as beam
 import s2sphere
 import six
 import yaml
+import pytz
 
 from .records import InvalidRecord, VesselInfoRecord, VesselLocationRecord, VesselRecord
 
@@ -72,7 +73,7 @@ class CreateTaggedRecords(beam.PTransform):
         if not self.thin:
             return item
         ident, records = item
-        last_timestamp = datetime.datetime(datetime.MINYEAR, 1, 1)
+        last_timestamp = datetime.datetime(datetime.MINYEAR, 1, 1, tzinfo=pytz.utc)
         thinned = []
         for rcd in records:
             if (rcd.timestamp - last_timestamp) >= self.FIVE_MINUTES:
