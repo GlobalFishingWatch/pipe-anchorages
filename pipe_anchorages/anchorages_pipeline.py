@@ -11,12 +11,6 @@ from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.transforms.sink import AnchorageSink
 from pipe_anchorages.transforms.source import QuerySource
 
-from pipe_anchorages import common as cmn
-from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
-from pipe_anchorages.options.anchorage_options import AnchorageOptions
-from pipe_anchorages.records import VesselLocationRecord
-from pipe_anchorages.transforms.sink import AnchorageSink
-from pipe_anchorages.transforms.source import QuerySource
 
 def create_queries(args, thin_to_m=1):
     if args.segments_table is None:
