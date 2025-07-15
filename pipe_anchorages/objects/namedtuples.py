@@ -5,8 +5,7 @@ import datetime
 import pytz
 
 
-epoch = datetime.datetime.utcfromtimestamp(0).replace(tzinfo=pytz.utc)
-
+epoch = datetime.datetime.fromtimestamp(0, datetime.UTC)
 
 def datetime_to_s(x):
     return (x - epoch).total_seconds()

@@ -786,7 +786,7 @@ expected = [
 
 
 def evt_from_dict(x):
-    x["timestamp"] = datetime.datetime.utcfromtimestamp(x["timestamp"]).replace(tzinfo=pytz.utc)
+    x["timestamp"] = datetime.datetime.fromtimestamp(x["timestamp"], datetime.UTC)
     return VisitEvent(**x)
 
 

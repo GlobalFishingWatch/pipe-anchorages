@@ -27,68 +27,47 @@ def test_create_queries_1():
     )
     assert create_queries(args) == [
         """
-    WITH
+        WITH
 
-    destinations AS (
-      SELECT seg_id, _TABLE_SUFFIX AS table_suffix,
-          CASE
-            WHEN ARRAY_LENGTH(destinations) = 0 THEN NULL
-            ELSE (SELECT MAX(value)
-                  OVER (ORDER BY count DESC)
-                  FROM UNNEST(destinations)
-                  LIMIT 1)
-            END AS destination
-      FROM `SEGMENTS_TABLE_*`
-      WHERE _TABLE_SUFFIX BETWEEN '20120501' AND '20150125'
-    ),
+        destinations AS (
+          SELECT seg_id, _TABLE_SUFFIX AS table_suffix,
+              CASE
+                WHEN ARRAY_LENGTH(cumulative_destinations) = 0 THEN NULL
+                ELSE (SELECT MAX(destination)
+                      OVER (ORDER BY count DESC)
+                      FROM UNNEST(cumulative_destinations)
+                      LIMIT 1)
+                END AS destination
+          FROM `SEGMENTS_TABLE_*`
+          WHERE _TABLE_SUFFIX BETWEEN '20120501' AND '20150125'
+        ),
 
-    positions AS (
-      SELECT ssvid, seg_id, lat, lon, timestamp, speed,
-             date(timestamp) as table_suffix
-        FROM `SOURCE_TABLE`
-       WHERE date(timestamp) BETWEEN '2012-05-01' AND '2015-01-25'
-         AND seg_id IS NOT NULL
-         AND lat IS NOT NULL
-         AND lon IS NOT NULL
-         AND speed IS NOT NULL
-    )
+        message_with_timestamps_in_seconds as (
+           select cast(UNIX_MILLIS(timestamp) as FLOAT64) / 1000  AS timestamp,
+                (60 * 1) as thin,
+                format_date("%Y%m%d", date(timestamp)) as table_suffix,
+                 * except (timestamp)
+           from`SOURCE_TABLE*`
+           WHERE date(timestamp) BETWEEN '2012-05-01' AND '2015-01-25'
+             AND seg_id IS NOT NULL
+             AND lat IS NOT NULL
+             AND lon IS NOT NULL
+             AND speed IS NOT NULL
+             ),
 
-    SELECT ssvid as ident,
-           lat,
-           lon,
-           timestamp,
-           destination,
-           speed
-    FROM positions
-    JOIN destinations
-    USING (seg_id, table_suffix)
-    """,
-        """
-    WITH
-
-    destinations AS (
-      SELECT seg_id, _TABLE_SUFFIX AS table_suffix,
-          CASE
-            WHEN ARRAY_LENGTH(destinations) = 0 THEN NULL
-            ELSE (SELECT MAX(value)
-                  OVER (ORDER BY count DESC)
-                  FROM UNNEST(destinations)
-                  LIMIT 1)
-            END AS destination
-      FROM `SEGMENTS_TABLE_*`
-      WHERE _TABLE_SUFFIX BETWEEN '20150126' AND '20170515'
-    ),
-
-    positions AS (
-      SELECT ssvid, seg_id, lat, lon, timestamp, speed,
-             date(timestamp) as table_suffix
-        FROM `SOURCE_TABLE`
-       WHERE date(timestamp) BETWEEN '2015-01-26' AND '2017-05-15'
-         AND seg_id IS NOT NULL
-         AND lat IS NOT NULL
-         AND lon IS NOT NULL
-         AND speed IS NOT NULL
-    )
+        position_messages AS (
+            SELECT ssvid, seg_id, lat, lon, timestamp, speed,  table_suffix
+              FROM (
+                SELECT *,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY ssvid, cast(floor(timestamp / thin) AS INT64)
+                        ORDER BY ABS(timestamp / thin - FLOOR(timestamp / thin) - 0.5) ASC,
+                        timestamp, ssvid, lat, lon, speed, course
+                        ) ndx,
+                from message_with_timestamps_in_seconds
+            )
+            WHERE ndx = 1
+        )
 
     SELECT ssvid as ident,
            lat,
@@ -96,8 +75,61 @@ def test_create_queries_1():
            timestamp,
            destination,
            speed
-    FROM positions
+    FROM position_messages
     JOIN destinations
     USING (seg_id, table_suffix)
     """,
+    """
+        WITH
+
+        destinations AS (
+          SELECT seg_id, _TABLE_SUFFIX AS table_suffix,
+              CASE
+                WHEN ARRAY_LENGTH(cumulative_destinations) = 0 THEN NULL
+                ELSE (SELECT MAX(destination)
+                      OVER (ORDER BY count DESC)
+                      FROM UNNEST(cumulative_destinations)
+                      LIMIT 1)
+                END AS destination
+          FROM `SEGMENTS_TABLE_*`
+          WHERE _TABLE_SUFFIX BETWEEN '20150126' AND '20170515'
+        ),
+
+        message_with_timestamps_in_seconds as (
+           select cast(UNIX_MILLIS(timestamp) as FLOAT64) / 1000  AS timestamp,
+                (60 * 1) as thin,
+                format_date("%Y%m%d", date(timestamp)) as table_suffix,
+                 * except (timestamp)
+           from`SOURCE_TABLE*`
+           WHERE date(timestamp) BETWEEN '2015-01-26' AND '2017-05-15'
+             AND seg_id IS NOT NULL
+             AND lat IS NOT NULL
+             AND lon IS NOT NULL
+             AND speed IS NOT NULL
+             ),
+
+        position_messages AS (
+            SELECT ssvid, seg_id, lat, lon, timestamp, speed,  table_suffix
+              FROM (
+                SELECT *,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY ssvid, cast(floor(timestamp / thin) AS INT64)
+                        ORDER BY ABS(timestamp / thin - FLOOR(timestamp / thin) - 0.5) ASC,
+                        timestamp, ssvid, lat, lon, speed, course
+                        ) ndx,
+                from message_with_timestamps_in_seconds
+            )
+            WHERE ndx = 1
+        )
+
+    SELECT ssvid as ident,
+           lat,
+           lon,
+           timestamp,
+           destination,
+           speed
+    FROM position_messages
+    JOIN destinations
+    USING (seg_id, table_suffix)
+    """
     ]
