@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import datetime
 import numpy as np
-import pytz
 
 from pipe_anchorages.objects.visit_event import VisitEvent
 from pipe_anchorages.objects.namedtuples import _datetime_to_s

@@ -78,8 +78,7 @@ def test_create_queries_1():
     FROM position_messages
     JOIN destinations
     USING (seg_id, table_suffix)
-    """,
-    """
+    """, """
         WITH
 
         destinations AS (
