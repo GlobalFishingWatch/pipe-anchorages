@@ -82,7 +82,7 @@ def run(arguments):
             * Minimal confidence: {args.min_confidence} meaning: {confidence_meaning[args.min_confidence]}.
 
             Caveats:
-             - Vessels that don't have a single port visit of at least confidence {args.min_confidence} also do not have a voyage, despite possibly having a lot of time at sea (see https://globalfishingwatch.atlassian.net/browse/PIPELINE-2440).
+            - Vessels that don't have a single port visit of at least confidence {args.min_confidence} also do not have a voyage, despite possibly having a lot of time at sea (see https://globalfishingwatch.atlassian.net/browse/PIPELINE-2440).
 
             A "voyage" is defined as the combination of a vessel's previous port_visit's end and next port_visit's start.
             Every vessel's first voyage has an unknown start, so the `trip_start_*` columns are NULL. Respectively, each vessel's last voyage has an undefined end, so the `trip_end_*` columns are NULL.
