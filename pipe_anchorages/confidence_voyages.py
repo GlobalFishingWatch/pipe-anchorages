@@ -76,7 +76,7 @@ def run(arguments):
         table_id=args.output,
         description=f"""
             Created by pipe-anchorages: {get_pipe_ver()}.
-            * Create voyages filter per minimal confidence.
+            * Create voyages based on port visits with minimal confidence of {args.min_confidence}.
             * https://github.com/GlobalFishingWatch/anchorages_pipeline
             * Source: {args.source}
             * Minimal confidence: {args.min_confidence} meaning: {confidence_meaning[args.min_confidence]}.
