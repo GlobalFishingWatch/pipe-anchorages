@@ -12,9 +12,15 @@ RUN pip install -r requirements-scheduler.txt
 COPY ./requirements-worker.txt ./
 RUN pip install -r requirements-worker.txt
 
-# Setup local package
+# # Setup local package
+# COPY . /opt/project
+# RUN pip install -e .
+
+# Setup local packages
 COPY . /opt/project
-RUN pip install -e .
+ENV PYTHONPATH /opt/project
+RUN cd /usr/local/lib/python3.8/site-packages && \
+    python /opt/project/setup.py develop
 
 # Setup the entrypoint for quickly executing the pipelines
 ENTRYPOINT ["./main.py"]

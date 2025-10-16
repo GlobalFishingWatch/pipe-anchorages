@@ -4,7 +4,7 @@ from apache_beam import typehints
 import datetime
 
 
-epoch = datetime.datetime.fromtimestamp(0, datetime.UTC)
+epoch = datetime.datetime.fromtimestamp(0, datetime.timezone.utc)
 
 
 def datetime_to_s(x):
