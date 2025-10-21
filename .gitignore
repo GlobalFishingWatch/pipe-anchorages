@@ -3,6 +3,8 @@ untracked/
 .pytest_cache/
 fishing_list.txt
 
+# figures
+notebooks/amanda_exploration/figures/
 
 .DS_Store
 
@@ -76,6 +78,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # pyenv
 .python-version

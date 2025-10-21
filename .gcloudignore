@@ -1,0 +1,16 @@
+# Ignore Python cache and environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Ignore notebooks and large local data
+notebooks/
+
+# Ignore version control files
+.git/
+.gitignore
+
+# Ignore OS / editor junk
+.DS_Store
+.env
