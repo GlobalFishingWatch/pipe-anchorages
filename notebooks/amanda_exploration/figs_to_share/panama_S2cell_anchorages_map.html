@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_53174898e9b3079d3f45379e12d0b654 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_53174898e9b3079d3f45379e12d0b654" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_53174898e9b3079d3f45379e12d0b654 = L.map(
+                "map_53174898e9b3079d3f45379e12d0b654",
+                {
+                    center: [8.866422329236592, -79.6698569203932],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 18,
+  "zoomControl": true,
+  "preferCanvas": true,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_5f951218ae32879226d4a30b9106421a = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_5f951218ae32879226d4a30b9106421a.addTo(map_53174898e9b3079d3f45379e12d0b654);
+        
+    
+        function geo_json_65efa767e2eec6c281a6ac71481acd5b_styler(feature) {
+            switch(feature.id) {
+                default:
+                    return {"color": "blue", "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "weight": 2};
+            }
+        }
+
+        function geo_json_65efa767e2eec6c281a6ac71481acd5b_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_65efa767e2eec6c281a6ac71481acd5b = L.geoJson(null, {
+                onEachFeature: geo_json_65efa767e2eec6c281a6ac71481acd5b_onEachFeature,
+            
+                style: geo_json_65efa767e2eec6c281a6ac71481acd5b_styler,
+            ...{
+}
+        });
+
+        function geo_json_65efa767e2eec6c281a6ac71481acd5b_add (data) {
+            geo_json_65efa767e2eec6c281a6ac71481acd5b
+                .addData(data);
+        }
+            geo_json_65efa767e2eec6c281a6ac71481acd5b_add({"features": [{"geometry": {"coordinates": [[[-79.67266319718634, 8.869220300997792], [-79.67266319718634, 8.863780228824693], [-79.66705055598808, 8.863624476714051], [-79.66705055598808, 8.869064456368308], [-79.67266319718634, 8.869220300997792]]], "type": "Polygon"}, "id": "0", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.67266319718634, 8.863780228824693], [-79.67266319718634, 8.858340542229024], [-79.66705055598808, 8.858184882636282], [-79.66705055598808, 8.863624476714051], [-79.67266319718634, 8.863780228824693]]], "type": "Polygon"}, "id": "1", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.34915986589677, 7.334022698660441], [-80.34915986589677, 7.3286885435507765], [-80.34359075874926, 7.328568692126329], [-80.34359075874926, 7.333902761915981], [-80.34915986589677, 7.334022698660441]]], "type": "Polygon"}, "id": "2", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.53786342260064, 8.963400994199548], [-79.53786342260064, 8.957956241761368], [-79.53224241567446, 8.95779655168074], [-79.53224241567446, 8.963241210244435], [-79.53786342260064, 8.963400994199548]]], "type": "Polygon"}, "id": "3", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.52662106213451, 8.963081331420842], [-79.52662106213451, 8.957636766787536], [-79.52099936213783, 8.95747688707182], [-79.52099936213783, 8.962921357718821], [-79.52662106213451, 8.963081331420842]]], "type": "Polygon"}, "id": "4", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.53224241567446, 8.963241210244435], [-79.53224241567446, 8.95779655168074], [-79.52662106213451, 8.957636766787536], [-79.52662106213451, 8.963081331420842], [-79.53224241567446, 8.963241210244435]]], "type": "Polygon"}, "id": "5", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.68388742784927, 8.869531709427632], [-79.68388742784927, 8.86409145238405], [-79.67827548785871, 8.863935887377991], [-79.67827548785871, 8.869376052014196], [-79.68388742784927, 8.869531709427632]]], "type": "Polygon"}, "id": "6", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.43735891349489, 8.36798347443389], [-82.43735891349489, 8.36254480590917], [-82.43194053509157, 8.362441258828625], [-82.43194053509157, 8.367879861935972], [-82.43735891349489, 8.36798347443389]]], "type": "Polygon"}, "id": "7", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.52662106213451, 8.957636766787536], [-79.52662106213451, 8.952192585192554], [-79.52099936213783, 8.952032799462302], [-79.52099936213783, 8.95747688707182], [-79.52662106213451, 8.957636766787536]]], "type": "Polygon"}, "id": "8", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.44277686862371, 8.362648271124073], [-82.44277686862371, 8.357209937765411], [-82.43735891349489, 8.357106537915005], [-82.43735891349489, 8.36254480590917], [-82.44277686862371, 8.362648271124073]]], "type": "Polygon"}, "id": "9", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.17076619033769, 7.752656611072266], [-80.17076619033769, 7.74729210894218], [-80.16518535201986, 7.747162918788989], [-80.16518535201986, 7.752527333656842], [-80.17076619033769, 7.752656611072266]]], "type": "Polygon"}, "id": "10", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.43663239426519, 9.025856834659816], [-79.43663239426519, 9.020409195153459], [-79.43100517234626, 9.020246658300598], [-79.43100517234626, 9.025694202915577], [-79.43663239426519, 9.025856834659816]]], "type": "Polygon"}, "id": "11", "properties": {"label_html": "Label: Puerto Juan D\u00edaz\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-81.05890603406964, 7.928437075772942], [-81.05890603406964, 7.923047356435945], [-81.05338538349037, 7.922928737002709], [-81.05338538349037, 7.9283183777178134], [-81.05890603406964, 7.928437075772942]]], "type": "Polygon"}, "id": "12", "properties": {"label_html": "Label: Puerto Mutis\u003cbr\u003eSublabel: Veraguas", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.43735891349489, 8.378862012523337], [-82.43735891349489, 8.37342254335126], [-82.43194053509157, 8.373318865434888], [-82.43194053509157, 8.378758269187431], [-82.43735891349489, 8.378862012523337]]], "type": "Polygon"}, "id": "13", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.17076619033769, 7.758021527054673], [-80.17076619033769, 7.752656611072266], [-80.16518535201986, 7.752527333656842], [-80.16518535201986, 7.757892162374819], [-80.17076619033769, 7.758021527054673]]], "type": "Polygon"}, "id": "14", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.53224241567446, 8.95779655168074], [-79.53224241567446, 8.952352276156205], [-79.52662106213451, 8.952192585192554], [-79.52662106213451, 8.957636766787536], [-79.53224241567446, 8.95779655168074]]], "type": "Polygon"}, "id": "15", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.67827548785871, 8.869376052014196], [-79.67827548785871, 8.863935887377991], [-79.67266319718634, 8.863780228824693], [-79.67266319718634, 8.869220300997792], [-79.67827548785871, 8.869376052014196]]], "type": "Polygon"}, "id": "16", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.34359075874926, 7.333902761915981], [-80.34359075874926, 7.328568692126329], [-80.3380212826554, 7.328448764205164], [-80.3380212826554, 7.3337827486202505], [-80.34359075874926, 7.333902761915981]]], "type": "Polygon"}, "id": "17", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.43735891349489, 8.37342254335126], [-82.43735891349489, 8.36798347443389], [-82.43194053509157, 8.367879861935972], [-82.43194053509157, 8.373318865434888], [-82.43735891349489, 8.37342254335126]]], "type": "Polygon"}, "id": "18", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.67827548785871, 8.863935887377991], [-79.67827548785871, 8.858496108320159], [-79.67266319718634, 8.858340542229024], [-79.67266319718634, 8.863780228824693], [-79.67827548785871, 8.863935887377991]]], "type": "Polygon"}, "id": "19", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.66705055598808, 8.863624476714051], [-79.66705055598808, 8.858184882636282], [-79.66143756442, 8.858029129531845], [-79.66143756442, 8.863468631035973], [-79.66705055598808, 8.863624476714051]]], "type": "Polygon"}, "id": "20", "properties": {"label_html": "Label: Puerto Vacamonte\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-78.20203874831095, 7.532171399086155], [-78.20203874831095, 7.526854011960494], [-78.19634037908176, 7.526699407971808], [-78.19634037908176, 7.532016688404058], [-78.20203874831095, 7.532171399086155]]], "type": "Polygon"}, "id": "21", "properties": {"label_html": "Label: Puerto Pi\u00f1a\u003cbr\u003eSublabel: Dari\u00e9n", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.34915986589677, 7.339357277911381], [-80.34915986589677, 7.334022698660441], [-80.34359075874926, 7.333902761915981], [-80.34359075874926, 7.339237255844281], [-80.34915986589677, 7.339357277911381]]], "type": "Polygon"}, "id": "22", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.44225927224495, 9.026019370695897], [-79.44225927224495, 9.020571636354177], [-79.43663239426519, 9.020409195153459], [-79.43663239426519, 9.025856834659816], [-79.44225927224495, 9.026019370695897]]], "type": "Polygon"}, "id": "23", "properties": {"label_html": "Label: Puerto Juan D\u00edaz\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.43735891349489, 8.36254480590917], [-82.43735891349489, 8.357106537915005], [-82.43194053509157, 8.357003056250745], [-82.43194053509157, 8.362441258828625], [-82.43735891349489, 8.36254480590917]]], "type": "Polygon"}, "id": "24", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.36586497215161, 8.036808692352789], [-80.36586497215161, 8.031419821255543], [-80.36029697274884, 8.031289023675965], [-80.36029697274884, 8.036677809325113], [-80.36586497215161, 8.036808692352789]]], "type": "Polygon"}, "id": "25", "properties": {"label_html": "Label: Boca Parita\u003cbr\u003eSublabel: Herrera", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.56596325253265, 8.947863977652382], [-79.56596325253265, 8.942419906232878], [-79.56034398102899, 8.94226097084588], [-79.56034398102899, 8.947704948672852], [-79.56596325253265, 8.947863977652382]]], "type": "Polygon"}, "id": "26", "properties": {"label_html": "Label: La Boca\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.35472860394694, 8.025769849500415], [-80.35472860394694, 8.020381963841546], [-80.34915986589677, 8.020251170108024], [-80.34915986589677, 8.02563897021297], [-80.35472860394694, 8.025769849500415]]], "type": "Polygon"}, "id": "27", "properties": {"label_html": "Label: Boca Parita\u003cbr\u003eSublabel: Herrera", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.52099936213783, 8.95747688707182], [-79.52099936213783, 8.952032799462302], [-79.51537731584142, 8.951872918955528], [-79.51537731584142, 8.957316912523666], [-79.52099936213783, 8.95747688707182]]], "type": "Polygon"}, "id": "28", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.53786342260064, 8.957956241761368], [-79.53786342260064, 8.95251187236318], [-79.53224241567446, 8.952352276156205], [-79.53224241567446, 8.95779655168074], [-79.53786342260064, 8.957956241761368]]], "type": "Polygon"}, "id": "29", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.16518535201986, 7.752527333656842], [-80.16518535201986, 7.747162918788989], [-80.15960414960914, 7.747033647512122], [-80.15960414960914, 7.752397975062838], [-80.16518535201986, 7.752527333656842]]], "type": "Polygon"}, "id": "30", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.07015482048465, 9.129442536748089], [-79.07015482048465, 9.123993207271283], [-79.06450558257468, 9.123822362858716], [-79.06450558257468, 9.129271593774815], [-79.07015482048465, 9.129442536748089]]], "type": "Polygon"}, "id": "31", "properties": {"label_html": "Label: Puerto Coquira\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.34915986589677, 8.020251170108024], [-80.34915986589677, 8.014863777445024], [-80.34359075874926, 8.01473298578063], [-80.34359075874926, 8.020120292836795], [-80.34915986589677, 8.020251170108024]]], "type": "Polygon"}, "id": "32", "properties": {"label_html": "Label: Boca Parita\u003cbr\u003eSublabel: Herrera", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.85867780296965, 8.272453981525983], [-82.85867780296965, 8.267018004523429], [-82.85329283847072, 8.266921967048031], [-82.85329283847072, 8.272357882665574], [-82.85867780296965, 8.272453981525983]]], "type": "Polygon"}, "id": "33", "properties": {"label_html": "Label: Puerto Armuelles\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.06450558257468, 9.129271593774815], [-79.06450558257468, 9.123822362858716], [-79.05885601121777, 9.123651420984963], [-79.05885601121777, 9.129100553283935], [-79.06450558257468, 9.129271593774815]]], "type": "Polygon"}, "id": "34", "properties": {"label_html": "Label: Puerto Coquira\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.83713534481758, 8.277505241164194], [-82.83713534481758, 8.272069106919028], [-82.83174864731558, 8.271972688567304], [-82.83174864731558, 8.277408761222034], [-82.83713534481758, 8.277505241164194]]], "type": "Polygon"}, "id": "35", "properties": {"label_html": "Label: Puerto Armuelles\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-82.44277686862371, 8.368087005014376], [-82.44277686862371, 8.362648271124073], [-82.43735891349489, 8.36254480590917], [-82.43735891349489, 8.36798347443389], [-82.44277686862371, 8.368087005014376]]], "type": "Polygon"}, "id": "36", "properties": {"label_html": "Label: Puerto Pedregal\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.36586497215161, 8.058368245878496], [-80.36586497215161, 8.052977747393673], [-80.36029697274884, 8.05284660801079], [-80.36029697274884, 8.058237021040261], [-80.36586497215161, 8.058368245878496]]], "type": "Polygon"}, "id": "37", "properties": {"label_html": "Label: Boca Parita\u003cbr\u003eSublabel: Herrera", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.37699986215634, 8.026292530930887], [-80.37699986215634, 8.02090430360373], [-80.37143260200438, 8.02077384391843], [-80.37143260200438, 8.026161985910612], [-80.37699986215634, 8.026292530930887]]], "type": "Polygon"}, "id": "38", "properties": {"label_html": "Label: Boca Parita\u003cbr\u003eSublabel: Herrera", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.52099936213783, 8.962921357718821], [-79.52099936213783, 8.95747688707182], [-79.51537731584142, 8.957316912523666], [-79.51537731584142, 8.962761289128448], [-79.52099936213783, 8.962921357718821]]], "type": "Polygon"}, "id": "39", "properties": {"label_html": "Label: Puerto Panam\u00e1\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.28787942015583, 7.86814087118304], [-80.28787942015583, 7.862765884947219], [-80.28230626291116, 7.862636587384455], [-80.28230626291116, 7.8680114874653215], [-80.28787942015583, 7.86814087118304]]], "type": "Polygon"}, "id": "40", "properties": {"label_html": "Label: B\u00facaro\u003cbr\u003eSublabel: Los Santos", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-81.81150511438756, 8.219877934381712], [-81.81150511438756, 8.214457181636806], [-81.80603896458386, 8.214345914561685], [-81.80603896458386, 8.219766595906405], [-81.81150511438756, 8.219877934381712]]], "type": "Polygon"}, "id": "41", "properties": {"label_html": "Label: Puerto Remedios\u003cbr\u003eSublabel: Chiriqu\u00ed", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.49938574651256, 8.245079643363802], [-80.49938574651256, 8.239673362814209], [-80.49382665784493, 8.239541370782252], [-80.49382665784493, 8.244947567131826], [-80.49938574651256, 8.245079643363802]]], "type": "Polygon"}, "id": "42", "properties": {"label_html": "Label: Puerto Aguadulce\u003cbr\u003eSublabel: Cocl\u00e9", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.7119418621192, 8.875749696494005], [-79.71194186211919, 8.8703085928048], [-79.70633167787565, 8.870153403254216], [-79.70633167787565, 8.875594414813662], [-79.7119418621192, 8.875749696494005]]], "type": "Polygon"}, "id": "43", "properties": {"label_html": "Label: Puerto Caimito\u003cbr\u003eSublabel: Panam\u00e1 Oeste", "source": "ais_detected"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.54910439598389, 8.947386606750824], [-79.54910439598389, 8.941942816276537], [-79.54348408275608, 8.941783597074265], [-79.54348408275608, 8.947227293788382], [-79.54910439598389, 8.947386606750824]]], "type": "Polygon"}, "id": "44", "properties": {"label_html": "Label: Chorrillo\u003cbr\u003eSublabel: Panam\u00e1", "source": "ais_detected"}, "type": "Feature"}], "tolerance": 0, "type": "FeatureCollection"});
+
+        
+    
+            geo_json_65efa767e2eec6c281a6ac71481acd5b.addTo(map_53174898e9b3079d3f45379e12d0b654);
+        
+    
+            var feature_group_5fe72f02b364fd0535925c198a4d625f = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_1826cc9ce8a6401e2d7d57044ede2a30 = L.circleMarker(
+                [8.86642232923659, -79.6698569203932],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_32a7bf0a8830256cb70d944e62f47869 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e4fcce734359f2290e63b83b9a80f809 = $(`<div id="html_e4fcce734359f2290e63b83b9a80f809" style="width: 100.0%; height: 100.0%;">Lat: 8.86642232923659, Lon: -79.6698569203932<br>Source: ais_detected</div>`)[0];
+                popup_32a7bf0a8830256cb70d944e62f47869.setContent(html_e4fcce734359f2290e63b83b9a80f809);
+            
+        
+
+        circle_marker_1826cc9ce8a6401e2d7d57044ede2a30.bindPopup(popup_32a7bf0a8830256cb70d944e62f47869)
+        ;
+
+        
+    
+    
+            var circle_marker_0a1d033399d0e376a734e8661d116259 = L.circleMarker(
+                [8.86098249608699, -79.6698569203932],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_8d81abbc720b4f2ace080798f8d444ed = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_74231281a060346abe32fd6abe1fffac = $(`<div id="html_74231281a060346abe32fd6abe1fffac" style="width: 100.0%; height: 100.0%;">Lat: 8.86098249608699, Lon: -79.6698569203932<br>Source: ais_detected</div>`)[0];
+                popup_8d81abbc720b4f2ace080798f8d444ed.setContent(html_74231281a060346abe32fd6abe1fffac);
+            
+        
+
+        circle_marker_0a1d033399d0e376a734e8661d116259.bindPopup(popup_8d81abbc720b4f2ace080798f8d444ed)
+        ;
+
+        
+    
+    
+            var circle_marker_8e18021f3d3464264860800db315dba8 = L.circleMarker(
+                [7.331295630602828, -80.34637535845074],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_da63665320845c84691dea66a8414dc7 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_492360c91cfd31bcc9d1b2f4997c66dd = $(`<div id="html_492360c91cfd31bcc9d1b2f4997c66dd" style="width: 100.0%; height: 100.0%;">Lat: 7.331295630602828, Lon: -80.34637535845074<br>Source: ais_detected</div>`)[0];
+                popup_da63665320845c84691dea66a8414dc7.setContent(html_492360c91cfd31bcc9d1b2f4997c66dd);
+            
+        
+
+        circle_marker_8e18021f3d3464264860800db315dba8.bindPopup(popup_da63665320845c84691dea66a8414dc7)
+        ;
+
+        
+    
+    
+            var circle_marker_07c275ce12ef27477157bc52354756c4 = L.circleMarker(
+                [8.960598713454775, -79.53505296247408],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_d420362b8df626fecc103df361399135 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d76def33c38c7b1d3017a1e50b9eff57 = $(`<div id="html_d76def33c38c7b1d3017a1e50b9eff57" style="width: 100.0%; height: 100.0%;">Lat: 8.960598713454775, Lon: -79.53505296247408<br>Source: ais_detected</div>`)[0];
+                popup_d420362b8df626fecc103df361399135.setContent(html_d76def33c38c7b1d3017a1e50b9eff57);
+            
+        
+
+        circle_marker_07c275ce12ef27477157bc52354756c4.bindPopup(popup_d420362b8df626fecc103df361399135)
+        ;
+
+        
+    
+    
+            var circle_marker_6d3fdc21fcdc7c8e0e97b93029b3f442 = L.circleMarker(
+                [8.9602790497357, -79.52381025543345],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_6f9cb9a4db069f8c5e3b31b2a0eac1c1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_94df84735d201441b8e3866f9b1636ad = $(`<div id="html_94df84735d201441b8e3866f9b1636ad" style="width: 100.0%; height: 100.0%;">Lat: 8.9602790497357, Lon: -79.52381025543345<br>Source: ais_detected</div>`)[0];
+                popup_6f9cb9a4db069f8c5e3b31b2a0eac1c1.setContent(html_94df84735d201441b8e3866f9b1636ad);
+            
+        
+
+        circle_marker_6d3fdc21fcdc7c8e0e97b93029b3f442.bindPopup(popup_6f9cb9a4db069f8c5e3b31b2a0eac1c1)
+        ;
+
+        
+    
+    
+            var circle_marker_a618b5eba1775c0c3901c8594ee20f54 = L.circleMarker(
+                [8.960438929017988, -79.5294317822214],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_efb2af2f6ccbec41fb5b2a0f3f437153 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5a9163445dcddff383064acc4daaa5aa = $(`<div id="html_5a9163445dcddff383064acc4daaa5aa" style="width: 100.0%; height: 100.0%;">Lat: 8.960438929017988, Lon: -79.5294317822214<br>Source: ais_detected</div>`)[0];
+                popup_efb2af2f6ccbec41fb5b2a0f3f437153.setContent(html_5a9163445dcddff383064acc4daaa5aa);
+            
+        
+
+        circle_marker_a618b5eba1775c0c3901c8594ee20f54.bindPopup(popup_efb2af2f6ccbec41fb5b2a0f3f437153)
+        ;
+
+        
+    
+    
+            var circle_marker_522683c7b0a8d58dd76f0cdbc35c7815 = L.circleMarker(
+                [8.86673373880859, -79.68108150169897],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_7d3d7ce11315789ab7e4df0de9157a2d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_baf07ebf8afd40e64f34c0311248de73 = $(`<div id="html_baf07ebf8afd40e64f34c0311248de73" style="width: 100.0%; height: 100.0%;">Lat: 8.86673373880859, Lon: -79.68108150169897<br>Source: ais_detected</div>`)[0];
+                popup_7d3d7ce11315789ab7e4df0de9157a2d.setContent(html_baf07ebf8afd40e64f34c0311248de73);
+            
+        
+
+        circle_marker_522683c7b0a8d58dd76f0cdbc35c7815.bindPopup(popup_7d3d7ce11315789ab7e4df0de9157a2d)
+        ;
+
+        
+    
+    
+            var circle_marker_0758e81d8b8cb34409a28a5a7f453484 = L.circleMarker(
+                [8.365212310456592, -82.43464977719417],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_fe91df0ae8d7f6e6e37dabf8b8f1c3c8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b4b60d595b96ba9cbdb10bc350221dfa = $(`<div id="html_b4b60d595b96ba9cbdb10bc350221dfa" style="width: 100.0%; height: 100.0%;">Lat: 8.365212310456592, Lon: -82.43464977719417<br>Source: ais_detected</div>`)[0];
+                popup_fe91df0ae8d7f6e6e37dabf8b8f1c3c8.setContent(html_b4b60d595b96ba9cbdb10bc350221dfa);
+            
+        
+
+        circle_marker_0758e81d8b8cb34409a28a5a7f453484.bindPopup(popup_fe91df0ae8d7f6e6e37dabf8b8f1c3c8)
+        ;
+
+        
+    
+    
+            var circle_marker_2a9ec8f26872984ab66e8d1d7a9547ce = L.circleMarker(
+                [8.954834723590002, -79.52381025543345],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_be7f272b85cad3934fea41377ba1d9b9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9fe31c947b3d34dcff09121eb81fa8a1 = $(`<div id="html_9fe31c947b3d34dcff09121eb81fa8a1" style="width: 100.0%; height: 100.0%;">Lat: 8.954834723590002, Lon: -79.52381025543345<br>Source: ais_detected</div>`)[0];
+                popup_be7f272b85cad3934fea41377ba1d9b9.setContent(html_9fe31c947b3d34dcff09121eb81fa8a1);
+            
+        
+
+        circle_marker_2a9ec8f26872984ab66e8d1d7a9547ce.bindPopup(popup_be7f272b85cad3934fea41377ba1d9b9)
+        ;
+
+        
+    
+    
+            var circle_marker_966121b726169665f6a2612f1add6f2c = L.circleMarker(
+                [8.359877348332507, -82.44006794397698],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_54ec9e2fcf2ffd06316833a0e283bd48 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_12ff899959d5f41f83344b1e9504dcdf = $(`<div id="html_12ff899959d5f41f83344b1e9504dcdf" style="width: 100.0%; height: 100.0%;">Lat: 8.359877348332507, Lon: -82.44006794397698<br>Source: ais_detected</div>`)[0];
+                popup_54ec9e2fcf2ffd06316833a0e283bd48.setContent(html_12ff899959d5f41f83344b1e9504dcdf);
+            
+        
+
+        circle_marker_966121b726169665f6a2612f1add6f2c.bindPopup(popup_54ec9e2fcf2ffd06316833a0e283bd48)
+        ;
+
+        
+    
+    
+            var circle_marker_bd8dc06a28c2e16aceec53cc066c2ad6 = L.circleMarker(
+                [7.749909701518773, -80.16797581669991],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_9c5df6b8a3f4a8e5b97987d71ccf823f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cc0fc3d9f595e5501e22304260d47caf = $(`<div id="html_cc0fc3d9f595e5501e22304260d47caf" style="width: 100.0%; height: 100.0%;">Lat: 7.749909701518773, Lon: -80.16797581669991<br>Source: ais_detected</div>`)[0];
+                popup_9c5df6b8a3f4a8e5b97987d71ccf823f.setContent(html_cc0fc3d9f595e5501e22304260d47caf);
+            
+        
+
+        circle_marker_bd8dc06a28c2e16aceec53cc066c2ad6.bindPopup(popup_9c5df6b8a3f4a8e5b97987d71ccf823f)
+        ;
+
+        
+    
+    
+            var circle_marker_9b2416bf55c09177bba5fc80d0b0817c = L.circleMarker(
+                [9.023051687059036, -79.43381882628826],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_6c4cc084ec90f317ba954b9b8a2a4f18 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8541e8a867d015f3a586f99f5cd4f9a5 = $(`<div id="html_8541e8a867d015f3a586f99f5cd4f9a5" style="width: 100.0%; height: 100.0%;">Lat: 9.023051687059036, Lon: -79.43381882628826<br>Source: ais_detected</div>`)[0];
+                popup_6c4cc084ec90f317ba954b9b8a2a4f18.setContent(html_8541e8a867d015f3a586f99f5cd4f9a5);
+            
+        
+
+        circle_marker_9b2416bf55c09177bba5fc80d0b0817c.bindPopup(popup_6c4cc084ec90f317ba954b9b8a2a4f18)
+        ;
+
+        
+    
+    
+            var circle_marker_4a1d4fe27ac7ac6bfc1866e14a921be0 = L.circleMarker(
+                [7.925682845563518, -81.05614575727921],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_52b0ef9193c335f001104827ce7ecd94 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_53b483b7dad74eb2dbf44263a1f5fa55 = $(`<div id="html_53b483b7dad74eb2dbf44263a1f5fa55" style="width: 100.0%; height: 100.0%;">Lat: 7.925682845563518, Lon: -81.05614575727921<br>Source: ais_detected</div>`)[0];
+                popup_52b0ef9193c335f001104827ce7ecd94.setContent(html_53b483b7dad74eb2dbf44263a1f5fa55);
+            
+        
+
+        circle_marker_4a1d4fe27ac7ac6bfc1866e14a921be0.bindPopup(popup_52b0ef9193c335f001104827ce7ecd94)
+        ;
+
+        
+    
+    
+            var circle_marker_b75ad902c00577e46e678bb5aecfa4f9 = L.circleMarker(
+                [8.376090382851343, -82.43464977719417],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_280a299fa2928475bfe7c56e391263f0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_578e957eb72221830a20863399a72017 = $(`<div id="html_578e957eb72221830a20863399a72017" style="width: 100.0%; height: 100.0%;">Lat: 8.376090382851343, Lon: -82.43464977719417<br>Source: ais_detected</div>`)[0];
+                popup_280a299fa2928475bfe7c56e391263f0.setContent(html_578e957eb72221830a20863399a72017);
+            
+        
+
+        circle_marker_b75ad902c00577e46e678bb5aecfa4f9.bindPopup(popup_280a299fa2928475bfe7c56e391263f0)
+        ;
+
+        
+    
+    
+            var circle_marker_e26961c518f968029d37c91c8f8da789 = L.circleMarker(
+                [7.755274366966585, -80.16797581669991],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_472a9ca926b862567b55001f835f1157 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e56d72a9c8493568410a6e1c168b2554 = $(`<div id="html_e56d72a9c8493568410a6e1c168b2554" style="width: 100.0%; height: 100.0%;">Lat: 7.755274366966585, Lon: -80.16797581669991<br>Source: ais_detected</div>`)[0];
+                popup_472a9ca926b862567b55001f835f1157.setContent(html_e56d72a9c8493568410a6e1c168b2554);
+            
+        
+
+        circle_marker_e26961c518f968029d37c91c8f8da789.bindPopup(popup_472a9ca926b862567b55001f835f1157)
+        ;
+
+        
+    
+    
+            var circle_marker_a3a61f7b7364675603c9b62c51c63691 = L.circleMarker(
+                [8.954994508914362, -79.5294317822214],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_9da14f15c9a895ac58cc54b5fba75707 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_702ba9fb4caf1a61c734d6f6bd2678a6 = $(`<div id="html_702ba9fb4caf1a61c734d6f6bd2678a6" style="width: 100.0%; height: 100.0%;">Lat: 8.954994508914362, Lon: -79.5294317822214<br>Source: ais_detected</div>`)[0];
+                popup_9da14f15c9a895ac58cc54b5fba75707.setContent(html_702ba9fb4caf1a61c734d6f6bd2678a6);
+            
+        
+
+        circle_marker_a3a61f7b7364675603c9b62c51c63691.bindPopup(popup_9da14f15c9a895ac58cc54b5fba75707)
+        ;
+
+        
+    
+    
+            var circle_marker_1c036ea40d92a938595c343e5ae11bd3 = L.circleMarker(
+                [8.866578080812669, -79.675469386348],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_bc9e4b7e6aab1f9dc64d48727124636b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_81d54d29e83fc3129b1d7d4cdc318574 = $(`<div id="html_81d54d29e83fc3129b1d7d4cdc318574" style="width: 100.0%; height: 100.0%;">Lat: 8.866578080812669, Lon: -79.675469386348<br>Source: ais_detected</div>`)[0];
+                popup_bc9e4b7e6aab1f9dc64d48727124636b.setContent(html_81d54d29e83fc3129b1d7d4cdc318574);
+            
+        
+
+        circle_marker_1c036ea40d92a938595c343e5ae11bd3.bindPopup(popup_bc9e4b7e6aab1f9dc64d48727124636b)
+        ;
+
+        
+    
+    
+            var circle_marker_dbe0f54f9b99b9d07f0e4e9e3b118821 = L.circleMarker(
+                [7.331175698257877, -80.34080606681118],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_1b99222e5df49d1bc6127da54fbafb91 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3cc0ecd6618847291482ff786b43e7e0 = $(`<div id="html_3cc0ecd6618847291482ff786b43e7e0" style="width: 100.0%; height: 100.0%;">Lat: 7.331175698257877, Lon: -80.34080606681118<br>Source: ais_detected</div>`)[0];
+                popup_1b99222e5df49d1bc6127da54fbafb91.setContent(html_3cc0ecd6618847291482ff786b43e7e0);
+            
+        
+
+        circle_marker_dbe0f54f9b99b9d07f0e4e9e3b118821.bindPopup(popup_1b99222e5df49d1bc6127da54fbafb91)
+        ;
+
+        
+    
+    
+            var circle_marker_f180777f84cafe4775133a45e9d5e472 = L.circleMarker(
+                [8.370651146492396, -82.43464977719417],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_f73f11cb025790655fae5dd458544791 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2316469a45ed8a1ff27bea75fb75008c = $(`<div id="html_2316469a45ed8a1ff27bea75fb75008c" style="width: 100.0%; height: 100.0%;">Lat: 8.370651146492396, Lon: -82.43464977719417<br>Source: ais_detected</div>`)[0];
+                popup_f73f11cb025790655fae5dd458544791.setContent(html_2316469a45ed8a1ff27bea75fb75008c);
+            
+        
+
+        circle_marker_f180777f84cafe4775133a45e9d5e472.bindPopup(popup_f73f11cb025790655fae5dd458544791)
+        ;
+
+        
+    
+    
+            var circle_marker_e32b2dee269d10ad05649b67d26dd53d = L.circleMarker(
+                [8.861138155172567, -79.675469386348],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_5f6e01727ee000e2e2030b72bad389cb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4558f669f3f468db4ceaed13322b3fc6 = $(`<div id="html_4558f669f3f468db4ceaed13322b3fc6" style="width: 100.0%; height: 100.0%;">Lat: 8.861138155172567, Lon: -79.675469386348<br>Source: ais_detected</div>`)[0];
+                popup_5f6e01727ee000e2e2030b72bad389cb.setContent(html_4558f669f3f468db4ceaed13322b3fc6);
+            
+        
+
+        circle_marker_e32b2dee269d10ad05649b67d26dd53d.bindPopup(popup_5f6e01727ee000e2e2030b72bad389cb)
+        ;
+
+        
+    
+    
+            var circle_marker_505515f30c38cd536ffdbe340646afb3 = L.circleMarker(
+                [8.860826743466895, -79.66424410399053],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_bfd7b494dc53a846becaf5711e2279bb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_de70fdb9a9c41966cefe4139682c6952 = $(`<div id="html_de70fdb9a9c41966cefe4139682c6952" style="width: 100.0%; height: 100.0%;">Lat: 8.860826743466895, Lon: -79.66424410399053<br>Source: ais_detected</div>`)[0];
+                popup_bfd7b494dc53a846becaf5711e2279bb.setContent(html_de70fdb9a9c41966cefe4139682c6952);
+            
+        
+
+        circle_marker_505515f30c38cd536ffdbe340646afb3.bindPopup(popup_bfd7b494dc53a846becaf5711e2279bb)
+        ;
+
+        
+    
+    
+            var circle_marker_42ea30941c7def8e96397243452941dc = L.circleMarker(
+                [7.5294353349770295, -78.1991896022672],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_2d898cbce716e285ce4d7967e4a93d41 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_979d40b30c78080d2d69dfc1e06fe4bc = $(`<div id="html_979d40b30c78080d2d69dfc1e06fe4bc" style="width: 100.0%; height: 100.0%;">Lat: 7.5294353349770295, Lon: -78.1991896022672<br>Source: ais_detected</div>`)[0];
+                popup_2d898cbce716e285ce4d7967e4a93d41.setContent(html_979d40b30c78080d2d69dfc1e06fe4bc);
+            
+        
+
+        circle_marker_42ea30941c7def8e96397243452941dc.bindPopup(popup_2d898cbce716e285ce4d7967e4a93d41)
+        ;
+
+        
+    
+    
+            var circle_marker_653aa2079c9088bd4009780cf9ee0b87 = L.circleMarker(
+                [7.33662995514523, -80.34637535845074],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_4f975144c605fd8c7b717586c4b0eccc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_368a671f50c9c6d6e44b5b8c765e9ad3 = $(`<div id="html_368a671f50c9c6d6e44b5b8c765e9ad3" style="width: 100.0%; height: 100.0%;">Lat: 7.33662995514523, Lon: -80.34637535845074<br>Source: ais_detected</div>`)[0];
+                popup_4f975144c605fd8c7b717586c4b0eccc.setContent(html_368a671f50c9c6d6e44b5b8c765e9ad3);
+            
+        
+
+        circle_marker_653aa2079c9088bd4009780cf9ee0b87.bindPopup(popup_4f975144c605fd8c7b717586c4b0eccc)
+        ;
+
+        
+    
+    
+            var circle_marker_94e0ca11294f05474c4c8ed1d52b0308 = L.circleMarker(
+                [9.023214223516185, -79.43944587625732],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_1d0acba3d38af0fc88ddb4cbabf52026 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a658a783420c9e96a43bbe811c49d4af = $(`<div id="html_a658a783420c9e96a43bbe811c49d4af" style="width: 100.0%; height: 100.0%;">Lat: 9.023214223516185, Lon: -79.43944587625732<br>Source: ais_detected</div>`)[0];
+                popup_1d0acba3d38af0fc88ddb4cbabf52026.setContent(html_a658a783420c9e96a43bbe811c49d4af);
+            
+        
+
+        circle_marker_94e0ca11294f05474c4c8ed1d52b0308.bindPopup(popup_1d0acba3d38af0fc88ddb4cbabf52026)
+        ;
+
+        
+    
+    
+            var circle_marker_b31b048ce96ef5a8dceecfc77df751c8 = L.circleMarker(
+                [8.359773874881856, -82.43464977719417],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_4f5a9f140fa251feaacdcdb914d3d08a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1a91c13ea24bbdce92f774bf6b4a0f57 = $(`<div id="html_1a91c13ea24bbdce92f774bf6b4a0f57" style="width: 100.0%; height: 100.0%;">Lat: 8.359773874881856, Lon: -82.43464977719417<br>Source: ais_detected</div>`)[0];
+                popup_4f5a9f140fa251feaacdcdb914d3d08a.setContent(html_1a91c13ea24bbdce92f774bf6b4a0f57);
+            
+        
+
+        circle_marker_b31b048ce96ef5a8dceecfc77df751c8.bindPopup(popup_4f5a9f140fa251feaacdcdb914d3d08a)
+        ;
+
+        
+    
+    
+            var circle_marker_9b143b67dae7b141e2435312dbf17b74 = L.circleMarker(
+                [8.034048796219336, -80.36308101863455],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_ca2186e9a15c4320dd6131f6c78a899e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_62768d8654fdf67c08b1df0cafd53048 = $(`<div id="html_62768d8654fdf67c08b1df0cafd53048" style="width: 100.0%; height: 100.0%;">Lat: 8.034048796219336, Lon: -80.36308101863455<br>Source: ais_detected</div>`)[0];
+                popup_ca2186e9a15c4320dd6131f6c78a899e.setContent(html_62768d8654fdf67c08b1df0cafd53048);
+            
+        
+
+        circle_marker_9b143b67dae7b141e2435312dbf17b74.bindPopup(popup_ca2186e9a15c4320dd6131f6c78a899e)
+        ;
+
+        
+    
+    
+            var circle_marker_2d71464b2488038bf199788113f85705 = L.circleMarker(
+                [8.94506241475402, -79.5631536602154],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_6bc013079940536e0476a3491bd48b7b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b673f7573267f541aa4577af291a8f53 = $(`<div id="html_b673f7573267f541aa4577af291a8f53" style="width: 100.0%; height: 100.0%;">Lat: 8.94506241475402, Lon: -79.5631536602154<br>Source: ais_detected</div>`)[0];
+                popup_6bc013079940536e0476a3491bd48b7b.setContent(html_b673f7573267f541aa4577af291a8f53);
+            
+        
+
+        circle_marker_2d71464b2488038bf199788113f85705.bindPopup(popup_6bc013079940536e0476a3491bd48b7b)
+        ;
+
+        
+    
+    
+            var circle_marker_d613415908eefa06b7118ef352e168b2 = L.circleMarker(
+                [8.02301044793871, -80.35194428106844],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_5a799471807ba3e95e56976ef105a37a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_123743e68b4925845e115d8f38740812 = $(`<div id="html_123743e68b4925845e115d8f38740812" style="width: 100.0%; height: 100.0%;">Lat: 8.02301044793871, Lon: -80.35194428106844<br>Source: ais_detected</div>`)[0];
+                popup_5a799471807ba3e95e56976ef105a37a.setContent(html_123743e68b4925845e115d8f38740812);
+            
+        
+
+        circle_marker_d613415908eefa06b7118ef352e168b2.bindPopup(popup_5a799471807ba3e95e56976ef105a37a)
+        ;
+
+        
+    
+    
+            var circle_marker_0505007cfd2170c371a4bea8ac5ed1c7 = L.circleMarker(
+                [8.954674843466123, -79.51818838226727],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_28ccd7e6c87989ecc5259249b8b320be = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_64096faf79e244a4d9688c2e5c5815e6 = $(`<div id="html_64096faf79e244a4d9688c2e5c5815e6" style="width: 100.0%; height: 100.0%;">Lat: 8.954674843466123, Lon: -79.51818838226727<br>Source: ais_detected</div>`)[0];
+                popup_28ccd7e6c87989ecc5259249b8b320be.setContent(html_64096faf79e244a4d9688c2e5c5815e6);
+            
+        
+
+        circle_marker_0505007cfd2170c371a4bea8ac5ed1c7.bindPopup(popup_28ccd7e6c87989ecc5259249b8b320be)
+        ;
+
+        
+    
+    
+            var circle_marker_0d034652f3ccc7d69069c22af7b35f53 = L.circleMarker(
+                [8.955154199449128, -79.53505296247408],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_f40a0d9b30f411859ee8711aeccb0d4c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3508d7b3f4ec1432f5d4a029b9127e9 = $(`<div id="html_b3508d7b3f4ec1432f5d4a029b9127e9" style="width: 100.0%; height: 100.0%;">Lat: 8.955154199449128, Lon: -79.53505296247408<br>Source: ais_detected</div>`)[0];
+                popup_f40a0d9b30f411859ee8711aeccb0d4c.setContent(html_b3508d7b3f4ec1432f5d4a029b9127e9);
+            
+        
+
+        circle_marker_0d034652f3ccc7d69069c22af7b35f53.bindPopup(popup_f40a0d9b30f411859ee8711aeccb0d4c)
+        ;
+
+        
+    
+    
+            var circle_marker_b96e9543e6b52f7337e26c7123e718b5 = L.circleMarker(
+                [7.749780427160378, -80.16239479631659],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_63da44386b60e5b51167fdd149230d7f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4a7c6e161bf0c77d4494ca662c73816d = $(`<div id="html_4a7c6e161bf0c77d4494ca662c73816d" style="width: 100.0%; height: 100.0%;">Lat: 7.749780427160378, Lon: -80.16239479631659<br>Source: ais_detected</div>`)[0];
+                popup_63da44386b60e5b51167fdd149230d7f.setContent(html_4a7c6e161bf0c77d4494ca662c73816d);
+            
+        
+
+        circle_marker_b96e9543e6b52f7337e26c7123e718b5.bindPopup(popup_63da44386b60e5b51167fdd149230d7f)
+        ;
+
+        
+    
+    
+            var circle_marker_396413953c6acf9543662107304d7025 = L.circleMarker(
+                [9.126632390064954, -79.06733024322055],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_1d5d42e0bbb956cfb3cad6b25827adb4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bd1ad5225dfd1ba2c794d4855c9351e7 = $(`<div id="html_bd1ad5225dfd1ba2c794d4855c9351e7" style="width: 100.0%; height: 100.0%;">Lat: 9.126632390064954, Lon: -79.06733024322055<br>Source: ais_detected</div>`)[0];
+                popup_1d5d42e0bbb956cfb3cad6b25827adb4.setContent(html_bd1ad5225dfd1ba2c794d4855c9351e7);
+            
+        
+
+        circle_marker_396413953c6acf9543662107304d7025.bindPopup(popup_1d5d42e0bbb956cfb3cad6b25827adb4)
+        ;
+
+        
+    
+    
+            var circle_marker_e20de8c4bf0a112f8a255f99af13ef05 = L.circleMarker(
+                [8.017492016043587, -80.34637535845074],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_c54fbfbc3d598148de4dcbeb9f886e9a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_70b3fc686f102bd81ac9cf4aece2ec0c = $(`<div id="html_70b3fc686f102bd81ac9cf4aece2ec0c" style="width: 100.0%; height: 100.0%;">Lat: 8.017492016043587, Lon: -80.34637535845074<br>Source: ais_detected</div>`)[0];
+                popup_c54fbfbc3d598148de4dcbeb9f886e9a.setContent(html_70b3fc686f102bd81ac9cf4aece2ec0c);
+            
+        
+
+        circle_marker_e20de8c4bf0a112f8a255f99af13ef05.bindPopup(popup_c54fbfbc3d598148de4dcbeb9f886e9a)
+        ;
+
+        
+    
+    
+            var circle_marker_4299dd2036bcb7f4f4e88ab9a7a9a894 = L.circleMarker(
+                [8.269687918522877, -82.85598537490912],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_bdf1f09eba412f5eb666267977256391 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2a7a017da290c24ce937ea51228555f2 = $(`<div id="html_2a7a017da290c24ce937ea51228555f2" style="width: 100.0%; height: 100.0%;">Lat: 8.269687918522877, Lon: -82.85598537490912<br>Source: ais_detected</div>`)[0];
+                popup_bdf1f09eba412f5eb666267977256391.setContent(html_2a7a017da290c24ce937ea51228555f2);
+            
+        
+
+        circle_marker_4299dd2036bcb7f4f4e88ab9a7a9a894.bindPopup(popup_bdf1f09eba412f5eb666267977256391)
+        ;
+
+        
+    
+    
+            var circle_marker_8b8bc09992f7fed6b9fe8487ffcc5522 = L.circleMarker(
+                [9.12646144762857, -79.06168083856707],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_14852d3b7ef2974009b534c55ead75ae = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9aea12b5d58b4f81b1d8ecb53ee70a69 = $(`<div id="html_9aea12b5d58b4f81b1d8ecb53ee70a69" style="width: 100.0%; height: 100.0%;">Lat: 9.12646144762857, Lon: -79.06168083856707<br>Source: ais_detected</div>`)[0];
+                popup_14852d3b7ef2974009b534c55ead75ae.setContent(html_9aea12b5d58b4f81b1d8ecb53ee70a69);
+            
+        
+
+        circle_marker_8b8bc09992f7fed6b9fe8487ffcc5522.bindPopup(popup_14852d3b7ef2974009b534c55ead75ae)
+        ;
+
+        
+    
+    
+            var circle_marker_445a4666ca23d36ee02757a0a5a93f96 = L.circleMarker(
+                [8.27473890908154, -82.83444205019033],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_19c556211a42147188bc1ac805e83f21 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d7406e78d24e260714e2d2345f51e5d9 = $(`<div id="html_d7406e78d24e260714e2d2345f51e5d9" style="width: 100.0%; height: 100.0%;">Lat: 8.27473890908154, Lon: -82.83444205019033<br>Source: ais_detected</div>`)[0];
+                popup_19c556211a42147188bc1ac805e83f21.setContent(html_d7406e78d24e260714e2d2345f51e5d9);
+            
+        
+
+        circle_marker_445a4666ca23d36ee02757a0a5a93f96.bindPopup(popup_19c556211a42147188bc1ac805e83f21)
+        ;
+
+        
+    
+    
+            var circle_marker_0baa712c0d01ca5bdf5f8a04119ef5a3 = L.circleMarker(
+                [8.36531584929818, -82.44006794397698],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_ad30f2aecadcb92675aa3af47f1d6ab0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4d87b8ae0bb7da432e4d802f7a680030 = $(`<div id="html_4d87b8ae0bb7da432e4d802f7a680030" style="width: 100.0%; height: 100.0%;">Lat: 8.36531584929818, Lon: -82.44006794397698<br>Source: ais_detected</div>`)[0];
+                popup_ad30f2aecadcb92675aa3af47f1d6ab0.setContent(html_4d87b8ae0bb7da432e4d802f7a680030);
+            
+        
+
+        circle_marker_0baa712c0d01ca5bdf5f8a04119ef5a3.bindPopup(popup_ad30f2aecadcb92675aa3af47f1d6ab0)
+        ;
+
+        
+    
+    
+            var circle_marker_743c5c9b45aeeac860d79842de6b616b = L.circleMarker(
+                [8.055607365241938, -80.36308101863455],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_873bbe80f3567b2edac9ff106655273c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_81b21e6995d24453490b1bcc4d818aaf = $(`<div id="html_81b21e6995d24453490b1bcc4d818aaf" style="width: 100.0%; height: 100.0%;">Lat: 8.055607365241938, Lon: -80.36308101863455<br>Source: ais_detected</div>`)[0];
+                popup_873bbe80f3567b2edac9ff106655273c.setContent(html_81b21e6995d24453490b1bcc4d818aaf);
+            
+        
+
+        circle_marker_743c5c9b45aeeac860d79842de6b616b.bindPopup(popup_873bbe80f3567b2edac9ff106655273c)
+        ;
+
+        
+    
+    
+            var circle_marker_43718a25bfe9231d98968ed385aae3cf = L.circleMarker(
+                [8.02353312560783, -80.37421627830238],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_ace9c1fdaae762ef92db2c2915e96a68 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4b485328668ff71d230ea1d5a29c39df = $(`<div id="html_4b485328668ff71d230ea1d5a29c39df" style="width: 100.0%; height: 100.0%;">Lat: 8.02353312560783, Lon: -80.37421627830238<br>Source: ais_detected</div>`)[0];
+                popup_ace9c1fdaae762ef92db2c2915e96a68.setContent(html_4b485328668ff71d230ea1d5a29c39df);
+            
+        
+
+        circle_marker_43718a25bfe9231d98968ed385aae3cf.bindPopup(popup_ace9c1fdaae762ef92db2c2915e96a68)
+        ;
+
+        
+    
+    
+            var circle_marker_12f336f482c4d3bb6e98e98a3f105bf5 = L.circleMarker(
+                [8.96011907559798, -79.51818838226727],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_9fc0c9866a0f7e2088738a472f28b6d0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a944753d888b84f059440d89fa0952c6 = $(`<div id="html_a944753d888b84f059440d89fa0952c6" style="width: 100.0%; height: 100.0%;">Lat: 8.96011907559798, Lon: -79.51818838226727<br>Source: ais_detected</div>`)[0];
+                popup_9fc0c9866a0f7e2088738a472f28b6d0.setContent(html_a944753d888b84f059440d89fa0952c6);
+            
+        
+
+        circle_marker_12f336f482c4d3bb6e98e98a3f105bf5.bindPopup(popup_9fc0c9866a0f7e2088738a472f28b6d0)
+        ;
+
+        
+    
+    
+            var circle_marker_11b0790b87afe355a2482df093ddf61f = L.circleMarker(
+                [7.865388666606528, -80.28509288745333],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_14d46be6f0258901641fdfd0d46815b4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_89c34fb72ad4f3010cb53ee02bbce93e = $(`<div id="html_89c34fb72ad4f3010cb53ee02bbce93e" style="width: 100.0%; height: 100.0%;">Lat: 7.865388666606528, Lon: -80.28509288745333<br>Source: ais_detected</div>`)[0];
+                popup_14d46be6f0258901641fdfd0d46815b4.setContent(html_89c34fb72ad4f3010cb53ee02bbce93e);
+            
+        
+
+        circle_marker_11b0790b87afe355a2482df093ddf61f.bindPopup(popup_14d46be6f0258901641fdfd0d46815b4)
+        ;
+
+        
+    
+    
+            var circle_marker_e7161f7e1ba432d88fb8f0fcdb902ba5 = L.circleMarker(
+                [8.21711186641899, -81.80877209042288],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_bd5a7b068f3ad577f4af772301e2d8e3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a38e0e86f24290de7ca510c69ea85e3b = $(`<div id="html_a38e0e86f24290de7ca510c69ea85e3b" style="width: 100.0%; height: 100.0%;">Lat: 8.21711186641899, Lon: -81.80877209042288<br>Source: ais_detected</div>`)[0];
+                popup_bd5a7b068f3ad577f4af772301e2d8e3.setContent(html_a38e0e86f24290de7ca510c69ea85e3b);
+            
+        
+
+        circle_marker_e7161f7e1ba432d88fb8f0fcdb902ba5.bindPopup(popup_bd5a7b068f3ad577f4af772301e2d8e3)
+        ;
+
+        
+    
+    
+            var circle_marker_ff4d48dce910c689e17acbd60cdd3480 = L.circleMarker(
+                [8.242310446451391, -80.49660624881408],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_d21e08c2ed72990cd6b724d670f0c475 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_444666e05c37326c605e5162d196dc18 = $(`<div id="html_444666e05c37326c605e5162d196dc18" style="width: 100.0%; height: 100.0%;">Lat: 8.242310446451391, Lon: -80.49660624881408<br>Source: ais_detected</div>`)[0];
+                popup_d21e08c2ed72990cd6b724d670f0c475.setContent(html_444666e05c37326c605e5162d196dc18);
+            
+        
+
+        circle_marker_ff4d48dce910c689e17acbd60cdd3480.bindPopup(popup_d21e08c2ed72990cd6b724d670f0c475)
+        ;
+
+        
+    
+    
+            var circle_marker_e8c1be0e6c8f79f28f114f7a8b65e9e4 = L.circleMarker(
+                [8.872951490366775, -79.70913681393978],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_95ce02d47fdd0c58c616843965f55002 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2d7a453eab366058ccc61bd946487837 = $(`<div id="html_2d7a453eab366058ccc61bd946487837" style="width: 100.0%; height: 100.0%;">Lat: 8.872951490366775, Lon: -79.70913681393978<br>Source: ais_detected</div>`)[0];
+                popup_95ce02d47fdd0c58c616843965f55002.setContent(html_2d7a453eab366058ccc61bd946487837);
+            
+        
+
+        circle_marker_e8c1be0e6c8f79f28f114f7a8b65e9e4.bindPopup(popup_95ce02d47fdd0c58c616843965f55002)
+        ;
+
+        
+    
+    
+            var circle_marker_49412b76e5bd046196907d0246f7c0f2 = L.circleMarker(
+                [8.94458504237958, -79.54629428274575],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_5fe72f02b364fd0535925c198a4d625f);
+        
+    
+        var popup_496c5d547de0df151259bdca97d0d3bd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_607784ec24445a1bd02edb1c8a350eab = $(`<div id="html_607784ec24445a1bd02edb1c8a350eab" style="width: 100.0%; height: 100.0%;">Lat: 8.94458504237958, Lon: -79.54629428274575<br>Source: ais_detected</div>`)[0];
+                popup_496c5d547de0df151259bdca97d0d3bd.setContent(html_607784ec24445a1bd02edb1c8a350eab);
+            
+        
+
+        circle_marker_49412b76e5bd046196907d0246f7c0f2.bindPopup(popup_496c5d547de0df151259bdca97d0d3bd)
+        ;
+
+        
+    
+    
+            feature_group_5fe72f02b364fd0535925c198a4d625f.addTo(map_53174898e9b3079d3f45379e12d0b654);
+        
+    
+            var feature_group_77f649185fadb6885cbbb0cd07f84367 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_a2ba6131012c4daf1dd77bf82640264d = L.marker(
+                [8.86642232923659, -79.6698569203932],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_a45b8fda99b2a3dc68d371d1bd6343eb = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_a2ba6131012c4daf1dd77bf82640264d.setIcon(div_icon_a45b8fda99b2a3dc68d371d1bd6343eb);
+            
+    
+            var marker_98fe87e3b627209b61ce77cb0980875e = L.marker(
+                [8.86098249608699, -79.6698569203932],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_dc86f609b9f849e20120c7d2179c3acc = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_98fe87e3b627209b61ce77cb0980875e.setIcon(div_icon_dc86f609b9f849e20120c7d2179c3acc);
+            
+    
+            var marker_9a77bcabc9d73760690d482086c91aa5 = L.marker(
+                [7.331295630602828, -80.34637535845074],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_972a6390654b9a3ad1cc66925ae267fa = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_9a77bcabc9d73760690d482086c91aa5.setIcon(div_icon_972a6390654b9a3ad1cc66925ae267fa);
+            
+    
+            var marker_2db8cd736131bb06a752594942f2ff25 = L.marker(
+                [8.960598713454775, -79.53505296247408],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_a8189b935ae8ea9d146449222b527dca = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_2db8cd736131bb06a752594942f2ff25.setIcon(div_icon_a8189b935ae8ea9d146449222b527dca);
+            
+    
+            var marker_3a548ebffea71abbd0b299f7f75b6ae8 = L.marker(
+                [8.9602790497357, -79.52381025543345],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_40aa26fef1862eb097fa598dd1c6f90c = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_3a548ebffea71abbd0b299f7f75b6ae8.setIcon(div_icon_40aa26fef1862eb097fa598dd1c6f90c);
+            
+    
+            var marker_4aaa2cae9ad1d2e231e6c39127bee90d = L.marker(
+                [8.960438929017988, -79.5294317822214],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_c2da8bee7a8e2c735447258c6f6c6d74 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4aaa2cae9ad1d2e231e6c39127bee90d.setIcon(div_icon_c2da8bee7a8e2c735447258c6f6c6d74);
+            
+    
+            var marker_421b37f74506c7f605867437e7e0f5da = L.marker(
+                [8.86673373880859, -79.68108150169897],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_e7643eab7e63840068411eb139589a63 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_421b37f74506c7f605867437e7e0f5da.setIcon(div_icon_e7643eab7e63840068411eb139589a63);
+            
+    
+            var marker_90cc63f9ab9d372485120475d9b2d904 = L.marker(
+                [8.365212310456592, -82.43464977719417],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_f7679ecf5dd707d1985b662b02ce6068 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_90cc63f9ab9d372485120475d9b2d904.setIcon(div_icon_f7679ecf5dd707d1985b662b02ce6068);
+            
+    
+            var marker_8f415fd4afececd9faec5d37f3e755b2 = L.marker(
+                [8.954834723590002, -79.52381025543345],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_708d0fc858c476cd64dc8cce150c843e = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_8f415fd4afececd9faec5d37f3e755b2.setIcon(div_icon_708d0fc858c476cd64dc8cce150c843e);
+            
+    
+            var marker_a6596dbe9481fdb7ca88bf7f95066415 = L.marker(
+                [8.359877348332507, -82.44006794397698],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_6e735851dc1ede906aed8f3dee57b587 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_a6596dbe9481fdb7ca88bf7f95066415.setIcon(div_icon_6e735851dc1ede906aed8f3dee57b587);
+            
+    
+            var marker_515344edab849188d91f32582f02a59c = L.marker(
+                [7.749909701518773, -80.16797581669991],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_fd9ebc0a4bf8358d100778f8bb77f689 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_515344edab849188d91f32582f02a59c.setIcon(div_icon_fd9ebc0a4bf8358d100778f8bb77f689);
+            
+    
+            var marker_4a6d6323099c9423363b3389206c9d96 = L.marker(
+                [9.023051687059036, -79.43381882628826],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_1bb4ee75d1fff90fa03fa87cb815b399 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Juan D\u00edaz\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4a6d6323099c9423363b3389206c9d96.setIcon(div_icon_1bb4ee75d1fff90fa03fa87cb815b399);
+            
+    
+            var marker_d1c8fa50df918144a3317e949e63d11e = L.marker(
+                [7.925682845563518, -81.05614575727921],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_7a00cb64e5270d91c0a2be1efa5da507 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Mutis\u003cbr\u003eVeraguas\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_d1c8fa50df918144a3317e949e63d11e.setIcon(div_icon_7a00cb64e5270d91c0a2be1efa5da507);
+            
+    
+            var marker_ccbaeb9e08c1772f95e26fbe3f1aa083 = L.marker(
+                [8.376090382851343, -82.43464977719417],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_3d4677ef8e142757f27a09e98fa456e7 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_ccbaeb9e08c1772f95e26fbe3f1aa083.setIcon(div_icon_3d4677ef8e142757f27a09e98fa456e7);
+            
+    
+            var marker_51cb0041da8e131e9c13dfc12b730c83 = L.marker(
+                [7.755274366966585, -80.16797581669991],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_c47fa470761ea8ff809871027abd10a5 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_51cb0041da8e131e9c13dfc12b730c83.setIcon(div_icon_c47fa470761ea8ff809871027abd10a5);
+            
+    
+            var marker_181e9a7b8bdbea61daf540b664ada342 = L.marker(
+                [8.954994508914362, -79.5294317822214],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_ebe867d5dfc81f091ab3b0d7d5279c0a = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_181e9a7b8bdbea61daf540b664ada342.setIcon(div_icon_ebe867d5dfc81f091ab3b0d7d5279c0a);
+            
+    
+            var marker_5cf2cbeb99f3e75c3677293a33c99346 = L.marker(
+                [8.866578080812669, -79.675469386348],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_05015da5122fbf4bfa3bc9a24f3e1d50 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_5cf2cbeb99f3e75c3677293a33c99346.setIcon(div_icon_05015da5122fbf4bfa3bc9a24f3e1d50);
+            
+    
+            var marker_a3f29575d1c3ed51c5cb0c63d6ca6843 = L.marker(
+                [7.331175698257877, -80.34080606681118],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_f38f336e34c1f48bcdc8b80d9d6d004c = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_a3f29575d1c3ed51c5cb0c63d6ca6843.setIcon(div_icon_f38f336e34c1f48bcdc8b80d9d6d004c);
+            
+    
+            var marker_634c1c65b3bc081a820ae1c2c6f96e19 = L.marker(
+                [8.370651146492396, -82.43464977719417],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_68644bec46133306403b865633dca494 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_634c1c65b3bc081a820ae1c2c6f96e19.setIcon(div_icon_68644bec46133306403b865633dca494);
+            
+    
+            var marker_ea4e8ca222377ce43fbd8f1010ee23d5 = L.marker(
+                [8.861138155172567, -79.675469386348],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_551a2180de5d324e65ebd229c70c2ad6 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_ea4e8ca222377ce43fbd8f1010ee23d5.setIcon(div_icon_551a2180de5d324e65ebd229c70c2ad6);
+            
+    
+            var marker_0f2fd4f7e73a1530a12e311327ca8d5d = L.marker(
+                [8.860826743466895, -79.66424410399053],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_8f476513af02b7c7efb113099efab8ec = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Vacamonte\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_0f2fd4f7e73a1530a12e311327ca8d5d.setIcon(div_icon_8f476513af02b7c7efb113099efab8ec);
+            
+    
+            var marker_4ee5473ba3d9e981ac06ca91aa5c3cef = L.marker(
+                [7.5294353349770295, -78.1991896022672],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_b3f011ddffa8512e54fa308ed358ce29 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pi\u00f1a\u003cbr\u003eDari\u00e9n\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4ee5473ba3d9e981ac06ca91aa5c3cef.setIcon(div_icon_b3f011ddffa8512e54fa308ed358ce29);
+            
+    
+            var marker_89455d4456759fde34b7b747b0fc5ae7 = L.marker(
+                [7.33662995514523, -80.34637535845074],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_8a8be3ba5a7091f5f0b89b0657556c08 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_89455d4456759fde34b7b747b0fc5ae7.setIcon(div_icon_8a8be3ba5a7091f5f0b89b0657556c08);
+            
+    
+            var marker_4b4074f7039efdc1eb9a613f0cc8814b = L.marker(
+                [9.023214223516185, -79.43944587625732],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_5b98af9e62017b8935cf55b205299b30 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Juan D\u00edaz\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4b4074f7039efdc1eb9a613f0cc8814b.setIcon(div_icon_5b98af9e62017b8935cf55b205299b30);
+            
+    
+            var marker_bdb9194d25250b3b0832d31c7d58803e = L.marker(
+                [8.359773874881856, -82.43464977719417],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_d751878de91949fc69a8fc4648b8ccd8 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_bdb9194d25250b3b0832d31c7d58803e.setIcon(div_icon_d751878de91949fc69a8fc4648b8ccd8);
+            
+    
+            var marker_99c2510ba01fadfd4b478d32e749d485 = L.marker(
+                [8.034048796219336, -80.36308101863455],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_7b7d6bd37ff72dedeb924c0fe5b1f7d4 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eBoca Parita\u003cbr\u003eHerrera\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_99c2510ba01fadfd4b478d32e749d485.setIcon(div_icon_7b7d6bd37ff72dedeb924c0fe5b1f7d4);
+            
+    
+            var marker_0e891fb417a2aeb2297fdc50824176ab = L.marker(
+                [8.94506241475402, -79.5631536602154],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_42c44e051452fa46f2af494ee78c951e = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eLa Boca\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_0e891fb417a2aeb2297fdc50824176ab.setIcon(div_icon_42c44e051452fa46f2af494ee78c951e);
+            
+    
+            var marker_03601fe4177c98d670e2c282b226dfbe = L.marker(
+                [8.02301044793871, -80.35194428106844],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_e4f5cd3ea0259e26906d9ffbdb6e91bb = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eBoca Parita\u003cbr\u003eHerrera\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_03601fe4177c98d670e2c282b226dfbe.setIcon(div_icon_e4f5cd3ea0259e26906d9ffbdb6e91bb);
+            
+    
+            var marker_a52f42a3ddc7aaf2961f716d6da764b3 = L.marker(
+                [8.954674843466123, -79.51818838226727],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_daf76180c5b1f54ff5af349eaee439a6 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_a52f42a3ddc7aaf2961f716d6da764b3.setIcon(div_icon_daf76180c5b1f54ff5af349eaee439a6);
+            
+    
+            var marker_c2689bac18795314dcad21b02a5aadaf = L.marker(
+                [8.955154199449128, -79.53505296247408],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_f81f10e626a7c4646afde989bd79c456 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_c2689bac18795314dcad21b02a5aadaf.setIcon(div_icon_f81f10e626a7c4646afde989bd79c456);
+            
+    
+            var marker_9d53704a7d6826d89d736f90075abeb9 = L.marker(
+                [7.749780427160378, -80.16239479631659],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_1ccc9c2152f3281bd6d86e0ce240f0d5 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_9d53704a7d6826d89d736f90075abeb9.setIcon(div_icon_1ccc9c2152f3281bd6d86e0ce240f0d5);
+            
+    
+            var marker_7907192fc2f3c675a38f92f2dd9bb9cb = L.marker(
+                [9.126632390064954, -79.06733024322055],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_1dece90112c5bfc3fbffeedd21055983 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Coquira\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_7907192fc2f3c675a38f92f2dd9bb9cb.setIcon(div_icon_1dece90112c5bfc3fbffeedd21055983);
+            
+    
+            var marker_d62af59ce7e76dc356244f1e5658a046 = L.marker(
+                [8.017492016043587, -80.34637535845074],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_c389c5dc2c23beeb6aa49820d1c8cfe1 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eBoca Parita\u003cbr\u003eHerrera\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_d62af59ce7e76dc356244f1e5658a046.setIcon(div_icon_c389c5dc2c23beeb6aa49820d1c8cfe1);
+            
+    
+            var marker_538635408144a669ee6841ded0b2f5bc = L.marker(
+                [8.269687918522877, -82.85598537490912],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_ce427b045250547e69f805edb26b096d = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Armuelles\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_538635408144a669ee6841ded0b2f5bc.setIcon(div_icon_ce427b045250547e69f805edb26b096d);
+            
+    
+            var marker_4e506399aeb66333647c807403a68d7d = L.marker(
+                [9.12646144762857, -79.06168083856707],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_6a061b590268b9f53a8b207703e281d0 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Coquira\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4e506399aeb66333647c807403a68d7d.setIcon(div_icon_6a061b590268b9f53a8b207703e281d0);
+            
+    
+            var marker_3b24c125df65c3919c2d70bfe719b652 = L.marker(
+                [8.27473890908154, -82.83444205019033],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_c24f717910a6dfab342e6db931118e6c = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Armuelles\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_3b24c125df65c3919c2d70bfe719b652.setIcon(div_icon_c24f717910a6dfab342e6db931118e6c);
+            
+    
+            var marker_4be2a7f0283edae235d897c0d4005a99 = L.marker(
+                [8.36531584929818, -82.44006794397698],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_fa5f760e8c8e3f025780bca744dba487 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pedregal\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4be2a7f0283edae235d897c0d4005a99.setIcon(div_icon_fa5f760e8c8e3f025780bca744dba487);
+            
+    
+            var marker_19b5ced7e860d056935442838d8453f2 = L.marker(
+                [8.055607365241938, -80.36308101863455],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_eb6cea8adb50cef02f6d18ca49ae8565 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eBoca Parita\u003cbr\u003eHerrera\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_19b5ced7e860d056935442838d8453f2.setIcon(div_icon_eb6cea8adb50cef02f6d18ca49ae8565);
+            
+    
+            var marker_66b90bbe8c3811df00172f30298941b0 = L.marker(
+                [8.02353312560783, -80.37421627830238],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_312054f59431ae4a9dc82650d348eec4 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eBoca Parita\u003cbr\u003eHerrera\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_66b90bbe8c3811df00172f30298941b0.setIcon(div_icon_312054f59431ae4a9dc82650d348eec4);
+            
+    
+            var marker_a0658947dc797fcc4cdd9e9e1e5b92e2 = L.marker(
+                [8.96011907559798, -79.51818838226727],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_cdd288bcc5199bb471f7d943adea9a90 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Panam\u00e1\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_a0658947dc797fcc4cdd9e9e1e5b92e2.setIcon(div_icon_cdd288bcc5199bb471f7d943adea9a90);
+            
+    
+            var marker_c4cefdd5a2f7e0bc8b39074e4c7d931d = L.marker(
+                [7.865388666606528, -80.28509288745333],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_9cd203bebe9c4cb2620f4efcce1431ee = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eB\u00facaro\u003cbr\u003eLos Santos\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_c4cefdd5a2f7e0bc8b39074e4c7d931d.setIcon(div_icon_9cd203bebe9c4cb2620f4efcce1431ee);
+            
+    
+            var marker_65ab4946f4fbf2695143f20cc02e461d = L.marker(
+                [8.21711186641899, -81.80877209042288],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_718e368b3decff53f4c025394175aaf3 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Remedios\u003cbr\u003eChiriqu\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_65ab4946f4fbf2695143f20cc02e461d.setIcon(div_icon_718e368b3decff53f4c025394175aaf3);
+            
+    
+            var marker_61931fe156367af7f57751d9fc0aaca7 = L.marker(
+                [8.242310446451391, -80.49660624881408],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_1ed6300e5ef237b296361f8b6955a6cf = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Aguadulce\u003cbr\u003eCocl\u00e9\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_61931fe156367af7f57751d9fc0aaca7.setIcon(div_icon_1ed6300e5ef237b296361f8b6955a6cf);
+            
+    
+            var marker_6302ae8dfa3c2ce42b099e361d2007b9 = L.marker(
+                [8.872951490366775, -79.70913681393978],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_9cd21b34dca07f7dbce11548d4784c86 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Caimito\u003cbr\u003ePanam\u00e1 Oeste\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_6302ae8dfa3c2ce42b099e361d2007b9.setIcon(div_icon_9cd21b34dca07f7dbce11548d4784c86);
+            
+    
+            var marker_eb1dc849eb5c70f57437b7408e535ca3 = L.marker(
+                [8.94458504237958, -79.54629428274575],
+                {
+}
+            ).addTo(feature_group_77f649185fadb6885cbbb0cd07f84367);
+        
+    
+            var div_icon_5f3db878a3fef23b2d7e52bf79a367f1 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eChorrillo\u003cbr\u003ePanam\u00e1\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_eb1dc849eb5c70f57437b7408e535ca3.setIcon(div_icon_5f3db878a3fef23b2d7e52bf79a367f1);
+            
+    
+            var layer_control_a7f1c561946b785cd47456bfe7b5bc6b_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_5f951218ae32879226d4a30b9106421a,
+                },
+                overlays :  {
+                    "S2 Cells" : geo_json_65efa767e2eec6c281a6ac71481acd5b,
+                    "S2 Centroid" : feature_group_5fe72f02b364fd0535925c198a4d625f,
+                    "Label / Sublabel" : feature_group_77f649185fadb6885cbbb0cd07f84367,
+                },
+            };
+            let layer_control_a7f1c561946b785cd47456bfe7b5bc6b = L.control.layers(
+                layer_control_a7f1c561946b785cd47456bfe7b5bc6b_layers.base_layers,
+                layer_control_a7f1c561946b785cd47456bfe7b5bc6b_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_53174898e9b3079d3f45379e12d0b654);
+
+        
+</script>
+</html>
