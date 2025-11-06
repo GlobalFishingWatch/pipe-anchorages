@@ -34,7 +34,7 @@ def s2_level14_hex8(lat: float, lon: float) -> str:
 # %%
 ais_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/anchorage_overrides.csv')
 ais_anchorages['label_source'] = 'anchorage_overrides'
-ais_anchorages = clean_overrides(ais_anchorages)
+ais_anchorages = clean_overrides(ais_anchorages,duplicate_option='keep_last')
 ais_anchorages
 
 # %% [markdown]
@@ -43,7 +43,7 @@ ais_anchorages
 # %%
 bra_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/brazil_overrides.csv')
 bra_anchorages['label_source'] = 'brazil_vms_overrides'
-bra_anchorages = clean_overrides(bra_anchorages, True)
+bra_anchorages = clean_overrides(bra_anchorages)
 bra_anchorages
 
 # %% [markdown]
@@ -52,7 +52,7 @@ bra_anchorages
 # %%
 chl_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/chile_overrides.csv')
 chl_anchorages['label_source'] = 'chile_vms_overrides'
-chl_anchorages = clean_overrides(chl_anchorages, True)
+chl_anchorages = clean_overrides(chl_anchorages)
 chl_anchorages
 
 
@@ -62,7 +62,7 @@ chl_anchorages
 # %%
 pan_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/panama_overrides.csv')
 pan_anchorages['label_source'] = 'panama_vms_overrides'
-pan_anchorages = clean_overrides(pan_anchorages, True)
+pan_anchorages = clean_overrides(pan_anchorages)
 pan_anchorages
 
 # %% [markdown]
@@ -71,7 +71,7 @@ pan_anchorages
 # %%
 ecu_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/ecuador_overrides.csv')
 ecu_anchorages['label_source'] = 'ecuador_vms_overrides'
-ecu_anchorages = clean_overrides(ecu_anchorages, True)
+ecu_anchorages = clean_overrides(ecu_anchorages)
 ecu_anchorages
 
 # %% [markdown]
@@ -80,7 +80,7 @@ ecu_anchorages
 # %%
 cri_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/costa_rica_overrides.csv')
 cri_anchorages['label_source'] = 'costa_rica_vms_overrides'
-cri_anchorages = clean_overrides(cri_anchorages, True)
+cri_anchorages = clean_overrides(cri_anchorages)
 cri_anchorages
 
 # %% [markdown]
@@ -92,7 +92,7 @@ old_len = len(combined_anchorages)
 duplicates = combined_anchorages[combined_anchorages.duplicated(subset='s2id', keep=False)]
 combined_anchorages = combined_anchorages.drop_duplicates(subset='s2id', keep='first').reset_index(drop=True) # taking first because this takes ecuador over costa rica which has anchorages in ecuador
 if old_len - len(combined_anchorages) > 0:
-    print(f"WARNING: Dropped {old_len - len(combined_anchorages)} duplicates from country-reviewed lists. This means one country-reviewed list overwrote at least 1 row from another. You should look into this")
+    print(f"WARNING: Dropped {old_len - len(combined_anchorages)} duplicates from country-reviewed lists. This means one country-reviewed list overwrote at least 1 row from another.")
 
 combined_anchorages = pd.concat([ais_anchorages, combined_anchorages])
 old_len = len(combined_anchorages)
@@ -103,11 +103,13 @@ print('Country duplicates:')
 duplicates
 
 # %%
-# combined_anchorages.to_csv('../../pipe_anchorages/data/port_lists/combined_anchorage_overrides.csv',index=False)
+combined_to_save = combined_anchorages.drop(columns=['source','label_source'])
+
+combined_to_save.to_csv('../../pipe_anchorages/data/port_lists/combined_anchorage_overrides.csv',index=False)
+combined_to_save
 
 
 # %%
-combined_anchorages
 
 # %% [markdown]
 # # map anchorages
