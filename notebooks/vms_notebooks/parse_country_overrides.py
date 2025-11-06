@@ -12,7 +12,6 @@ from amanda_anchorage_helper import *
 
 fig_fldr = './figures'
 
-
 # %%
 def run_buffer_1km_s2cells_query(country_name):
     q = f'''
@@ -25,11 +24,22 @@ def run_buffer_1km_s2cells_query(country_name):
 
     with 
 
+    provided_pts AS (
+      SELECT
+        s2id,
+        label,
+        sublabel,
+        iso3,
+        longitude, 
+        latitude,
+      FROM `world-fishing-827.scratch_amanda_ttl_120.reviewed_ports_{country_name}`
+    ),
+
     regions AS (
       SELECT
         *,
         ST_BUFFER(ST_GEOGPOINT(longitude, latitude), 1000) AS geom_polygon
-      FROM `world-fishing-827.scratch_amanda_ttl_120.reviewed_ports_{country_name}`
+      FROM provided_pts
     ),
 
     # WKT to S2 cell
@@ -50,27 +60,63 @@ def run_buffer_1km_s2cells_query(country_name):
       *  except (s2id_array, int_s2id),
     from s2_cells
     inner join unnest(s2_cells.s2id_array) as int_s2id
-    )
+    ),
 
+    all_buffered AS (
     select
       s2id,
       ST_X(center) longitude,
       ST_Y(center) latitude,
       *  except (s2id, center),
     from unnested
+    ),
+
+    buffer_distances AS (
+        SELECT
+          ab.*,
+          CASE
+            WHEN ab.s2id = p.s2id THEN 0
+            ELSE ST_DISTANCE(
+              ST_GEOGPOINT(ab.longitude, ab.latitude),
+              ST_GEOGPOINT(p.longitude,  p.latitude)
+            )
+          END AS buffer_dist
+        FROM
+          all_buffered AS ab
+        LEFT JOIN
+          provided_pts AS p
+        USING(label,sublabel,iso3)
+    ),
+
+    closest_buffer AS (
+    SELECT *
+    FROM (
+      SELECT
+        *,
+        ROW_NUMBER() OVER (
+          PARTITION BY s2id
+          ORDER BY buffer_dist ASC, label, sublabel -- additional ordering by label and sublabel just so ties are deterministic
+        ) AS rn
+      FROM buffer_distances
+    )
+    WHERE rn = 1
+    )
+
+    SELECT
+      * EXCEPT (rn, buffer_dist),
+      IF (buffer_dist = 0, 'provided_points', 'buffer') AS source
+    FROM closest_buffer
     '''
 
     return(get_bq_df(q))
-
 
 # %% [markdown]
 # # Brazil
 
 # %%
-df = pd.read_csv('../../pipe_anchorages/data/port_lists/brazil_overrides_duplicates.csv')
-df = clean_overrides(df, True)
+df = pd.read_csv('../../pipe_anchorages/data/port_lists/brazil_original_overrides.csv')
+df = clean_overrides(df,duplicate_option='keep_last')
 df.to_csv('../../pipe_anchorages/data/port_lists/brazil_overrides.csv',index=False)
-
 
 # %% [markdown]
 # # Chile
@@ -90,19 +136,10 @@ country_name = 'chile'
 df_singleS2 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
 #df_to_bq(df,'scratch_amanda_ttl_120',f"reviewed_ports_{country_name}",v='',project_id = 'world-fishing-827',if_exists = 'fail') # fail -> replace if you want to overwrite
 df = run_buffer_1km_s2cells_query(country_name)
-df = clean_overrides(df, combine_duplicates = True)
+df = clean_overrides(df)
+df
 df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_overrides.csv', index = False)
 
-df_singleS2['source'] = 'provided_points'
-df = df.merge(
-    df_singleS2[["s2id", "source"]],
-    on="s2id",
-    how="left"
-)
-df = clean_overrides(df, combine_duplicates = True)
-
-# Fill missing (non-matching) values with "ais_detected"
-df["source"] = df["source"].fillna("buffer")
 color_map = {
     "provided_points": "purple",
     "buffer": "orange",
@@ -110,7 +147,6 @@ color_map = {
 m = map_s2_anchorages(df, show_labels=False, fit_bounds=True, color_map = color_map)
 m.save(f"{fig_fldr}/buffered_S2cell_overrides_map_{country_name}_20251024.html")
 m
-
 
 # %% [markdown]
 # # Panama
@@ -128,25 +164,14 @@ df = df.rename(columns={
 })[["s2id", "latitude", "longitude", "label", "sublabel", "iso3"]]
 #df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv',index=False)
 
-
 # %%
 df_singleS2 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
 #df_to_bq(df,'scratch_amanda_ttl_120',f"reviewed_ports_{country_name}",v='',project_id = 'world-fishing-827',if_exists = 'fail') # fail -> replace if you want to overwrite
 df = run_buffer_1km_s2cells_query(country_name)
-df = clean_overrides(df, combine_duplicates = True)
+df = clean_overrides(df)
+df
 df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_overrides.csv', index = False)
 
-df_singleS2['source'] = 'provided_points'
-df = df.merge(
-    df_singleS2[["s2id", "source"]],
-    on="s2id",
-    how="left"
-)
-print()
-df = clean_overrides(df, combine_duplicates = True)
-
-
-df["source"] = df["source"].fillna("buffer")
 color_map = {
     "provided_points": "purple",
     "buffer": "orange",
@@ -175,20 +200,10 @@ df
 df_singleS2 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
 #df_to_bq(df,'scratch_amanda_ttl_120',f"reviewed_ports_{country_name}",v='',project_id = 'world-fishing-827',if_exists = 'fail') # fail -> replace if you want to overwrite
 df = run_buffer_1km_s2cells_query(country_name)
-df = clean_overrides(df, combine_duplicates = True)
+df = clean_overrides(df)
+df
 df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_overrides.csv', index = False)
 
-df_singleS2['source'] = 'provided_points'
-df = df.merge(
-    df_singleS2[["s2id", "source"]],
-    on="s2id",
-    how="left"
-)
-print()
-df = clean_overrides(df, combine_duplicates = True)
-
-
-df["source"] = df["source"].fillna("buffer")
 color_map = {
     "provided_points": "purple",
     "buffer": "orange",
@@ -239,28 +254,10 @@ df
 df_singleS2 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
 #df_to_bq(df,'scratch_amanda_ttl_120',f"reviewed_ports_{country_name}",v='',project_id = 'world-fishing-827',if_exists = 'fail') # fail -> replace if you want to overwrite
 df = run_buffer_1km_s2cells_query(country_name)
-#df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_overrides.csv', index = False)
-
+df = clean_overrides(df)
 df
-
-# %%
-df_singleS2 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
-#df_to_bq(df,'scratch_amanda_ttl_120',f"reviewed_ports_{country_name}",v='',project_id = 'world-fishing-827',if_exists = 'fail') # fail -> replace if you want to overwrite
-df = run_buffer_1km_s2cells_query(country_name)
-df = clean_overrides(df, combine_duplicates = True)
 df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_overrides.csv', index = False)
 
-
-df_singleS2['source'] = 'provided_points'
-df = df.merge(
-    df_singleS2[["s2id", "source"]],
-    on="s2id",
-    how="left"
-)
-df = clean_overrides(df, combine_duplicates = True)
-
-
-df["source"] = df["source"].fillna("buffer")
 color_map = {
     "provided_points": "purple",
     "buffer": "orange",
@@ -268,5 +265,8 @@ color_map = {
 m = map_s2_anchorages(df, show_labels=False, fit_bounds=True, color_map = color_map)
 m.save(f"{fig_fldr}/buffered_S2cell_overrides_map_{country_name}_20251024.html")
 m
+
+# %%
+
 
 

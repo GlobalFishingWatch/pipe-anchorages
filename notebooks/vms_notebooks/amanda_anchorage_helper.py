@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # %%
 from amanda_notebook_bq_helper import *
 import numpy as np
@@ -254,7 +255,30 @@ def map_s2_anchorages(
 
 
 # %%
-def clean_overrides(df, combine_duplicates = False):
+def cellid_from_token(token: str) -> CellId:
+    """Parse an S2CellId token (hex without trailing zeros) into a CellId."""
+    token = token.lower().strip()
+    if not (1 <= len(token) <= 16):
+        raise ValueError("S2 token must be 1..16 hex chars")
+    val = int(token, 16)
+    # pad zeros on the RIGHT to reach 16 hex chars => shift left by 4 bits per missing hex digit
+    shift = 4 * (16 - len(token))
+    return CellId(val << shift)
+
+def s2_center_distance_meters(id1_hex: str, id2_hex: str) -> float:
+    """Distance between centroids of two s2 cells, in meters"""
+    EARTH_RADIUS_M = 6_371_000
+    c1 = cellid_from_token(id1_hex)
+    c2 = cellid_from_token(id2_hex)
+    ll1 = c1.to_lat_lng()
+    ll2 = c2.to_lat_lng()
+    return ll1.get_distance(ll2).radians * EARTH_RADIUS_M
+
+def clean_overrides(df, duplicate_option = 'nothing'):
+    duplicate_options = ['keep_last', 'combine_with_ampersand','nothing']
+    if duplicate_option not in duplicate_options:
+        raise Exception(f"{duplicate_option} not a valid duplicate_option")
+
     # fix messed up s2ids
     messed_up_s2id_count = 0
     for idx, row in df.iterrows():
@@ -264,13 +288,13 @@ def clean_overrides(df, combine_duplicates = False):
             messed_up_s2id_count = messed_up_s2id_count+1
     print(f"Fixed {messed_up_s2id_count} messed up s2ids")
 
-    # drop duplicates
+    # handle duplicates
 
     old_len = len(df)
-    if not combine_duplicates:
+    if duplicate_option == 'keep_last':
         df = df.drop_duplicates(subset='s2id', keep='last').reset_index(drop=True)
         print(f"Dropped {old_len - len(df)} duplicates")
-    else:
+    elif duplicate_option == 'combine_with_ampersand':
         # Filter to duplicated s2ids (includes all occurrences)
         dupes = df[df.duplicated(subset='s2id', keep=False)]
 
@@ -317,5 +341,17 @@ def clean_overrides(df, combine_duplicates = False):
         print(f"Handled {old_len - len(df)} duplicates")
         print(f"Rows whose labels were combined: {n_labels_combined}")
         print(f"Rows whose sublabels were combined: {n_sublabels_combined}")
+    
+    elif duplicate_option == 'nothing':
+        dupes = df[df.duplicated(subset='s2id', keep=False)]
+        if len(dupes) > 0:
+            print(f"WARNING: There are {len(dupes)} duplicated s2ids that were not handled")
+        else:
+            print(f"There are 0 duplicated s2ids")
+
+    else:
+        raise Exception("invalid duplicate option, should be unreachable")
         
     return(df)
+
+# %%

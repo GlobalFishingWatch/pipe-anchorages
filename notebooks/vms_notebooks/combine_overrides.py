@@ -6,6 +6,8 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import contextily as ctx
+import json
+
 
 from amanda_anchorage_helper import *
 fig_fldr = './figures'
@@ -31,7 +33,7 @@ def s2_level14_hex8(lat: float, lon: float) -> str:
 
 # %%
 ais_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/anchorage_overrides.csv')
-ais_anchorages['source'] = 'ais_anchorage_overrides'
+ais_anchorages['label_source'] = 'anchorage_overrides'
 ais_anchorages = clean_overrides(ais_anchorages)
 ais_anchorages
 
@@ -40,7 +42,7 @@ ais_anchorages
 
 # %%
 bra_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/brazil_overrides.csv')
-bra_anchorages['source'] = 'brazil_vms_reviewed'
+bra_anchorages['label_source'] = 'brazil_vms_overrides'
 bra_anchorages = clean_overrides(bra_anchorages, True)
 bra_anchorages
 
@@ -49,7 +51,7 @@ bra_anchorages
 
 # %%
 chl_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/chile_overrides.csv')
-chl_anchorages['source'] = 'chile_vms_reviewed'
+chl_anchorages['label_source'] = 'chile_vms_overrides'
 chl_anchorages = clean_overrides(chl_anchorages, True)
 chl_anchorages
 
@@ -59,7 +61,7 @@ chl_anchorages
 
 # %%
 pan_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/panama_overrides.csv')
-pan_anchorages['source'] = 'panama_vms_reviewed'
+pan_anchorages['label_source'] = 'panama_vms_overrides'
 pan_anchorages = clean_overrides(pan_anchorages, True)
 pan_anchorages
 
@@ -68,7 +70,7 @@ pan_anchorages
 
 # %%
 ecu_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/ecuador_overrides.csv')
-ecu_anchorages['source'] = 'ecuador_vms_reviewed'
+ecu_anchorages['label_source'] = 'ecuador_vms_overrides'
 ecu_anchorages = clean_overrides(ecu_anchorages, True)
 ecu_anchorages
 
@@ -77,7 +79,7 @@ ecu_anchorages
 
 # %%
 cri_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/costa_rica_overrides.csv')
-cri_anchorages['source'] = 'costa_rica_vms_reviewed'
+cri_anchorages['label_source'] = 'costa_rica_vms_overrides'
 cri_anchorages = clean_overrides(cri_anchorages, True)
 cri_anchorages
 
@@ -101,9 +103,11 @@ print('Country duplicates:')
 duplicates
 
 # %%
-combined_anchorages_no_source = combined_anchorages.drop(columns='source')
-# combined_anchorages_no_source.to_csv('../../pipe_anchorages/data/port_lists/combined_anchorage_overrides.csv',index=False)
+# combined_anchorages.to_csv('../../pipe_anchorages/data/port_lists/combined_anchorage_overrides.csv',index=False)
 
+
+# %%
+combined_anchorages
 
 # %% [markdown]
 # # map anchorages
@@ -282,6 +286,9 @@ for focal_country_name in focal_country_names:
 # ## folium html maps
 
 # %%
+combined_anchorages = combined_anchorages.rename(columns={'label_source': 'source'})
+
+# %%
 q = f'''
 SELECT
   *
@@ -290,6 +297,10 @@ FROM
 '''
 df = get_bq_df(q)
 df['s2lat'], df['s2lon'] = zip(*df['s2id'].map(s2id_to_latlon))
+df
+
+# %%
+
 # Left join on 's2id' to bring in the 'source' column
 df = df.merge(
     combined_anchorages[["s2id", "source"]],
@@ -306,9 +317,9 @@ df
 country_names = ['costa_rica','ecuador','panama','chile']
 
 for country_name in country_names:
-    df.loc[df["source"] == f"{country_name}_vms_reviewed", "source"] = f"{country_name}_vms_reviewed_buffer"
+    df.loc[df["source"] == f"{country_name}_vms_overrides", "source"] = f"{country_name}_vms_overrides_buffer"
     df1 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
-    df.loc[df["s2id"].isin(df1["s2id"]), "source"] = f"{country_name}_vms_reviewed_provided_point"
+    df.loc[df["s2id"].isin(df1["s2id"]), "source"] = f"{country_name}_vms_overrides_provided_point"
 
 np.unique(df['source'])
 
@@ -438,3 +449,106 @@ label_map = {
 m = map_s2_anchorages(dfc,color_map = color_map, label_map = label_map, legend_title='Source (first on this list that applies)')
 m.save(f"{fig_fldr}/{country_name}_combined_named_anchorages.html")
 m
+
+# %% [markdown]
+# # Save polygons
+
+# %%
+df["label_and_source"] = df["label"].astype(str) + ": " + df["source"].astype(str)
+df
+
+# %%
+np.unique(df['source'])
+
+# %%
+dfc
+
+# %%
+from typing import Dict, Any, List
+import pandas as pd
+from s2sphere import Cell, CellId, LatLng
+
+def df_to_s2_feature_collection(df: pd.DataFrame) -> Dict[str, Any]:
+    """
+    Convert a DataFrame with S2 cell tokens to a GeoJSON FeatureCollection of polygons.
+
+    Expected columns:
+      - s2id (str): S2 cell token
+      - label (optional, str)
+      - sublabel (optional, str)
+      - source (optional, str)
+      - s2lat, s2lon (optional, floats) — only tracked for potential fit_bounds use
+
+    Rows with invalid/missing s2id tokens are skipped.
+    """
+    features: List[Dict[str, Any]] = []
+    lon_all: List[float] = []  # retained in case you want fit_bounds/bbox later
+    lat_all: List[float] = []
+
+    for row in df.itertuples(index=False):
+        s2id = getattr(row, "s2id", None)
+        if s2id is None or (isinstance(s2id, float) and pd.isna(s2id)):
+            continue
+
+        label = getattr(row, "label", "NULL")
+        sublabel = getattr(row, "sublabel", "NULL")
+        src = getattr(row, "source", "no_source")
+        label_src = getattr(row,"label_and_source","no label_and_source")
+
+        # Try constructing the S2 cell; skip invalids
+        try:
+            cell = Cell(CellId.from_token(str(s2id)))
+        except Exception:
+            continue
+
+        # Build the cell polygon ring (lon, lat) and close it
+        ring: List[List[float]] = []
+        for i in range(4):
+            v = cell.get_vertex(i)
+            ll = LatLng.from_point(v)
+            ring.append([ll.lng().degrees, ll.lat().degrees])
+            lon_all.append(ll.lng().degrees)
+            lat_all.append(ll.lat().degrees)
+        ring.append(ring[0])
+
+        # Track centroids too for potential fit_bounds
+        if hasattr(row, "s2lat") and hasattr(row, "s2lon"):
+            lat_all.append(getattr(row, "s2lat"))
+            lon_all.append(getattr(row, "s2lon"))
+
+        features.append({
+            "type": "Feature",
+            "geometry": {"type": "Polygon", "coordinates": [ring]},
+            "properties": {
+                "label": label if pd.notna(label) else "NULL",
+                "sublabel": sublabel if pd.notna(sublabel) else "NULL",
+                "source": src if pd.notna(src) else "no_source",
+                "label_source": label_src if pd.notna(label_src) else "no label_and_source",
+                "s2id": s2id
+            }
+        })
+
+    # Build and return FeatureCollection
+    return {"type": "FeatureCollection", "features": features, "tolerance": 0}
+
+
+# %%
+
+# %%
+import json
+
+country_names = ['costa_rica', 'ecuador', 'panama', 'chile', 'brazil']
+country_isos = ['CRI', 'ECU', 'PAN', 'CHL', 'BRA']
+
+for country_name, country_iso in zip(country_names, country_isos):
+    dfc = df[df["iso3"] == country_iso]
+    polys = df_to_s2_feature_collection(dfc)
+
+    # Save the FeatureCollection to a GeoJSON file
+    output_path = f"{country_name}_anchorages.geojson"
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(polys, f, ensure_ascii=False, indent=2)
+
+    print(f"Saved {output_path} ({len(polys['features'])} features)")
+
+# %%
