@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_0523aedf2f70c97fdb32aba20f24c11f {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    
+                    <style>
+                        .foliumtooltip {
+                            
+                        }
+                       .foliumtooltip table{
+                            margin: auto;
+                        }
+                        .foliumtooltip tr{
+                            text-align: left;
+                        }
+                        .foliumtooltip th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_0523aedf2f70c97fdb32aba20f24c11f" ></div>
+        
+    
+    <div id='maplegend' class='maplegend' 
+         style='position: absolute; z-index:9999; border:2px solid #bbb; 
+                background-color: rgba(255, 255, 255, 0.9); border-radius:6px; 
+                padding: 10px; font-size:14px; left: 100px; top: 20px;'>
+      <div class='legend-title'>Source</div>
+      <div class='legend-scale'>
+        <ul class='legend-labels'>
+          <li><span style='background:blue;'></span>palau_vms_overrides</li><li><span style='background:lightgray;'></span>no_source</li>
+        </ul>
+      </div>
+    </div>
+    <style type='text/css'>
+      .maplegend .legend-title { text-align:left; margin-bottom:8px; font-weight:bold; font-size:90%; }
+      .maplegend .legend-scale ul { margin:0; padding:0; list-style:none; }
+      .maplegend .legend-scale ul li { line-height:18px; margin-bottom:4px; }
+      .maplegend ul.legend-labels li span {
+        display:inline-block; height:12px; width:18px; margin-right:6px;
+        border:1px solid #999; opacity:0.7;
+      }
+    </style>
+    
+</body>
+<script>
+    
+    
+            var map_0523aedf2f70c97fdb32aba20f24c11f = L.map(
+                "map_0523aedf2f70c97fdb32aba20f24c11f",
+                {
+                    center: [7.331217173958492, 134.45829371906257],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 18,
+  "zoomControl": true,
+  "preferCanvas": true,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+
+            
+
+        
+    
+            var tile_layer_decea0b28c1f3fcace6d24f54d7052b9 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_decea0b28c1f3fcace6d24f54d7052b9.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+        
+    
+            var tile_layer_bd25051bab7667d67d52eadedc82025a = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_bd25051bab7667d67d52eadedc82025a.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+        
+    
+        function geo_json_ee62b7bb0f275f6509088db6c6336306_styler(feature) {
+            switch(feature.properties.s2id) {
+                default:
+                    return {"color": "blue", "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "weight": 2};
+            }
+        }
+
+        function geo_json_ee62b7bb0f275f6509088db6c6336306_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_ee62b7bb0f275f6509088db6c6336306 = L.geoJson(null, {
+                onEachFeature: geo_json_ee62b7bb0f275f6509088db6c6336306_onEachFeature,
+            
+                style: geo_json_ee62b7bb0f275f6509088db6c6336306_styler,
+            ...{
+}
+        });
+
+        function geo_json_ee62b7bb0f275f6509088db6c6336306_add (data) {
+            geo_json_ee62b7bb0f275f6509088db6c6336306
+                .addData(data);
+        }
+            geo_json_ee62b7bb0f275f6509088db6c6336306_add({"features": [{"geometry": {"coordinates": [[[134.45593495314566, 7.329478172548347], [134.46065236690777, 7.328892470912151], [134.46065236690777, 7.3329560999123755], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.329478172548347]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b75", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}, {"geometry": {"coordinates": [[[134.45121706710648, 7.3341281463897525], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.337606391263816], [134.45121706710648, 7.338192736121246], [134.45121706710648, 7.3341281463897525]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b0d", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}], "tolerance": 0, "type": "FeatureCollection"});
+
+        
+    
+    geo_json_ee62b7bb0f275f6509088db6c6336306.bindTooltip(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature => {
+        if (feature === null) {
+            return '';
+        } else if (typeof(feature)=='object') {
+            return JSON.stringify(feature);
+        } else {
+            return feature;
+        }
+    }
+    let fields = ["label", "sublabel", "source", "s2id"];
+    let aliases = ["Label:", "Sublabel:", "Source:", "s2 cell:"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i]}</th>
+            
+            <td>${handleObject(layer.feature.properties[v])}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{
+  "sticky": false,
+  "className": "foliumtooltip",
+});
+                     
+    
+            geo_json_ee62b7bb0f275f6509088db6c6336306.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+        
+    
+            var feature_group_df30298095e4c70dd996f8e258a4d168 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_246851d5d9d913b6e1d64a9c09daedd4 = L.circleMarker(
+                [7.331217173958492, 134.45829371906257],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_df30298095e4c70dd996f8e258a4d168);
+        
+    
+            var circle_marker_52161ce6a1f9d4ae94dce96077570d7b = L.circleMarker(
+                [7.3358673065672155, 134.45357606915948],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_df30298095e4c70dd996f8e258a4d168);
+        
+    
+            feature_group_df30298095e4c70dd996f8e258a4d168.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+        
+    
+            var feature_group_28590649ad04ae6b542c8fb8c1f4b6c5 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_4c15e791d82c0640184bffdc22e5da5d = L.marker(
+                [7.331217173958492, 134.45829371906257],
+                {
+}
+            ).addTo(feature_group_28590649ad04ae6b542c8fb8c1f4b6c5);
+        
+    
+            var div_icon_77829be0b9b59c4245b42269a2212bbf = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eMalakal Harbor\u003cbr\u003eNone\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_4c15e791d82c0640184bffdc22e5da5d.setIcon(div_icon_77829be0b9b59c4245b42269a2212bbf);
+            
+    
+            var marker_49224f04093e62488f110007f17bcbaf = L.marker(
+                [7.3358673065672155, 134.45357606915948],
+                {
+}
+            ).addTo(feature_group_28590649ad04ae6b542c8fb8c1f4b6c5);
+        
+    
+            var div_icon_525860acf6bc21d1d996d67b44f28bd6 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eMalakal Harbor\u003cbr\u003eNone\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_49224f04093e62488f110007f17bcbaf.setIcon(div_icon_525860acf6bc21d1d996d67b44f28bd6);
+            
+    
+            map_0523aedf2f70c97fdb32aba20f24c11f.fitBounds(
+                [[7.328892470912151, 134.45121706710648], [7.338192736121246, 134.46065236690777]],
+                {}
+            );
+        
+    
+            var layer_control_efc6a09f428ca03bb5633314aecc3b74_layers = {
+                base_layers : {
+                    "Esri Satellite" : tile_layer_decea0b28c1f3fcace6d24f54d7052b9,
+                    "OpenStreetMap" : tile_layer_bd25051bab7667d67d52eadedc82025a,
+                },
+                overlays :  {
+                    "S2 Cells" : geo_json_ee62b7bb0f275f6509088db6c6336306,
+                    "S2 Centroid" : feature_group_df30298095e4c70dd996f8e258a4d168,
+                    "Label / Sublabel" : feature_group_28590649ad04ae6b542c8fb8c1f4b6c5,
+                },
+            };
+            let layer_control_efc6a09f428ca03bb5633314aecc3b74 = L.control.layers(
+                layer_control_efc6a09f428ca03bb5633314aecc3b74_layers.base_layers,
+                layer_control_efc6a09f428ca03bb5633314aecc3b74_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+
+        
+</script>
+</html>

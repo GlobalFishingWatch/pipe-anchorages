@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_02ef8b7f6109393a6fe50e909338a955 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    
+                    <style>
+                        .foliumtooltip {
+                            
+                        }
+                       .foliumtooltip table{
+                            margin: auto;
+                        }
+                        .foliumtooltip tr{
+                            text-align: left;
+                        }
+                        .foliumtooltip th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_02ef8b7f6109393a6fe50e909338a955" ></div>
+        
+    
+    <div id='maplegend' class='maplegend' 
+         style='position: absolute; z-index:9999; border:2px solid #bbb; 
+                background-color: rgba(255, 255, 255, 0.9); border-radius:6px; 
+                padding: 10px; font-size:14px; left: 100px; top: 20px;'>
+      <div class='legend-title'>Source</div>
+      <div class='legend-scale'>
+        <ul class='legend-labels'>
+          <li><span style='background:blue;'></span>ecuador_vms_overrides</li><li><span style='background:lightgray;'></span>no_source</li>
+        </ul>
+      </div>
+    </div>
+    <style type='text/css'>
+      .maplegend .legend-title { text-align:left; margin-bottom:8px; font-weight:bold; font-size:90%; }
+      .maplegend .legend-scale ul { margin:0; padding:0; list-style:none; }
+      .maplegend .legend-scale ul li { line-height:18px; margin-bottom:4px; }
+      .maplegend ul.legend-labels li span {
+        display:inline-block; height:12px; width:18px; margin-right:6px;
+        border:1px solid #999; opacity:0.7;
+      }
+    </style>
+    
+</body>
+<script>
+    
+    
+            var map_02ef8b7f6109393a6fe50e909338a955 = L.map(
+                "map_02ef8b7f6109393a6fe50e909338a955",
+                {
+                    center: [0.987228974502217, -79.64178933702219],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 18,
+  "zoomControl": true,
+  "preferCanvas": true,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_02ef8b7f6109393a6fe50e909338a955);
+
+            
+
+        
+    
+            var tile_layer_d4416eee691ee7febd52e5d92d2d091b = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d4416eee691ee7febd52e5d92d2d091b.addTo(map_02ef8b7f6109393a6fe50e909338a955);
+        
+    
+            var tile_layer_962e875c79e001afc33de59c12f3a525 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_962e875c79e001afc33de59c12f3a525.addTo(map_02ef8b7f6109393a6fe50e909338a955);
+        
+    
+        function geo_json_350a5629d3dc6164c58f5996bc2f3e5b_styler(feature) {
+            switch(feature.properties.label) {
+                default:
+                    return {"color": "blue", "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "weight": 2};
+            }
+        }
+
+        function geo_json_350a5629d3dc6164c58f5996bc2f3e5b_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_350a5629d3dc6164c58f5996bc2f3e5b = L.geoJson(null, {
+                onEachFeature: geo_json_350a5629d3dc6164c58f5996bc2f3e5b_onEachFeature,
+            
+                style: geo_json_350a5629d3dc6164c58f5996bc2f3e5b_styler,
+            ...{
+}
+        });
+
+        function geo_json_350a5629d3dc6164c58f5996bc2f3e5b_add (data) {
+            geo_json_350a5629d3dc6164c58f5996bc2f3e5b
+                .addData(data);
+        }
+            geo_json_350a5629d3dc6164c58f5996bc2f3e5b_add({"features": [{"geometry": {"coordinates": [[[-79.64459648905714, 0.9895900698818222], [-79.64459648905714, 0.9848856914428169], [-79.6389820975704, 0.9848680551887109], [-79.6389820975704, 0.9895723494202887], [-79.64459648905714, 0.9895900698818222]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero de Esmeraldas ", "s2id": "8fd4bb8d", "source": "ecuador_vms_overrides", "sublabel": "Esmeraldas"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.88008318918982, 0.8680980596220609], [-79.88008318918982, 0.8634044301358116], [-79.87448362099953, 0.8633893674306935], [-79.87448362099953, 0.86808291505823], [-79.88008318918982, 0.8680980596220609]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Sua", "s2id": "8fd4ed1d", "source": "ecuador_vms_overrides", "sublabel": "Esmeraldas"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.02554646065153, 0.5085273554502634], [-80.02554646065153, 0.5038740697598675], [-80.01995620554536, 0.5038654217909058], [-80.01995620554536, 0.5085186276255097], [-80.02554646065153, 0.5085273554502634]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Mompiche", "s2id": "8fd506bb", "source": "ecuador_vms_overrides", "sublabel": "Esmeraldas"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.08142917150316, 0.04595853408836627], [-80.08142917150316, 0.04136015932806252], [-80.07584252600594, 0.041359453941919117], [-80.07584252600594, 0.04595775027826978], [-80.08142917150316, 0.04595853408836627]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero La Chorrera ", "s2id": "8fd57f73", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.23770779550036, -0.1334971468215849], [-80.23770779550036, -0.13810889323874667], [-80.23213133816674, -0.138106579901032], [-80.23213133816674, -0.13349491073051314], [-80.23770779550036, -0.1334971468215849]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Don Juan", "s2id": "902a7ad9", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.14285835934326, -0.04596712382622229], [-80.14285835934326, -0.05056691821807046], [-80.13727570208493, -0.05056606187213442], [-80.13727570208493, -0.04596634537729527], [-80.14285835934326, -0.04596712382622229]]], "type": "Polygon"}, "properties": {"label": "Desembaercadero Cabuyal", "s2id": "902a7e59", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.53828891039173, -0.8416110507917982], [-80.53828891039173, -0.8463112410561131], [-80.53273243697036, -0.8462975609308777], [-80.53273243697036, -0.841597446620465], [-80.53828891039173, -0.8416110507917982]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero de Crucita ", "s2id": "902bc165", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.6437906362446, -0.9407173861707336], [-80.6437906362446, -0.9454305477646239], [-80.63824129823794, -0.9454154588243516], [-80.63824129823794, -0.9407023724247603], [-80.6437906362446, -0.9407173861707336]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero de Jaramij\u00f3 ", "s2id": "902be625", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.66598421640728, -0.9266402499514134], [-80.66598421640728, -0.9313520653402376], [-80.66043638744344, -0.9313372409254342], [-80.66043638744344, -0.9266255005087767], [-80.66598421640728, -0.9266402499514134]]], "type": "Polygon"}, "properties": {"label": "Puerto At\u00fan Grupo PH", "s2id": "902be7b3", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.671531667739, -0.9313668800162507], [-80.671531667739, -0.9360793192343388], [-80.66598421640728, -0.9360644296270854], [-80.66598421640728, -0.9313520653402376], [-80.671531667739, -0.9313668800162507]]], "type": "Polygon"}, "properties": {"label": "Puerto Astiesmar", "s2id": "902be653", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.71035324089378, -0.9456108438617411], [-80.71035324089378, -0.9503254527036046], [-80.70480843714222, -0.950310407768011], [-80.70480843714222, -0.945595873537598], [-80.71035324089378, -0.9456108438617411]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Playita Mia", "s2id": "902be6c7", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.72698537864309, -0.9362276772405922], [-80.72698537864309, -0.9409414119842898], [-80.72144171179234, -0.9409265457411101], [-80.72144171179234, -0.9362128854446785], [-80.72698537864309, -0.9362276772405922]]], "type": "Polygon"}, "properties": {"label": "Puerto De Manta", "s2id": "902be12d", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.81009478702536, -0.9553110577813229], [-80.81009478702536, -0.9600280988280665], [-80.80455682464245, -0.9600130848797844], [-80.80455682464245, -0.955296117575771], [-80.81009478702536, -0.9553110577813229]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero de San Mateo", "s2id": "902be1e3", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.77132104754996, -1.4725220443712201], [-80.77132104754996, -1.47729795748358], [-80.7657804189459, -1.4772747495329144], [-80.7657804189459, -1.4724989113826625], [-80.77132104754996, -1.4725220443712201]]], "type": "Polygon"}, "properties": {"label": "Desembarcacdero Machalilla", "s2id": "902c1fa7", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.82670638471264, -1.5588151206218228], [-80.82670638471264, -1.5636015070416396], [-80.82116956720779, -1.5635771113146573], [-80.82116956720779, -1.5587907994994874], [-80.82670638471264, -1.5588151206218228]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero de Puerto Lopez", "s2id": "902e9e17", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.84884983405367, -1.5876404426838726], [-80.84884983405367, -1.5924303640118136], [-80.84331454511452, -1.5924055867815636], [-80.84331454511452, -1.587615739905404], [-80.84884983405367, -1.5876404426838726]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Salango", "s2id": "902e9dcf", "source": "ecuador_vms_overrides", "sublabel": "Manab\u00ed"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.74361410302471, -2.0154470975120513], [-80.74361410302471, -2.020283277390153], [-80.73807157440727, -2.0202514437163632], [-80.73807157440727, -2.015415339916203], [-80.74361410302471, -2.0154470975120513]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Palmar ", "s2id": "902dd96b", "source": "ecuador_vms_overrides", "sublabel": "Santa Elena"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.91524342357481, -2.2200963032293646], [-80.91524342357481, -2.224957113136147], [-80.90971273444269, -2.2249227949497503], [-80.90971273444269, -2.220062059866768], [-80.91524342357481, -2.2200963032293646]]], "type": "Polygon"}, "properties": {"label": "Puerto La Libertad ", "s2id": "902e0ec5", "source": "ecuador_vms_overrides", "sublabel": "Santa Elena"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.95394747970916, -2.205754540904126], [-80.95394747970916, -2.210614285088758], [-80.94841948354957, -2.210580351893245], [-80.94841948354957, -2.205720682158642], [-80.95394747970916, -2.205754540904126]]], "type": "Polygon"}, "properties": {"label": "Facilidad Pesquera de Santa Rosa", "s2id": "902e0e65", "source": "ecuador_vms_overrides", "sublabel": "Santa Elena"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.89311836288626, -2.327012520181636], [-80.89311836288626, -2.331884652391548], [-80.88758613813627, -2.3318485894295398], [-80.88758613813627, -2.326976532401958], [-80.89311836288626, -2.327012520181636]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero Anconcito", "s2id": "902e0699", "source": "ecuador_vms_overrides", "sublabel": "Santa Elena"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.69371769377543, -2.403675213988524], [-80.69371769377543, -2.408553031119391], [-80.68817175445668, -2.4085148611638756], [-80.68817175445668, -2.4036371211533836], [-80.69371769377543, -2.403675213988524]]], "type": "Polygon"}, "properties": {"label": "Desembarcadero Chanduy", "s2id": "902df8ed", "source": "ecuador_vms_overrides", "sublabel": "Santa Elena"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-79.89128125660861, -2.2230973711662267], [-79.89128125660861, -2.227944614296962], [-79.88568240111098, -2.2279058283091864], [-79.88568240111098, -2.2230586693938195], [-79.89128125660861, -2.2230973711662267]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero Guayaquil", "s2id": "902d6e4d", "source": "ecuador_vms_overrides", "sublabel": "Guaya"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.24885961180628, -2.7182835725661554], [-80.24885961180628, -2.723189022170436], [-80.24328388676413, -2.723143535974794], [-80.24328388676413, -2.718238168061357], [-80.24885961180628, -2.7182835725661554]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero Posorja", "s2id": "90326797", "source": "ecuador_vms_overrides", "sublabel": "Guaya"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.30459668667844, -2.6060356382949568], [-80.30459668667844, -2.610929922961633], [-80.29902463219084, -2.610886589183886], [-80.29902463219084, -2.605992385523584], [-80.30459668667844, -2.6060356382949568]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero  el Morro", "s2id": "90326fbd", "source": "ecuador_vms_overrides", "sublabel": "Guaya"}, "type": "Feature"}, {"geometry": {"coordinates": [[[-80.00877461513298, -3.268525972177742], [-80.00877461513298, -3.273485498296228], [-80.00318328013371, -3.273429327861579], [-80.00318328013371, -3.2684698864748016], [-80.00877461513298, -3.268525972177742]]], "type": "Polygon"}, "properties": {"label": "Puerto Pesquero Puerto Bol\u00edvar", "s2id": "90330eb5", "source": "ecuador_vms_overrides", "sublabel": "El Oro"}, "type": "Feature"}], "tolerance": 0, "type": "FeatureCollection"});
+
+        
+    
+    geo_json_350a5629d3dc6164c58f5996bc2f3e5b.bindTooltip(
+    function(layer){
+    let div = L.DomUtil.create('div');
+    
+    let handleObject = feature => {
+        if (feature === null) {
+            return '';
+        } else if (typeof(feature)=='object') {
+            return JSON.stringify(feature);
+        } else {
+            return feature;
+        }
+    }
+    let fields = ["label", "sublabel", "source", "s2id"];
+    let aliases = ["Label:", "Sublabel:", "Source:", "s2 cell:"];
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>
+            <th>${aliases[i]}</th>
+            
+            <td>${handleObject(layer.feature.properties[v])}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    
+    return div
+    }
+    ,{
+  "sticky": false,
+  "className": "foliumtooltip",
+});
+                     
+    
+            geo_json_350a5629d3dc6164c58f5996bc2f3e5b.addTo(map_02ef8b7f6109393a6fe50e909338a955);
+        
+    
+            var feature_group_cf8dfbcbefacc4d5584a4a319370fe73 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_68d595c9477b2ee4e13bc5f6d6f1de30 = L.circleMarker(
+                [0.987228974502217, -79.64178933702219],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_fa8191b95b5e9135fae7e3c607ba9f6a = L.circleMarker(
+                [0.8657436256435161, -79.87728344961866],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_a7b085a4ee2e834fd9e0caed8b770a4a = L.circleMarker(
+                [0.5061963000973013, -80.02275137812276],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_c602a360a29dd7d5c212ceae111119b8 = L.circleMarker(
+                [0.0436589044536096, -80.07863589397036],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_a755f265826e37e68152250ef984078a = L.circleMarker(
+                [-0.13580181295579977, -80.23491961258279],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_a424adc73ad9338be4fd4b15214c7738 = L.circleMarker(
+                [-0.048266542368277925, -80.14006707613997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_4779b807625dbb503500bd24ab46226d = L.circleMarker(
+                [-0.8439542572125058, -80.53551072044733],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_bb88a344c29f3047d16b08948b649817 = L.circleMarker(
+                [-0.9430663739433336, -80.6410160143617],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_f00542fbbd3758db74603b7a9520e0b9 = L.circleMarker(
+                [-0.9289886967798198, -80.6632103491201],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_5b31f7673fdb4f712eae6dba57065256 = L.circleMarker(
+                [-0.9337156061663167, -80.66875798928643],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_a2204db200772fe1c35f205b6d3495fd = L.circleMarker(
+                [-0.9479605771152848, -80.70758088636109],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_d0d1ff8529bf40011d64611eb5d86b5a = L.circleMarker(
+                [-0.9385770627172468, -80.72421359261635],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_1da90f222fa136b2cf3bf7ca37a2440d = L.circleMarker(
+                [-0.9576620224217725, -80.80732585350952],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_6961851ee701ffd8018dabec2783c56c = L.circleMarker(
+                [-1.474898349997431, -80.76855078079446],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_69d212d499c8d34b63c27a310f323fe5 = L.circleMarker(
+                [-1.561196069190147, -80.8239380236911],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_b453647c0aa63c3f3e45e3b7b0d26045 = L.circleMarker(
+                [-1.590022968004661, -80.84608223738856],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_d3213794f8615f1de7be6bbedda00f63 = L.circleMarker(
+                [-2.0178492257262173, -80.74084288617013],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_bf7ab43da25606b844ff9024b20006ca = L.circleMarker(
+                [-2.222509504531262, -80.91247812703347],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_89a26865272d7648a0694c2bcf53d07c = L.circleMarker(
+                [-2.2081674016888635, -80.9511835297822],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_2adbb5ec29d5bb87680beb2858059198 = L.circleMarker(
+                [-2.329430510704176, -80.89035229846266],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_b7600a5ab3331787db187adcebe20f07 = L.circleMarker(
+                [-2.406094994271452, -80.69094477140354],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_032179ee8dc4515a6c51d80cb2615bfc = L.circleMarker(
+                [-2.225501557800818, -79.88848187342239],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_a444b26160a3abeb7a6d45736019f7ce = L.circleMarker(
+                [-2.720713513310806, -80.2460717950724],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_7641ccb877d2869e3835401ebf266541 = L.circleMarker(
+                [-2.6084610722039225, -80.30181070541123],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            var circle_marker_f7bda9ffe7b215a512a5814728b87ac7 = L.circleMarker(
+                [-3.270977611833658, -80.0059789926001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(feature_group_cf8dfbcbefacc4d5584a4a319370fe73);
+        
+    
+            feature_group_cf8dfbcbefacc4d5584a4a319370fe73.addTo(map_02ef8b7f6109393a6fe50e909338a955);
+        
+    
+            var feature_group_78173c04ba11f3e16ed461793bfe10ee = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_fdc40deb460a04418230df7d2da71240 = L.marker(
+                [0.987228974502217, -79.64178933702219],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_c889464a533816e23a44f3906f9fcc25 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero de Esmeraldas \u003cbr\u003eEsmeraldas\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_fdc40deb460a04418230df7d2da71240.setIcon(div_icon_c889464a533816e23a44f3906f9fcc25);
+            
+    
+            var marker_0558e67f3c92598b0791688a89bb088f = L.marker(
+                [0.8657436256435161, -79.87728344961866],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_2f6d59784ae8d01d32cb2d2ebe17e4ff = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Sua\u003cbr\u003eEsmeraldas\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_0558e67f3c92598b0791688a89bb088f.setIcon(div_icon_2f6d59784ae8d01d32cb2d2ebe17e4ff);
+            
+    
+            var marker_3337471426dcc2c0db4b3509df8bfb3a = L.marker(
+                [0.5061963000973013, -80.02275137812276],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_29510e4450459c5a409322acd04a7a13 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Mompiche\u003cbr\u003eEsmeraldas\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_3337471426dcc2c0db4b3509df8bfb3a.setIcon(div_icon_29510e4450459c5a409322acd04a7a13);
+            
+    
+            var marker_17b6c2b94ad8b8d5ac1dff0c9e378d80 = L.marker(
+                [0.0436589044536096, -80.07863589397036],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_ea8197ba817545c416ab453101295e75 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero La Chorrera \u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_17b6c2b94ad8b8d5ac1dff0c9e378d80.setIcon(div_icon_ea8197ba817545c416ab453101295e75);
+            
+    
+            var marker_0c57156dc327cd1628bb29adee0dde65 = L.marker(
+                [-0.13580181295579977, -80.23491961258279],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_97ea58799324cd711bcafda7dd0a978e = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Don Juan\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_0c57156dc327cd1628bb29adee0dde65.setIcon(div_icon_97ea58799324cd711bcafda7dd0a978e);
+            
+    
+            var marker_f216f245ef0238bb5f019d310cb34205 = L.marker(
+                [-0.048266542368277925, -80.14006707613997],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_7ff6816e3b470f2c8ea661d633fbb50a = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembaercadero Cabuyal\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_f216f245ef0238bb5f019d310cb34205.setIcon(div_icon_7ff6816e3b470f2c8ea661d633fbb50a);
+            
+    
+            var marker_9bca1df7a9e348222af8f72e8669829d = L.marker(
+                [-0.8439542572125058, -80.53551072044733],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_4508972a4c219dcb79868be86fc0008b = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero de Crucita \u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_9bca1df7a9e348222af8f72e8669829d.setIcon(div_icon_4508972a4c219dcb79868be86fc0008b);
+            
+    
+            var marker_39c831d1b7a423973ff472e647dcb89e = L.marker(
+                [-0.9430663739433336, -80.6410160143617],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_18f0f3eb2589176c0ff7faeab59f6511 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero de Jaramij\u00f3 \u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_39c831d1b7a423973ff472e647dcb89e.setIcon(div_icon_18f0f3eb2589176c0ff7faeab59f6511);
+            
+    
+            var marker_0b43be5de7c29109c9439501f221dd23 = L.marker(
+                [-0.9289886967798198, -80.6632103491201],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_726a7faf3d26b6cd41da05c5dde23be9 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto At\u00fan Grupo PH\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_0b43be5de7c29109c9439501f221dd23.setIcon(div_icon_726a7faf3d26b6cd41da05c5dde23be9);
+            
+    
+            var marker_48d0a6d09625d9b7835318283a57f625 = L.marker(
+                [-0.9337156061663167, -80.66875798928643],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_e9e31ada6323a49142d182dbecea432f = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Astiesmar\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_48d0a6d09625d9b7835318283a57f625.setIcon(div_icon_e9e31ada6323a49142d182dbecea432f);
+            
+    
+            var marker_bc65783335ebebc91f240a263510d5ea = L.marker(
+                [-0.9479605771152848, -80.70758088636109],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_41f1be2e41b9a0c205b2db49a27521f6 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Playita Mia\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_bc65783335ebebc91f240a263510d5ea.setIcon(div_icon_41f1be2e41b9a0c205b2db49a27521f6);
+            
+    
+            var marker_bb38487aa81a6b095924f7f457f53eae = L.marker(
+                [-0.9385770627172468, -80.72421359261635],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_8edc6e700ad47082a2d1a26490a47588 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto De Manta\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_bb38487aa81a6b095924f7f457f53eae.setIcon(div_icon_8edc6e700ad47082a2d1a26490a47588);
+            
+    
+            var marker_e2844a9605ea293e6286446af0b01f9b = L.marker(
+                [-0.9576620224217725, -80.80732585350952],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_adb0f40906c37662d74a8a46117557c5 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero de San Mateo\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_e2844a9605ea293e6286446af0b01f9b.setIcon(div_icon_adb0f40906c37662d74a8a46117557c5);
+            
+    
+            var marker_6d59b0143b0cf9324132843a99ec36c3 = L.marker(
+                [-1.474898349997431, -80.76855078079446],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_8f83e68018109a7d3a29e2eb61b39722 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcacdero Machalilla\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_6d59b0143b0cf9324132843a99ec36c3.setIcon(div_icon_8f83e68018109a7d3a29e2eb61b39722);
+            
+    
+            var marker_7a1b1634f0fb42f3b7e16dcdc52f368e = L.marker(
+                [-1.561196069190147, -80.8239380236911],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_5efdb4dc678bcf79584f51428a1b0d48 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero de Puerto Lopez\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_7a1b1634f0fb42f3b7e16dcdc52f368e.setIcon(div_icon_5efdb4dc678bcf79584f51428a1b0d48);
+            
+    
+            var marker_93ebaceafed318cc8eb5a53119ad8957 = L.marker(
+                [-1.590022968004661, -80.84608223738856],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_7b192c28005021dea3aa5c8ac84f5f4c = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Salango\u003cbr\u003eManab\u00ed\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_93ebaceafed318cc8eb5a53119ad8957.setIcon(div_icon_7b192c28005021dea3aa5c8ac84f5f4c);
+            
+    
+            var marker_df30f9f7e737e0c2ef4690626dde7c0e = L.marker(
+                [-2.0178492257262173, -80.74084288617013],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_40f3224336a294107bb9ecde0f7eb445 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Palmar \u003cbr\u003eSanta Elena\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_df30f9f7e737e0c2ef4690626dde7c0e.setIcon(div_icon_40f3224336a294107bb9ecde0f7eb445);
+            
+    
+            var marker_6b575d4263c8a5cda2c6e650d54960df = L.marker(
+                [-2.222509504531262, -80.91247812703347],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_35a5ac3fb374d44350a7ef66668553ea = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto La Libertad \u003cbr\u003eSanta Elena\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_6b575d4263c8a5cda2c6e650d54960df.setIcon(div_icon_35a5ac3fb374d44350a7ef66668553ea);
+            
+    
+            var marker_10591ceb3adfaa793cb6c602d766d728 = L.marker(
+                [-2.2081674016888635, -80.9511835297822],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_5ddcd224a175afec76e8bdc9fc0cec09 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eFacilidad Pesquera de Santa Rosa\u003cbr\u003eSanta Elena\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_10591ceb3adfaa793cb6c602d766d728.setIcon(div_icon_5ddcd224a175afec76e8bdc9fc0cec09);
+            
+    
+            var marker_15d2f68a6868855972674429f04ecf6a = L.marker(
+                [-2.329430510704176, -80.89035229846266],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_da6bfa4bb2fc96595dd6a7dee9d04f45 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero Anconcito\u003cbr\u003eSanta Elena\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_15d2f68a6868855972674429f04ecf6a.setIcon(div_icon_da6bfa4bb2fc96595dd6a7dee9d04f45);
+            
+    
+            var marker_13eb717cb66df7bf0944d0c9172e85fd = L.marker(
+                [-2.406094994271452, -80.69094477140354],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_589e3abd5ff06958b7f6be394868cd4a = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eDesembarcadero Chanduy\u003cbr\u003eSanta Elena\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_13eb717cb66df7bf0944d0c9172e85fd.setIcon(div_icon_589e3abd5ff06958b7f6be394868cd4a);
+            
+    
+            var marker_deac6bb00ffb6cf778af57abfe761eee = L.marker(
+                [-2.225501557800818, -79.88848187342239],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_9fdc5a65fa43ba5b4fc353827e07f3ba = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero Guayaquil\u003cbr\u003eGuaya\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_deac6bb00ffb6cf778af57abfe761eee.setIcon(div_icon_9fdc5a65fa43ba5b4fc353827e07f3ba);
+            
+    
+            var marker_88a8ca975583c912628efcd97a040c8a = L.marker(
+                [-2.720713513310806, -80.2460717950724],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_ad71f6ba63937afc1d27ac7a00104b08 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero Posorja\u003cbr\u003eGuaya\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_88a8ca975583c912628efcd97a040c8a.setIcon(div_icon_ad71f6ba63937afc1d27ac7a00104b08);
+            
+    
+            var marker_72dc84ce1864dea901b6eeb9070f187d = L.marker(
+                [-2.6084610722039225, -80.30181070541123],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_ca9c888b3b6928228647f19430c9c3f3 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero  el Morro\u003cbr\u003eGuaya\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_72dc84ce1864dea901b6eeb9070f187d.setIcon(div_icon_ca9c888b3b6928228647f19430c9c3f3);
+            
+    
+            var marker_9bc7d164111baab3814c5fb575315759 = L.marker(
+                [-3.270977611833658, -80.0059789926001],
+                {
+}
+            ).addTo(feature_group_78173c04ba11f3e16ed461793bfe10ee);
+        
+    
+            var div_icon_dd390d2ea2b5954961b821617b6e4de1 = L.divIcon({
+  "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003ePuerto Pesquero Puerto Bol\u00edvar\u003cbr\u003eEl Oro\u003c/div\u003e\n                ",
+  "className": "empty",
+});
+        
+    
+                marker_9bc7d164111baab3814c5fb575315759.setIcon(div_icon_dd390d2ea2b5954961b821617b6e4de1);
+            
+    
+            map_02ef8b7f6109393a6fe50e909338a955.fitBounds(
+                [[-3.273485498296228, -80.95394747970916], [0.9895900698818222, -79.6389820975704]],
+                {}
+            );
+        
+    
+            var layer_control_3869313968d0d50029fddafd52de94c4_layers = {
+                base_layers : {
+                    "Esri Satellite" : tile_layer_d4416eee691ee7febd52e5d92d2d091b,
+                    "OpenStreetMap" : tile_layer_962e875c79e001afc33de59c12f3a525,
+                },
+                overlays :  {
+                    "S2 Cells" : geo_json_350a5629d3dc6164c58f5996bc2f3e5b,
+                    "S2 Centroid" : feature_group_cf8dfbcbefacc4d5584a4a319370fe73,
+                    "Label / Sublabel" : feature_group_78173c04ba11f3e16ed461793bfe10ee,
+                },
+            };
+            let layer_control_3869313968d0d50029fddafd52de94c4 = L.control.layers(
+                layer_control_3869313968d0d50029fddafd52de94c4_layers.base_layers,
+                layer_control_3869313968d0d50029fddafd52de94c4_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_02ef8b7f6109393a6fe50e909338a955);
+
+        
+</script>
+</html>

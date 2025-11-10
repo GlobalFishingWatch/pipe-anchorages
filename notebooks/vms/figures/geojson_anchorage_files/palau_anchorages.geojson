@@ -1,0 +1,1042 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881005,
+              7.334714181525526
+            ],
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.44649870881008,
+              7.338779088905525
+            ],
+            [
+              134.44649870881005,
+              7.334714181525526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b0f"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881008,
+              7.338779088905525
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.45121706710648,
+              7.342257651261293
+            ],
+            [
+              134.44649870881005,
+              7.342844321707703
+            ],
+            [
+              134.44649870881008,
+              7.338779088905525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b11"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.342257651261293
+            ],
+            [
+              134.45593495314566,
+              7.341670988744325
+            ],
+            [
+              134.45593495314566,
+              7.345735911558971
+            ],
+            [
+              134.45121706710648,
+              7.346322891749093
+            ],
+            [
+              134.45121706710648,
+              7.342257651261293
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b15"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881005,
+              7.342844321707703
+            ],
+            [
+              134.45121706710648,
+              7.342257651261293
+            ],
+            [
+              134.45121706710648,
+              7.346322891749093
+            ],
+            [
+              134.44649870881005,
+              7.346909879871246
+            ],
+            [
+              134.44649870881005,
+              7.342844321707703
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b17"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.4417798782762,
+              7.327170751052583
+            ],
+            [
+              134.44649870881005,
+              7.32658534327521
+            ],
+            [
+              134.44649870881005,
+              7.330649599628496
+            ],
+            [
+              134.44177987827624,
+              7.331235325029674
+            ],
+            [
+              134.4417798782762,
+              7.327170751052583
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50ba9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.321936330254275
+            ],
+            [
+              134.45593495314566,
+              7.3213512558985965
+            ],
+            [
+              134.45593495314566,
+              7.325414551434894
+            ],
+            [
+              134.45121706710648,
+              7.32599994339552
+            ],
+            [
+              134.45121706710648,
+              7.321936330254275
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50ba3"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881005,
+              7.322521412526417
+            ],
+            [
+              134.45121706710648,
+              7.321936330254275
+            ],
+            [
+              134.45121706710648,
+              7.32599994339552
+            ],
+            [
+              134.44649870881005,
+              7.32658534327521
+            ],
+            [
+              134.44649870881005,
+              7.322521412526417
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50ba5"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.3213512558985965
+            ],
+            [
+              134.46065236690777,
+              7.320766189480741
+            ],
+            [
+              134.46065236690777,
+              7.324829167414703
+            ],
+            [
+              134.45593495314566,
+              7.325414551434894
+            ],
+            [
+              134.45593495314566,
+              7.3213512558985965
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b99"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.46065236690777,
+              7.320766189480741
+            ],
+            [
+              134.46536930837303,
+              7.320181131022061
+            ],
+            [
+              134.46536930837303,
+              7.32424379135631
+            ],
+            [
+              134.46065236690777,
+              7.324829167414703
+            ],
+            [
+              134.46065236690777,
+              7.320766189480741
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b9b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ],
+            [
+              134.46536930837303,
+              7.3323700886135565
+            ],
+            [
+              134.46536930837303,
+              7.336433725415135
+            ],
+            [
+              134.46065236690777,
+              7.337020054354647
+            ],
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b71"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.46065236690777,
+              7.328892470912151
+            ],
+            [
+              134.46536930837303,
+              7.328306777240375
+            ],
+            [
+              134.46536930837303,
+              7.3323700886135565
+            ],
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ],
+            [
+              134.46065236690777,
+              7.328892470912151
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b77"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.46065236690777,
+              7.324829167414703
+            ],
+            [
+              134.46536930837303,
+              7.32424379135631
+            ],
+            [
+              134.46536930837303,
+              7.328306777240375
+            ],
+            [
+              134.46065236690777,
+              7.328892470912151
+            ],
+            [
+              134.46065236690777,
+              7.324829167414703
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b9d"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.325414551434894
+            ],
+            [
+              134.46065236690777,
+              7.324829167414703
+            ],
+            [
+              134.46065236690777,
+              7.328892470912151
+            ],
+            [
+              134.45593495314566,
+              7.329478172548347
+            ],
+            [
+              134.45593495314566,
+              7.325414551434894
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b9f"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.341670988744325
+            ],
+            [
+              134.46065236690777,
+              7.341084334178215
+            ],
+            [
+              134.46065236690777,
+              7.345148939322308
+            ],
+            [
+              134.45593495314566,
+              7.345735911558971
+            ],
+            [
+              134.45593495314566,
+              7.341670988744325
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b6b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.46065236690777,
+              7.337020054354647
+            ],
+            [
+              134.46065236690777,
+              7.341084334178215
+            ],
+            [
+              134.45593495314566,
+              7.341670988744325
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b6d"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.46065236690777,
+              7.337020054354647
+            ],
+            [
+              134.46536930837303,
+              7.336433725415135
+            ],
+            [
+              134.46536930837303,
+              7.340497687584377
+            ],
+            [
+              134.46065236690777,
+              7.341084334178215
+            ],
+            [
+              134.46065236690777,
+              7.337020054354647
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b6f"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ],
+            [
+              134.46065236690777,
+              7.337020054354647
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b73"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881005,
+              7.330649599628496
+            ],
+            [
+              134.45121706710648,
+              7.33006388212759
+            ],
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ],
+            [
+              134.44649870881005,
+              7.334714181525526
+            ],
+            [
+              134.44649870881005,
+              7.330649599628496
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b09"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.33006388212759
+            ],
+            [
+              134.45593495314566,
+              7.329478172548347
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ],
+            [
+              134.45121706710648,
+              7.33006388212759
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b0b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.32599994339552
+            ],
+            [
+              134.45593495314566,
+              7.325414551434894
+            ],
+            [
+              134.45593495314566,
+              7.329478172548347
+            ],
+            [
+              134.45121706710648,
+              7.33006388212759
+            ],
+            [
+              134.45121706710648,
+              7.32599994339552
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50ba1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44649870881005,
+              7.32658534327521
+            ],
+            [
+              134.45121706710648,
+              7.32599994339552
+            ],
+            [
+              134.45121706710648,
+              7.33006388212759
+            ],
+            [
+              134.44649870881005,
+              7.330649599628496
+            ],
+            [
+              134.44649870881005,
+              7.32658534327521
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50ba7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44177987827624,
+              7.335300224564154
+            ],
+            [
+              134.44649870881005,
+              7.334714181525526
+            ],
+            [
+              134.44649870881008,
+              7.338779088905525
+            ],
+            [
+              134.4417798782762,
+              7.339365449595241
+            ],
+            [
+              134.44177987827624,
+              7.335300224564154
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b05"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.4417798782762,
+              7.339365449595241
+            ],
+            [
+              134.44649870881008,
+              7.338779088905525
+            ],
+            [
+              134.44649870881005,
+              7.342844321707703
+            ],
+            [
+              134.44177987827624,
+              7.343431000062128
+            ],
+            [
+              134.4417798782762,
+              7.339365449595241
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides_buffer",
+        "s2id": "32d50b1b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.329478172548347
+            ],
+            [
+              134.46065236690777,
+              7.328892470912151
+            ],
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.45593495314566,
+              7.329478172548347
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MELEKEOK",
+        "sublabel": "MALAKAL HARBOR",
+        "source": "palau_vms_overrides_provided_points",
+        "label_source": "MELEKEOK: palau_vms_overrides_provided_points",
+        "s2id": "32d50b75"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.43706057552484,
+              7.335886275484227
+            ],
+            [
+              134.44177987827624,
+              7.335300224564154
+            ],
+            [
+              134.4417798782762,
+              7.339365449595241
+            ],
+            [
+              134.43706057552484,
+              7.339951818168972
+            ],
+            [
+              134.43706057552484,
+              7.335886275484227
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MELEKEOK",
+        "sublabel": "MALAKAL HARBOR",
+        "source": "ais_detected",
+        "label_source": "MELEKEOK: ais_detected",
+        "s2id": "32d50b03"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44177987827624,
+              7.331235325029674
+            ],
+            [
+              134.44649870881005,
+              7.330649599628496
+            ],
+            [
+              134.44649870881005,
+              7.334714181525526
+            ],
+            [
+              134.44177987827624,
+              7.335300224564154
+            ],
+            [
+              134.44177987827624,
+              7.331235325029674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MELEKEOK",
+        "sublabel": "MALAKAL HARBOR",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MELEKEOK: palau_vms_overrides_buffer",
+        "s2id": "32d50b07"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.45593495314566,
+              7.341670988744325
+            ],
+            [
+              134.45121706710648,
+              7.342257651261293
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MELEKEOK",
+        "sublabel": "MALAKAL HARBOR",
+        "source": "palau_vms_overrides_buffer",
+        "label_source": "MELEKEOK: palau_vms_overrides_buffer",
+        "s2id": "32d50b13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MELEKEOK",
+        "sublabel": "MALAKAL HARBOR",
+        "source": "palau_vms_overrides_provided_points",
+        "label_source": "MELEKEOK: palau_vms_overrides_provided_points",
+        "s2id": "32d50b0d"
+      }
+    }
+  ],
+  "tolerance": 0
+}
