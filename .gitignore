@@ -4,7 +4,7 @@ untracked/
 fishing_list.txt
 
 # figures
-notebooks/vms_notebooks/figures/
+notebooks/vms/figures/
 
 .DS_Store
 
