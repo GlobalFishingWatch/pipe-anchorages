@@ -47,7 +47,6 @@ def s2id_to_latlon(s2id):
 
 
 # %%
-s2id_to_latlon('14f9806d')
 
 
 # %%

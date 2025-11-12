@@ -1,0 +1,598 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -71.34087066550788,
+              -29.952363512237135
+            ],
+            [
+              -71.34087066550788,
+              -29.957937200908322
+            ],
+            [
+              -71.33493218301705,
+              -29.957069457297017
+            ],
+            [
+              -71.33493218301703,
+              -29.95149586644783
+            ],
+            [
+              -71.34087066550788,
+              -29.952363512237135
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "COQUIMBO & MUELLE AIP & MUELLE BRACPESCA & MUELLE PESCABEL 2",
+        "sublabel": "COQUIMBO",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9691c8ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -71.53085077781094,
+              -32.776169535481955
+            ],
+            [
+              -71.53085077781094,
+              -32.78161742078863
+            ],
+            [
+              -71.52491543767495,
+              -32.780714872257924
+            ],
+            [
+              -71.52491543767495,
+              -32.7752670649602
+            ],
+            [
+              -71.53085077781094,
+              -32.776169535481955
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "EL EMBARCADERO & MUELLE ASIMAR & MUELLE PESQUERA QUINTERO",
+        "sublabel": "QUINTERO",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9689c061"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.6595075078703,
+              -37.59955107057246
+            ],
+            [
+              -73.65950750787032,
+              -37.604735623150674
+            ],
+            [
+              -73.65362093255736,
+              -37.6039011244878
+            ],
+            [
+              -73.65362093255736,
+              -37.598716611800846
+            ],
+            [
+              -73.6595075078703,
+              -37.59955107057246
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "LEBU & PUERTO PESQUERO ARTESANAL DE LEBU & SECTOR VARADERO LEBU",
+        "sublabel": "LEBU",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9641f0a7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.16446278047809,
+              -37.070879859279316
+            ],
+            [
+              -73.16446278047809,
+              -37.07609387795584
+            ],
+            [
+              -73.15856263563954,
+              -37.0752349760375
+            ],
+            [
+              -73.15856263563954,
+              -37.070021001753496
+            ],
+            [
+              -73.16446278047809,
+              -37.070879859279316
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "EL MORRO (LOTA) & LA CONCHILLA",
+        "sublabel": "LOTA",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9669c197"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.25294639803293,
+              -39.82871988133119
+            ],
+            [
+              -73.25294639803293,
+              -39.833724929565236
+            ],
+            [
+              -73.24704857915732,
+              -39.83285180350976
+            ],
+            [
+              -73.24704857915732,
+              -39.82784678310267
+            ],
+            [
+              -73.25294639803293,
+              -39.82871988133119
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE MORA & MORA",
+        "sublabel": "VALDIVIA",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9615ee6b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.2588440603395,
+              -39.829592635592
+            ],
+            [
+              -73.2588440603395,
+              -39.8345977116374
+            ],
+            [
+              -73.25294639803293,
+              -39.833724929565236
+            ],
+            [
+              -73.25294639803293,
+              -39.82871988133119
+            ],
+            [
+              -73.2588440603395,
+              -39.829592635592
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "LA ISLA & LAS MUÑECAS & MUELLE CALYPSO & MUELLE CARTAGENA & MUELLE ETCHEPARE (VALDIVIA) & SANTA ISABEL & SHIVAR",
+        "sublabel": "VALDIVIA",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9615ee15"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.51818334679261,
+              -41.89498211218476
+            ],
+            [
+              -73.51818334679261,
+              -41.899815437532936
+            ],
+            [
+              -73.51229275944998,
+              -41.89894895373095
+            ],
+            [
+              -73.51229275944998,
+              -41.89411564427946
+            ],
+            [
+              -73.51818334679261,
+              -41.89498211218476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "COÑIMO & HUEIHUE",
+        "sublabel": "ANCUD",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "962283d5"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.05233395248906,
+              -41.81095663144063
+            ],
+            [
+              -73.05233395248906,
+              -41.815789948307255
+            ],
+            [
+              -73.04643092224194,
+              -41.81489591322029
+            ],
+            [
+              -73.04643092224194,
+              -41.81006261320363
+            ],
+            [
+              -73.05233395248906,
+              -41.81095663144063
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "CHAUQUEAR & ISLA PULUQUI",
+        "sublabel": "CALBUCO",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "96185dc9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.60063415780483,
+              -41.61141895364712
+            ],
+            [
+              -73.60063415780483,
+              -41.61627862824172
+            ],
+            [
+              -73.59474589771293,
+              -41.61541803435791
+            ],
+            [
+              -73.59474589771293,
+              -41.6105583771016
+            ],
+            [
+              -73.60063415780483,
+              -41.61141895364712
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MAULLÍN & MUELLE TOLEDO",
+        "sublabel": "MAULLÍN",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "9622a39b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -72.8283194753489,
+              -45.46196522479793
+            ],
+            [
+              -72.82558468996152,
+              -45.46638934318299
+            ],
+            [
+              -72.81939018940108,
+              -45.4654320426073
+            ],
+            [
+              -72.82212584003908,
+              -45.461008217486714
+            ],
+            [
+              -72.8283194753489,
+              -45.46196522479793
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE EMPORCHA, PUERTO CHACABUCO & MUELLE OXXEAN, PUERTO CHACABUCO",
+        "sublabel": "AYSÉN",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bd8cde5f"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -72.69397693229034,
+              -44.72461711869185
+            ],
+            [
+              -72.69126643961012,
+              -44.72896614324797
+            ],
+            [
+              -72.68518638228433,
+              -44.72801863697924
+            ],
+            [
+              -72.6878977082722,
+              -44.723669901437844
+            ],
+            [
+              -72.69397693229034,
+              -44.72461711869185
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE PUERTO CISNES & MUELLE PUERTO GALA",
+        "sublabel": "CISNES",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bdf4b001"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.75391114630779,
+              -43.898190281441025
+            ],
+            [
+              -73.751402520402,
+              -43.902491206622095
+            ],
+            [
+              -73.74550757792962,
+              -43.901632641798535
+            ],
+            [
+              -73.74801701417316,
+              -43.89733197950521
+            ],
+            [
+              -73.75391114630779,
+              -43.898190281441025
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE ARTESANAL, PUERTO MELINKA & MUELLE CONECTIVIDAD, PUERTO MELINKA",
+        "sublabel": "GUAITECAS",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bd8aa17b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -73.89234385957333,
+              -43.857638390475834
+            ],
+            [
+              -73.88985758980014,
+              -43.86193941402375
+            ],
+            [
+              -73.88397632080844,
+              -43.86109058675475
+            ],
+            [
+              -73.88646340044664,
+              -43.85678982331372
+            ],
+            [
+              -73.89234385957333,
+              -43.857638390475834
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE 1, REPOLLAL ALTO & MUELLE 2, REPOLLAL ALTO",
+        "sublabel": "GUAITECAS",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bd8a9e2d"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -67.60249528212472,
+              -54.9333107558183
+            ],
+            [
+              -67.59814966924773,
+              -54.93826856952334
+            ],
+            [
+              -67.58990335937213,
+              -54.93666987871534
+            ],
+            [
+              -67.59425023165163,
+              -54.931712553290104
+            ],
+            [
+              -67.60249528212472,
+              -54.9333107558183
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "PUERTO WILLIAMS & TERMINAL PESQUERO PUERTO WILLIAMS",
+        "sublabel": "CABO DE HORNOS",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bc4eac7b"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -70.44625774676811,
+              -53.30096553298791
+            ],
+            [
+              -70.44256656383074,
+              -53.30594457180875
+            ],
+            [
+              -70.43477060801136,
+              -53.30461732591233
+            ],
+            [
+              -70.43846302623696,
+              -53.29963869965022
+            ],
+            [
+              -70.44625774676811,
+              -53.30096553298791
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "BAHÍA CHILOTA & TERMINAL PESQUERO PORVENIR",
+        "sublabel": "PORVENIR",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bdb2f181"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -71.53551784212986,
+              -53.162300077080864
+            ],
+            [
+              -71.53202875263159,
+              -53.16731346266971
+            ],
+            [
+              -71.5243031895876,
+              -53.16607518199156
+            ],
+            [
+              -71.52779353055926,
+              -53.161062184457016
+            ],
+            [
+              -71.53551784212986,
+              -53.162300077080864
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MUELLE CRUCE CANAL FITZ ROY & RÍO CANELO",
+        "sublabel": "RÍO VERDE",
+        "source": "chile_vms_overrides_DUPLICATE",
+        "label_source": "no label_and_source",
+        "s2id": "bdad9007"
+      }
+    }
+  ],
+  "tolerance": 0
+}

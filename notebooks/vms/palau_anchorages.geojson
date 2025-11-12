@@ -1,0 +1,191 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45593495314566,
+              7.329478172548347
+            ],
+            [
+              134.46065236690777,
+              7.328892470912151
+            ],
+            [
+              134.46065236690777,
+              7.3329560999123755
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.45593495314566,
+              7.329478172548347
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides",
+        "s2id": "32d50b75"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.43706057552484,
+              7.335886275484227
+            ],
+            [
+              134.44177987827624,
+              7.335300224564154
+            ],
+            [
+              134.4417798782762,
+              7.339365449595241
+            ],
+            [
+              134.43706057552484,
+              7.339951818168972
+            ],
+            [
+              134.43706057552484,
+              7.335886275484227
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "ais_detected",
+        "label_source": "MALAKAL HARBOR: ais_detected",
+        "s2id": "32d50b03"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ],
+            [
+              134.45593495314566,
+              7.333542119178237
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.45121706710648,
+              7.3341281463897525
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "palau_vms_overrides",
+        "label_source": "MALAKAL HARBOR: palau_vms_overrides",
+        "s2id": "32d50b0d"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.45121706710648,
+              7.338192736121246
+            ],
+            [
+              134.45593495314566,
+              7.337606391263816
+            ],
+            [
+              134.45593495314566,
+              7.341670988744325
+            ],
+            [
+              134.45121706710648,
+              7.342257651261293
+            ],
+            [
+              134.45121706710648,
+              7.338192736121246
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "ais_detected",
+        "label_source": "MALAKAL HARBOR: ais_detected",
+        "s2id": "32d50b13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              134.44177987827624,
+              7.331235325029674
+            ],
+            [
+              134.44649870881005,
+              7.330649599628496
+            ],
+            [
+              134.44649870881005,
+              7.334714181525526
+            ],
+            [
+              134.44177987827624,
+              7.335300224564154
+            ],
+            [
+              134.44177987827624,
+              7.331235325029674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "label": "MALAKAL HARBOR",
+        "sublabel": "NULL",
+        "source": "ais_detected",
+        "label_source": "MALAKAL HARBOR: ais_detected",
+        "s2id": "32d50b07"
+      }
+    }
+  ],
+  "tolerance": 0
+}

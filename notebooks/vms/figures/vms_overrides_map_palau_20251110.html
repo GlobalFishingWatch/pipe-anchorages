@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_0523aedf2f70c97fdb32aba20f24c11f {
+                #map_f0de089968b46e18e9371dd440600c43 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -70,7 +70,7 @@
 <body>
     
     
-            <div class="folium-map" id="map_0523aedf2f70c97fdb32aba20f24c11f" ></div>
+            <div class="folium-map" id="map_f0de089968b46e18e9371dd440600c43" ></div>
         
     
     <div id='maplegend' class='maplegend' 
@@ -98,8 +98,8 @@
 <script>
     
     
-            var map_0523aedf2f70c97fdb32aba20f24c11f = L.map(
-                "map_0523aedf2f70c97fdb32aba20f24c11f",
+            var map_f0de089968b46e18e9371dd440600c43 = L.map(
+                "map_f0de089968b46e18e9371dd440600c43",
                 {
                     center: [7.331217173958492, 134.45829371906257],
                     crs: L.CRS.EPSG3857,
@@ -111,13 +111,13 @@
 
                 }
             );
-            L.control.scale().addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            L.control.scale().addTo(map_f0de089968b46e18e9371dd440600c43);
 
             
 
         
     
-            var tile_layer_decea0b28c1f3fcace6d24f54d7052b9 = L.tileLayer(
+            var tile_layer_3cce2be1d8881583a1910cee253a5ee6 = L.tileLayer(
                 "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
                 {
   "minZoom": 0,
@@ -134,10 +134,10 @@
             );
         
     
-            tile_layer_decea0b28c1f3fcace6d24f54d7052b9.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            tile_layer_3cce2be1d8881583a1910cee253a5ee6.addTo(map_f0de089968b46e18e9371dd440600c43);
         
     
-            var tile_layer_bd25051bab7667d67d52eadedc82025a = L.tileLayer(
+            var tile_layer_5645e4fc4f23dc1835120755ea903f5c = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -154,38 +154,38 @@
             );
         
     
-            tile_layer_bd25051bab7667d67d52eadedc82025a.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            tile_layer_5645e4fc4f23dc1835120755ea903f5c.addTo(map_f0de089968b46e18e9371dd440600c43);
         
     
-        function geo_json_ee62b7bb0f275f6509088db6c6336306_styler(feature) {
+        function geo_json_2f760439baaa3fc257794e78e9a0b69b_styler(feature) {
             switch(feature.properties.s2id) {
                 default:
                     return {"color": "blue", "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "weight": 2};
             }
         }
 
-        function geo_json_ee62b7bb0f275f6509088db6c6336306_onEachFeature(feature, layer) {
+        function geo_json_2f760439baaa3fc257794e78e9a0b69b_onEachFeature(feature, layer) {
 
             layer.on({
             });
         };
-        var geo_json_ee62b7bb0f275f6509088db6c6336306 = L.geoJson(null, {
-                onEachFeature: geo_json_ee62b7bb0f275f6509088db6c6336306_onEachFeature,
+        var geo_json_2f760439baaa3fc257794e78e9a0b69b = L.geoJson(null, {
+                onEachFeature: geo_json_2f760439baaa3fc257794e78e9a0b69b_onEachFeature,
             
-                style: geo_json_ee62b7bb0f275f6509088db6c6336306_styler,
+                style: geo_json_2f760439baaa3fc257794e78e9a0b69b_styler,
             ...{
 }
         });
 
-        function geo_json_ee62b7bb0f275f6509088db6c6336306_add (data) {
-            geo_json_ee62b7bb0f275f6509088db6c6336306
+        function geo_json_2f760439baaa3fc257794e78e9a0b69b_add (data) {
+            geo_json_2f760439baaa3fc257794e78e9a0b69b
                 .addData(data);
         }
-            geo_json_ee62b7bb0f275f6509088db6c6336306_add({"features": [{"geometry": {"coordinates": [[[134.45593495314566, 7.329478172548347], [134.46065236690777, 7.328892470912151], [134.46065236690777, 7.3329560999123755], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.329478172548347]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b75", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}, {"geometry": {"coordinates": [[[134.45121706710648, 7.3341281463897525], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.337606391263816], [134.45121706710648, 7.338192736121246], [134.45121706710648, 7.3341281463897525]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b0d", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}], "tolerance": 0, "type": "FeatureCollection"});
+            geo_json_2f760439baaa3fc257794e78e9a0b69b_add({"features": [{"geometry": {"coordinates": [[[134.45593495314566, 7.329478172548347], [134.46065236690777, 7.328892470912151], [134.46065236690777, 7.3329560999123755], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.329478172548347]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b75", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}, {"geometry": {"coordinates": [[[134.45121706710648, 7.3341281463897525], [134.45593495314566, 7.333542119178237], [134.45593495314566, 7.337606391263816], [134.45121706710648, 7.338192736121246], [134.45121706710648, 7.3341281463897525]]], "type": "Polygon"}, "properties": {"label": "Malakal Harbor", "s2id": "32d50b0d", "source": "palau_vms_overrides", "sublabel": null}, "type": "Feature"}], "tolerance": 0, "type": "FeatureCollection"});
 
         
     
-    geo_json_ee62b7bb0f275f6509088db6c6336306.bindTooltip(
+    geo_json_2f760439baaa3fc257794e78e9a0b69b.bindTooltip(
     function(layer){
     let div = L.DomUtil.create('div');
     
@@ -220,94 +220,94 @@
 });
                      
     
-            geo_json_ee62b7bb0f275f6509088db6c6336306.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            geo_json_2f760439baaa3fc257794e78e9a0b69b.addTo(map_f0de089968b46e18e9371dd440600c43);
         
     
-            var feature_group_df30298095e4c70dd996f8e258a4d168 = L.featureGroup(
+            var feature_group_262f2d38ac045658d55f18922615a6aa = L.featureGroup(
                 {
 }
             );
         
     
-            var circle_marker_246851d5d9d913b6e1d64a9c09daedd4 = L.circleMarker(
+            var circle_marker_a3ff8306eaeeaf97f1d88b0747a01598 = L.circleMarker(
                 [7.331217173958492, 134.45829371906257],
                 {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
-            ).addTo(feature_group_df30298095e4c70dd996f8e258a4d168);
+            ).addTo(feature_group_262f2d38ac045658d55f18922615a6aa);
         
     
-            var circle_marker_52161ce6a1f9d4ae94dce96077570d7b = L.circleMarker(
+            var circle_marker_593ca6fce0f363337eacf0ca53570696 = L.circleMarker(
                 [7.3358673065672155, 134.45357606915948],
                 {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
-            ).addTo(feature_group_df30298095e4c70dd996f8e258a4d168);
+            ).addTo(feature_group_262f2d38ac045658d55f18922615a6aa);
         
     
-            feature_group_df30298095e4c70dd996f8e258a4d168.addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            feature_group_262f2d38ac045658d55f18922615a6aa.addTo(map_f0de089968b46e18e9371dd440600c43);
         
     
-            var feature_group_28590649ad04ae6b542c8fb8c1f4b6c5 = L.featureGroup(
+            var feature_group_c365bdb3f7bfd3530055ba005a66ae93 = L.featureGroup(
                 {
 }
             );
         
     
-            var marker_4c15e791d82c0640184bffdc22e5da5d = L.marker(
+            var marker_9bb6e9c67eacbb1edfacf2abb7b27694 = L.marker(
                 [7.331217173958492, 134.45829371906257],
                 {
 }
-            ).addTo(feature_group_28590649ad04ae6b542c8fb8c1f4b6c5);
+            ).addTo(feature_group_c365bdb3f7bfd3530055ba005a66ae93);
         
     
-            var div_icon_77829be0b9b59c4245b42269a2212bbf = L.divIcon({
+            var div_icon_341265dd5c0e94d992af8f88bfa8ec79 = L.divIcon({
   "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eMalakal Harbor\u003cbr\u003eNone\u003c/div\u003e\n                ",
   "className": "empty",
 });
         
     
-                marker_4c15e791d82c0640184bffdc22e5da5d.setIcon(div_icon_77829be0b9b59c4245b42269a2212bbf);
+                marker_9bb6e9c67eacbb1edfacf2abb7b27694.setIcon(div_icon_341265dd5c0e94d992af8f88bfa8ec79);
             
     
-            var marker_49224f04093e62488f110007f17bcbaf = L.marker(
+            var marker_85cfcb81099f91e82240853bb0f0515a = L.marker(
                 [7.3358673065672155, 134.45357606915948],
                 {
 }
-            ).addTo(feature_group_28590649ad04ae6b542c8fb8c1f4b6c5);
+            ).addTo(feature_group_c365bdb3f7bfd3530055ba005a66ae93);
         
     
-            var div_icon_525860acf6bc21d1d996d67b44f28bd6 = L.divIcon({
+            var div_icon_60824b0f35b38bd9b5bd6360c925b676 = L.divIcon({
   "html": "\n                \u003cdiv style=\"\n                    display:inline-block;font-size:15px;color:black;\n                    background-color:rgba(255,255,255,0.9);padding:4px 8px;border-radius:4px;\n                    text-align:center;transform:translate(-50%,-50%);position:relative;\n                    min-width:50px;white-space:nowrap;box-shadow:0 0 2px rgba(0,0,0,0.2);\n                \"\u003eMalakal Harbor\u003cbr\u003eNone\u003c/div\u003e\n                ",
   "className": "empty",
 });
         
     
-                marker_49224f04093e62488f110007f17bcbaf.setIcon(div_icon_525860acf6bc21d1d996d67b44f28bd6);
+                marker_85cfcb81099f91e82240853bb0f0515a.setIcon(div_icon_60824b0f35b38bd9b5bd6360c925b676);
             
     
-            map_0523aedf2f70c97fdb32aba20f24c11f.fitBounds(
+            map_f0de089968b46e18e9371dd440600c43.fitBounds(
                 [[7.328892470912151, 134.45121706710648], [7.338192736121246, 134.46065236690777]],
                 {}
             );
         
     
-            var layer_control_efc6a09f428ca03bb5633314aecc3b74_layers = {
+            var layer_control_2572dec65ae70fc2c0ef1d55dd56bcc8_layers = {
                 base_layers : {
-                    "Esri Satellite" : tile_layer_decea0b28c1f3fcace6d24f54d7052b9,
-                    "OpenStreetMap" : tile_layer_bd25051bab7667d67d52eadedc82025a,
+                    "Esri Satellite" : tile_layer_3cce2be1d8881583a1910cee253a5ee6,
+                    "OpenStreetMap" : tile_layer_5645e4fc4f23dc1835120755ea903f5c,
                 },
                 overlays :  {
-                    "S2 Cells" : geo_json_ee62b7bb0f275f6509088db6c6336306,
-                    "S2 Centroid" : feature_group_df30298095e4c70dd996f8e258a4d168,
-                    "Label / Sublabel" : feature_group_28590649ad04ae6b542c8fb8c1f4b6c5,
+                    "S2 Cells" : geo_json_2f760439baaa3fc257794e78e9a0b69b,
+                    "S2 Centroid" : feature_group_262f2d38ac045658d55f18922615a6aa,
+                    "Label / Sublabel" : feature_group_c365bdb3f7bfd3530055ba005a66ae93,
                 },
             };
-            let layer_control_efc6a09f428ca03bb5633314aecc3b74 = L.control.layers(
-                layer_control_efc6a09f428ca03bb5633314aecc3b74_layers.base_layers,
-                layer_control_efc6a09f428ca03bb5633314aecc3b74_layers.overlays,
+            let layer_control_2572dec65ae70fc2c0ef1d55dd56bcc8 = L.control.layers(
+                layer_control_2572dec65ae70fc2c0ef1d55dd56bcc8_layers.base_layers,
+                layer_control_2572dec65ae70fc2c0ef1d55dd56bcc8_layers.overlays,
                 {
   "position": "topright",
   "collapsed": false,
   "autoZIndex": true,
 }
-            ).addTo(map_0523aedf2f70c97fdb32aba20f24c11f);
+            ).addTo(map_f0de089968b46e18e9371dd440600c43);
 
         
 </script>

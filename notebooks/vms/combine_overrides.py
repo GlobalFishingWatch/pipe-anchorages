@@ -11,105 +11,77 @@ import json
 
 from amanda_anchorage_helper import *
 fig_fldr = './figures'
+port_list_fldr = '../../pipe_anchorages/data/port_lists'
 
+
+# %%
 
 # %% [markdown]
 # # Merge anchorages_overrides with the vms country overrides
-
-# %%
-from s2sphere import CellId, LatLng
-
-def s2_level14_hex8(lat: float, lon: float) -> str:
-    # Build the level-14 S2 cell containing this point
-    cid = CellId.from_lat_lng(LatLng.from_degrees(lat, lon)).parent(14)
-    # Format the 64-bit id as 16 hex chars and take the first 8 (most significant)
-    return f"{cid.id():016x}"[:8]
-
-
-
 
 # %% [markdown]
 # ## Read AIS anchorage overrides
 
 # %%
-ais_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/anchorage_overrides.csv')
-ais_anchorages['label_source'] = 'anchorage_overrides'
+ais_anchorages = pd.read_csv(f'{port_list_fldr}/anchorage_overrides.csv')
+ais_anchorages['source'] = 'ais_anchorage_overrides'
 ais_anchorages = clean_overrides(ais_anchorages,duplicate_option='keep_last')
 ais_anchorages
 
 # %% [markdown]
-# ## Brazil
+# ## VMS overrides
 
 # %%
-bra_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/brazil_overrides.csv')
-bra_anchorages['label_source'] = 'brazil_vms_overrides'
-bra_anchorages = clean_overrides(bra_anchorages)
-bra_anchorages
+country_names = ['brazil','chile','panama','ecuador','palau','papua_new_guinea','costa_rica']
+override_lists = []
+for c in country_names:
+    print(f"\n{c}")
+    df = pd.read_csv(f'{port_list_fldr}/{c}_vms_overrides.csv')
+    df['source'] = f'{c}_vms_overrides'
+    df = clean_overrides(df)
+    override_lists.append(df)
 
-# %% [markdown]
-# ## Chile
 
 # %%
-chl_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/chile_overrides.csv')
-chl_anchorages['label_source'] = 'chile_vms_overrides'
-chl_anchorages = clean_overrides(chl_anchorages)
-chl_anchorages
-
-
-# %% [markdown]
-# ## Panama
-
-# %%
-pan_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/panama_overrides.csv')
-pan_anchorages['label_source'] = 'panama_vms_overrides'
-pan_anchorages = clean_overrides(pan_anchorages)
-pan_anchorages
-
-# %% [markdown]
-# ## Ecuador
-
-# %%
-ecu_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/ecuador_overrides.csv')
-ecu_anchorages['label_source'] = 'ecuador_vms_overrides'
-ecu_anchorages = clean_overrides(ecu_anchorages)
-ecu_anchorages
-
-# %% [markdown]
-# ## Costa Rica 
-
-# %%
-cri_anchorages = pd.read_csv('../../pipe_anchorages/data/port_lists/costa_rica_overrides.csv')
-cri_anchorages['label_source'] = 'costa_rica_vms_overrides'
-cri_anchorages = clean_overrides(cri_anchorages)
-cri_anchorages
 
 # %% [markdown]
 # ## Merge
 
 # %%
-combined_anchorages = pd.concat([bra_anchorages, chl_anchorages, pan_anchorages, ecu_anchorages, cri_anchorages])
+combined_anchorages = override_lists[0]
+for o in override_lists[1:]:
+    combined_anchorages = pd.concat([combined_anchorages,o])
 old_len = len(combined_anchorages)
 duplicates = combined_anchorages[combined_anchorages.duplicated(subset='s2id', keep=False)]
 combined_anchorages = combined_anchorages.drop_duplicates(subset='s2id', keep='first').reset_index(drop=True) # taking first because this takes ecuador over costa rica which has anchorages in ecuador
-if old_len - len(combined_anchorages) > 0:
-    print(f"WARNING: Dropped {old_len - len(combined_anchorages)} duplicates from country-reviewed lists. This means one country-reviewed list overwrote at least 1 row from another.")
 
-combined_anchorages = pd.concat([ais_anchorages, combined_anchorages])
+country_dupes = old_len - len(combined_anchorages)
+if country_dupes > 0:
+    print(f"WARNING: Dropped {country_dupes} duplicates from country-reviewed lists. This means one country-reviewed list overwrote at least 1 row from another.")
+else:
+    print("No S2 cells were present in 2 or more country lists")
+
+combined_anchorages = pd.concat([combined_anchorages,ais_anchorages])
 old_len = len(combined_anchorages)
 combined_anchorages = combined_anchorages.drop_duplicates(subset='s2id', keep='last').reset_index(drop=True)
 print(f"Dropped {old_len - len(combined_anchorages)} s2ids from AIS overrides list that were duplicated in the country-reviewed lists")
 
-print('Country duplicates:')
-duplicates
+if country_dupes > 0:
+    print('Country duplicates:')
+    duplicates
 
 # %%
-combined_to_save = combined_anchorages.drop(columns=['source','label_source'])
+combined_anchorages
+
+# %%
+combined_to_save = combined_anchorages.drop(columns=['source'])
 
 combined_to_save.to_csv('../../pipe_anchorages/data/port_lists/combined_anchorage_overrides.csv',index=False)
 combined_to_save
 
 
 # %%
+np.unique(combined_anchorages['source'])
 
 # %% [markdown]
 # # map anchorages
@@ -288,14 +260,15 @@ for focal_country_name in focal_country_names:
 # ## folium html maps
 
 # %%
-combined_anchorages = combined_anchorages.rename(columns={'label_source': 'source'})
+#combined_anchorages = combined_anchorages.rename(columns={'label_source': 'source'})
+combined_anchorages
 
 # %%
 q = f'''
 SELECT
   *
 FROM
-  `world-fishing-827.scratch_amanda_ttl_120.combined_named_anchorages_precursor_v20251024`
+  `world-fishing-827.scratch_amanda_ttl_120.combined_named_anchorages_v20251111`
 '''
 df = get_bq_df(q)
 df['s2lat'], df['s2lon'] = zip(*df['s2id'].map(s2id_to_latlon))
@@ -316,13 +289,6 @@ df["source"] = df["source"].fillna("ais_detected")
 df
 
 # %%
-country_names = ['costa_rica','ecuador','panama','chile']
-
-for country_name in country_names:
-    df.loc[df["source"] == f"{country_name}_vms_overrides", "source"] = f"{country_name}_vms_overrides_buffer"
-    df1 = pd.read_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_singleS2cell_overrides.csv')
-    df.loc[df["s2id"].isin(df1["s2id"]), "source"] = f"{country_name}_vms_overrides_provided_point"
-
 np.unique(df['source'])
 
 # %%
@@ -333,7 +299,7 @@ country_name = 'brazil'
 dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
 
 color_map = {
-    f"{country_name}_vms_reviewed":"orange",
+    f"{country_name}_vms_overrides":"orange",
     "ais_anchorage_overrides": "blue",
     "ais_detected": "darkblue",
 }
@@ -356,19 +322,15 @@ country_iso = 'ECU'
 dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
 
 color_map = {
-    f"{country_name}_vms_reviewed_provided_point":"darkred",
-    f"{country_name}_vms_reviewed_buffer":"orange",
-    "costa_rica_vms_reviewed_provided_point": "purple",
-    "costa_rica_vms_reviewed_buffer": "lavender",
+    f"{country_name}_vms_overrides":"orange",
+    "costa_rica_vms_overrides": "purple",
     "ais_anchorage_overrides": "blue",
     "ais_detected": "darkblue",
 }
 
 label_map = {
-    f"{country_name}_vms_reviewed_provided_point":f"{country_name.replace('_', ' ').title()} reviewed - provided point",
-    f"{country_name}_vms_reviewed_buffer":f"{country_name.replace('_', ' ').title()} reviewed - 1km buffer",
-    "costa_rica_vms_reviewed_provided_point": "Costa Rica reviewed - 1km buffer",
-    "costa_rica_vms_reviewed_buffer": "Costa Rica reviewed - 1km buffer",
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
+    "costa_rica_vms_reviewed_provided_point": "Costa Rica reviewed",
     "ais_anchorage_overrides": "AIS anchorage overrides",
     "ais_detected": "Detected from AIS",
 }
@@ -385,15 +347,13 @@ country_name = 'panama'
 dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
 
 color_map = {
-    f"{country_name}_vms_reviewed_provided_point":"darkred",
-    f"{country_name}_vms_reviewed_buffer":"orange",
+    f"{country_name}_vms_overrides":"orange",
     "ais_anchorage_overrides": "blue",
     "ais_detected": "darkblue",
 }
 
 label_map = {
-    f"{country_name}_vms_reviewed_provided_point":f"{country_name.replace('_', ' ').title()} reviewed - provided point",
-    f"{country_name}_vms_reviewed_buffer":f"{country_name.replace('_', ' ').title()} reviewed - 1km buffer",
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
     "ais_anchorage_overrides": "AIS anchorage overrides",
     "ais_detected": "Detected from AIS",
 }
@@ -410,15 +370,13 @@ country_name = 'costa_rica'
 dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
 
 color_map = {
-    f"{country_name}_vms_reviewed_provided_point":"darkred",
-    f"{country_name}_vms_reviewed_buffer":"orange",
+    f"{country_name}_vms_overrides":"orange",
     "ais_anchorage_overrides": "blue",
     "ais_detected": "darkblue",
 }
 
 label_map = {
-    f"{country_name}_vms_reviewed_provided_point":f"{country_name.replace('_', ' ').title()} reviewed - provided point",
-    f"{country_name}_vms_reviewed_buffer":f"{country_name.replace('_', ' ').title()} reviewed - 1km buffer",
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
     "ais_anchorage_overrides": "AIS anchorage overrides",
     "ais_detected": "Detected from AIS",
 }
@@ -435,15 +393,57 @@ country_name = 'chile'
 dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
 
 color_map = {
-    f"{country_name}_vms_reviewed_provided_point":"darkred",
-    f"{country_name}_vms_reviewed_buffer":"orange",
+    f"{country_name}_vms_overrides":"orange",
     "ais_anchorage_overrides": "blue",
     "ais_detected": "darkblue",
 }
 
 label_map = {
-    f"{country_name}_vms_reviewed_provided_point":f"{country_name.replace('_', ' ').title()} reviewed - provided point",
-    f"{country_name}_vms_reviewed_buffer":f"{country_name.replace('_', ' ').title()} reviewed - 1km buffer",
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
+    "ais_anchorage_overrides": "AIS anchorage overrides",
+    "ais_detected": "Detected from AIS",
+}
+
+m = map_s2_anchorages(dfc,color_map = color_map, label_map = label_map, legend_title='Source (first on this list that applies)')
+m.save(f"{fig_fldr}/{country_name}_combined_named_anchorages.html")
+m
+
+# %%
+country_name = 'papua_new_guinea'
+country_iso = 'PNG'
+
+dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
+
+color_map = {
+    f"{country_name}_vms_overrides":"orange",
+    "ais_anchorage_overrides": "blue",
+    "ais_detected": "darkblue",
+}
+
+label_map = {
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
+    "ais_anchorage_overrides": "AIS anchorage overrides",
+    "ais_detected": "Detected from AIS",
+}
+
+m = map_s2_anchorages(dfc,color_map = color_map, label_map = label_map, legend_title='Source (first on this list that applies)')
+m.save(f"{fig_fldr}/{country_name}_combined_named_anchorages.html")
+m
+
+# %%
+country_name = 'palau'
+country_iso = 'PLW'
+
+dfc = df[df['iso3'] == country_iso].reset_index(drop=True)
+
+color_map = {
+    f"{country_name}_vms_overrides":"orange",
+    "ais_anchorage_overrides": "blue",
+    "ais_detected": "darkblue",
+}
+
+label_map = {
+    f"{country_name}_vms_reviewed":f"{country_name.replace('_', ' ').title()} reviewed",
     "ais_anchorage_overrides": "AIS anchorage overrides",
     "ais_detected": "Detected from AIS",
 }
@@ -461,6 +461,9 @@ df
 
 # %%
 np.unique(df['source'])
+
+# %%
+df
 
 # %%
 dfc
@@ -539,8 +542,8 @@ def df_to_s2_feature_collection(df: pd.DataFrame) -> Dict[str, Any]:
 # %%
 import json
 
-country_names = ['costa_rica', 'ecuador', 'panama', 'chile', 'brazil']
-country_isos = ['CRI', 'ECU', 'PAN', 'CHL', 'BRA']
+country_names = ['costa_rica', 'ecuador', 'panama', 'chile', 'brazil','peru','papua_new_guinea','palau']
+country_isos = ['CRI', 'ECU', 'PAN', 'CHL', 'BRA', 'PER', 'PNG','PLW']
 
 for country_name, country_iso in zip(country_names, country_isos):
     dfc = df[df["iso3"] == country_iso]
