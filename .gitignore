@@ -5,6 +5,8 @@ fishing_list.txt
 
 # figures
 notebooks/vms/figures/
+notebooks/vms/*.ipynb
+
 
 .DS_Store
 
