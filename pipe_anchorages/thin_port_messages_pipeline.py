@@ -13,9 +13,10 @@ from pipe_anchorages.transforms.create_tagged_anchorages import CreateTaggedAnch
 from pipe_anchorages.transforms.sink import MessageSink
 from pipe_anchorages.transforms.smart_thin_records import SmartThinRecords
 from pipe_anchorages.transforms.source import QuerySource
-from pipe_anchorages.utils.bqtools import BigQueryHelper, DateShardedTable
-from pipe_anchorages.utils.tools import list_of_days
+from pipe_anchorages.utils.bqtools import BigQueryHelper, DatePartitionedTable
 from pipe_anchorages.utils.ver import get_pipe_ver
+
+logger = logging.getLogger(__name__)
 
 
 def create_queries(args, start_date, end_date):
@@ -23,7 +24,7 @@ def create_queries(args, start_date, end_date):
     SELECT seg_id as ident, ssvid, lat, lon, speed,
             CAST(UNIX_MICROS(timestamp) AS FLOAT64) / 1000000 AS timestamp
     FROM `{table}`
-    WHERE date(timestamp) BETWEEN '{start:%Y-%m-%d}' AND '{end:%Y-%m-%d}'
+    WHERE DATE(timestamp) BETWEEN '{start}' AND '{end}'
       {filter_text}
     """
     start_window = start_date
@@ -57,17 +58,19 @@ def anchorage_query(args):
 
 
 def prepare_output_tables(pipe_options, cloud_options, start_date, end_date):
-    output_table = DateShardedTable(
-        table_id_prefix=pipe_options.output_table,
+    output_table = DatePartitionedTable(
+        table_id=pipe_options.output_table,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
 * Creates raw thinned messages in out port events.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
 * Sources: {pipe_options.input_table}
 * Anchorage table: {pipe_options.anchorage_table}
-* Date: {start_date}, {end_date}
+* Last processing date range: {start_date} - {end_date}
         """,
         schema=message_schema["fields"],
+        partitioning_field="timestamp",
+        additional_clustering_fields=["is_possible_gap_end"],
     )
 
     bq_helper = BigQueryHelper(
@@ -77,12 +80,12 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
         labels=dict([entry.split("=") for entry in cloud_options.labels]),
     )
 
-    # list_of_days doesn't include the end date. However, in daily mode,
-    # start and end date are the same day.
-    for date in list_of_days(start_date, end_date + datetime.timedelta(days=1)):
-        shard = output_table.build_shard(date)
-        bq_helper.ensure_table_exists(shard)
-        bq_helper.update_table(shard)
+    bq_helper.ensure_table_exists(output_table)
+    bq_helper.update_table(output_table)
+    # Ensure we delete any existing rows in the date range to be processed.
+    # Needed to maintain consistency if are re-processing past dates.
+    logger.info("Deleting existing rows in the range [{}-{}]".format(start_date, end_date))
+    bq_helper.run_query(output_table.clear_query(start_date, end_date))
 
 
 def run(options):

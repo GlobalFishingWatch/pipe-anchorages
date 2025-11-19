@@ -28,10 +28,10 @@ def create_queries(args, start_date, end_date):
            vids.seg_id,
            records.* except (timestamp, identifier),
            CAST(UNIX_MICROS(timestamp) AS FLOAT64) / 1000000 AS timestamp
-    FROM `{table}*` records
+    FROM `{table}` records
     JOIN `{vid_table}` vids
     ON records.identifier = vids.seg_id
-    WHERE records._table_suffix BETWEEN '{start:%Y%m%d}' AND '{end:%Y%m%d}'
+    WHERE DATE(timestamp) BETWEEN '{start}' AND '{end}'
      {condition}
     """
 
@@ -48,8 +48,8 @@ def create_queries(args, start_date, end_date):
             table=args.thinned_message_table,
             vid_table=args.vessel_id_table,
             condition=condition,
-            start=start_window,
-            end=end_window,
+            start=start_date,
+            end=end_date,
         )
         start_window = end_window + datetime.timedelta(days=1)
 
@@ -94,7 +94,7 @@ def drop_new_fields(x):
     return {key: value for key, value in x.items() if key not in excluded_fields}
 
 
-def strdate_to_utcdate(strdate):
+def strdate_to_utcdatetime(strdate):
     return datetime.datetime.strptime(strdate, "%Y-%m-%d").replace(tzinfo=pytz.utc)
 
 
@@ -135,8 +135,11 @@ def run(options):
 
     pipeline = beam.Pipeline(options=options)
 
-    start_date = strdate_to_utcdate(visit_args.start_date)
-    end_date = strdate_to_utcdate(visit_args.end_date)
+    start_time = strdate_to_utcdatetime(visit_args.start_date)
+    end_time = strdate_to_utcdatetime(visit_args.end_date)
+
+    start_date = start_time.date()
+    end_date = end_time.date()
 
     queries = create_queries(visit_args, start_date, end_date)
 
@@ -156,7 +159,7 @@ def run(options):
             stopped_begin_speed=config["stopped_begin_speed_knots"],
             stopped_end_speed=config["stopped_end_speed_knots"],
             min_gap_minutes=config["minimum_port_gap_duration_minutes"],
-            end_date=end_date,
+            end_time=end_time,
         )
         | CreatePortVisits(visit_args.max_inter_seg_dist_nm)
         | beam.Map(visit_to_msg)

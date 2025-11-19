@@ -1,4 +1,3 @@
-import datetime as dt
 import logging
 
 from apache_beam import Map, PTransform, io
@@ -34,10 +33,6 @@ class MessageSink(PTransform):
         self.table = table
         self.key = key
 
-    def compute_table_for_event(self, event):
-        stamp = dt.date.fromtimestamp(event[self.key])
-        return f"{self.table}{stamp:%Y%m%d}"
-
     def extract_latlon(self, x):
         x = x.copy()
         lonlat = x.pop("location")
@@ -56,9 +51,9 @@ class MessageSink(PTransform):
 
     def expand(self, xs):
         sink = io.WriteToBigQuery(
-            self.compute_table_for_event,
+            self.table,
             schema=message_schema,
-            write_disposition=io.BigQueryDisposition.WRITE_TRUNCATE,
+            write_disposition=io.BigQueryDisposition.WRITE_APPEND,
             create_disposition=io.BigQueryDisposition.CREATE_NEVER,
         )
 

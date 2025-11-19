@@ -87,15 +87,15 @@ class CreateInOutEvents(beam.PTransform, InOutEventsBase):
         stopped_begin_speed,
         stopped_end_speed,
         min_gap_minutes,
-        end_date,
+        end_time,
     ):
         self.anchorage_entry_dist = anchorage_entry_dist
         self.anchorage_exit_dist = anchorage_exit_dist
         self.stopped_begin_speed = stopped_begin_speed
         self.stopped_end_speed = stopped_end_speed
         self.min_gap = timedelta(minutes=min_gap_minutes)
-        self.end_date = end_date
-        self.last_possible_timestamp = end_date + timedelta(days=1) - timedelta(microseconds=1)
+        self.end_time = end_time
+        self.last_possible_timestamp = end_time + timedelta(days=1) - timedelta(microseconds=1)
         assert self.min_gap < timedelta(
             days=1
         ), "min gap must be under one day in current implementation"

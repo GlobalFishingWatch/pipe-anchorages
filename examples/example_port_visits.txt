@@ -1,0 +1,19 @@
+docker-compose run dev \
+    port_visits \
+    --start_date 2018-01-01 \
+    --end_date 2018-01-01 \
+    --vessel_id_table world-fishing-827.pipe_ais_v3_published.segment_info \
+    --thinned_message_table world-fishing-827.scratch_tomas_ttl30d.raw_port_events \
+    --output_table world-fishing-827.scratch_tomas_ttl30d.port_visits \
+    --bad_segs '(SELECT DISTINCT seg_id FROM `world-fishing-827.pipe_ais_v3_published.segs_activity` WHERE overlapping_and_short )' \
+    --project world-fishing-827 \
+    --temp_location gs://pipe-temp-us-central-ttl7/dataflow_temp \
+    --job_name tom-test-anchorages-port-visits \
+    --max_num_workers 200 \
+    --runner dataflow \
+    --labels environment=test \
+    --setup_file ./setup.py \
+    --requirements_file requirements-worker.txt \
+    --disk_size_gb 100 \
+    --region us-central1 \
+    --wait_for_job
