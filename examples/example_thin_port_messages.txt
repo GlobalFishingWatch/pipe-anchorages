@@ -1,0 +1,18 @@
+docker-compose run dev \
+    thin_port_messages \
+    --start_date 2018-01-01 \
+    --end_date 2018-01-01 \
+    --anchorage_table world-fishing-827.anchorages.named_anchorages_v20240117 \
+    --input_table world-fishing-827.pipe_ais_v3_internal.messages_positions \
+    --output_table world-fishing-827.scratch_tomas_ttl30d.raw_port_events \
+    --project world-fishing-827 \
+    --temp_location gs://pipe-temp-us-central-ttl7/dataflow_temp \
+    --job_name tom-test-anchorages-events-partitioned \
+    --max_num_workers 200 \
+    --runner dataflow \
+    --labels environment=test \
+    --setup_file ./setup.py \
+    --requirements_file requirements-worker.txt \
+    --disk_size_gb 100 \
+    --region us-central1 \
+    --wait_for_job

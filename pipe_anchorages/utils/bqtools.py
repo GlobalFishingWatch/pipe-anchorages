@@ -68,29 +68,6 @@ class SimpleTable:
 
 
 @dataclass(frozen=True)
-class DateShardedTable:
-    """
-    Represents a legacy date sharded table
-    """
-    table_id_prefix: str
-    description: str
-    schema: list
-    clustering_field: Optional[str] = None
-
-    def build_shard(self, date):
-        """
-        Returns a simple table representing a specific shard for this
-        date-sharded table
-        """
-        return SimpleTable(
-            table_id=f"{self.table_id_prefix}{date:%Y%m%d}",
-            description=self.description,
-            schema=self.schema,
-            clustering_field=self.clustering_field,
-        )
-
-
-@dataclass(frozen=True)
 class DatePartitionedTable:
     """
     Represents a timestamp-partitioned table with monthly partitions
