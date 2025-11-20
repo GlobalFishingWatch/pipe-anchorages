@@ -48,8 +48,8 @@ def create_queries(args, start_date, end_date):
             table=args.thinned_message_table,
             vid_table=args.vessel_id_table,
             condition=condition,
-            start=start_date,
-            end=end_date,
+            start=start_window,
+            end=end_window,
         )
         start_window = end_window + datetime.timedelta(days=1)
 
