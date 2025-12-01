@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # %%
 from amanda_notebook_bq_helper import *
 import numpy as np
@@ -73,7 +74,7 @@ df = df.rename(columns={
 })[["s2id", "latitude", "longitude", "label", "sublabel", "iso3"]]
 
 df = clean_overrides(df,duplicate_option='keep_last')
-df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_vms_overrides.csv',index=False)
+#df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_vms_overrides.csv',index=False)
 df['source'] = f'{country_name}_vms_overrides'
 m = map_s2_anchorages(df, show_labels=False, fit_bounds=True)
 m.save(f"{fig_fldr}/vms_overrides_map_{country_name}_20251110.html")
@@ -134,10 +135,10 @@ df = df[
 ].reset_index(drop=True)
 
 df = clean_overrides(df,duplicate_option='keep_last')
-df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_vms_overrides.csv',index=False)
+#df.to_csv(f'../../pipe_anchorages/data/port_lists/{country_name}_vms_overrides.csv',index=False)
 df['source'] = f'{country_name}_vms_overrides'
 m = map_s2_anchorages(df, show_labels=False, fit_bounds=True)
-m.save(f"{fig_fldr}/vms_overrides_map_{country_name}_20251110.html")
+#m.save(f"{fig_fldr}/vms_overrides_map_{country_name}_20251110.html")
 m
 
 # %% [markdown]
