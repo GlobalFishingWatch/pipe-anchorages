@@ -376,7 +376,7 @@ def clean_overrides(df, duplicate_option = 'nothing'):
                     df.loc[max_idx, 'label'] = s
                     n_labels_combined = n_labels_combined + len(group) - 1
 
-            if len(np.unique(group['sublabel'])) > 1:
+            if group['sublabel'].nunique(dropna=False) > 1: # can handle None
                 s = ''
                 for x in np.unique(group['sublabel']):
                     if pd.isna(x):
