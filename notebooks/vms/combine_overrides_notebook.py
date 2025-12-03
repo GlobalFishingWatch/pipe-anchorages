@@ -76,3 +76,9 @@ combined_to_save
 np.unique(combined_anchorages['source'])
 
 
+
+# %%
+for c in country_names:
+    print(f"{c}_vms_overrides.csv")
+
+# %%
