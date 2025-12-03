@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4.1.0
         with:
-          python-version: 3.8
+          python-version: 3.12
 
       - name: Install flake8
         run: pip --disable-pip-version-check install flake8
@@ -24,31 +24,56 @@ jobs:
         run: flake8 --count
 
   tests:
-    runs-on: ubuntu-latest
-    env:
-      GDAL_VERSION: "3.6.2"
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        os: ["ubuntu-latest"]
+        python-version: ["3.12", "3.13"]
+    env:
+      VENV: .venv
+      PACKAGE: pipe_anchorages
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          # cache option make the step fail if you don´t have requirements.txt or pyproject.toml on root.
+          # https://github.com/actions/setup-python/issues/807.
+  
+      - name: Create virtual environment
+        run: python -m venv $VENV
 
-      - name: Install dependencies
+      - name: Install package with test dependencies
         run: |
-          pip install --upgrade pip
-          sudo apt-get install libgdal-dev
-          pip install -r requirements/test.txt
+          . $VENV/bin/activate
+          make install-test
           pip install -e .
 
       - name: Test with pytest
         run: |
-          pytest
+          . $VENV/bin/activate
+          pytest --cov=$PACKAGE --cov-report=xml
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
+        if: github.ref == 'refs/heads/develop' && matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  tests-in-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4.1.0
+  
+      - name: Build docker image
+        run: make docker-build
+    
+      - name: Run tests
+        run: make docker-ci-test

@@ -1,46 +1,22 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  id: build-scheduler
-  args: [
-    'build',
-    '-t', '${_SCHEDULER_IMAGE_NAME}:${TAG_NAME}',
-    '-t', '${_SCHEDULER_IMAGE_NAME}:latest',
-    '-f', 'Dockerfile-scheduler',
-    '.',
-  ]
-
-- name: 'gcr.io/cloud-builders/docker'
-  id: test
-  waitFor: ['build-scheduler']
-  args: [
-    'run',
-    '--rm',
-    '--entrypoint', 'py.test',
-    '${_SCHEDULER_IMAGE_NAME}:latest',
-  ]
-
-- name: 'gcr.io/cloud-builders/docker'
-  id: build-worker
-  waitFor: ['test']
-  args: [
-    'build',
-    '-t', '${_WORKER_IMAGE_NAME}:${TAG_NAME}',
-    '-t', '${_WORKER_IMAGE_NAME}:latest',
-    '-f', 'Dockerfile-worker',
-    '.',
-  ]
-
+  - name: gcr.io/cloud-builders/docker
+    id: build
+    args:
+      - build
+      - '-t'
+      - '${_IMAGE_NAME}:${TAG_NAME}'
+      - '-t'
+      - '${_IMAGE_NAME}:latest'
+      - '-f'
+      - Dockerfile
+      - '--target'
+      - prod
+      - .
 images:
-  - '${_SCHEDULER_IMAGE_NAME}:${TAG_NAME}'
-  - '${_SCHEDULER_IMAGE_NAME}:latest'
-  - '${_WORKER_IMAGE_NAME}:${TAG_NAME}'
-  - '${_WORKER_IMAGE_NAME}:latest'
-
+  - '${_IMAGE_NAME}:${TAG_NAME}'
+  - '${_IMAGE_NAME}:latest'
 timeout: 600s
 substitutions:
-  _BASE_IMAGE_NAME: 'gcr.io/${PROJECT_ID}/github.com/globalfishingwatch/pipe-anchorages'
-  _SCHEDULER_IMAGE_NAME: '${_BASE_IMAGE_NAME}/scheduler'
-  _WORKER_IMAGE_NAME: '${_BASE_IMAGE_NAME}/worker'
+  _IMAGE_NAME: 'gcr.io/${PROJECT_ID}/github.com/globalfishingwatch/pipe-anchorages'
 options:
   dynamic_substitutions: true
-

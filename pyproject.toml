@@ -1,0 +1,176 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+"assets" = ["*"]
+
+[project]
+name = "pipe-anchorages"
+version = "4.5.1"
+description = "Tools for finding anchorages and associated port-visit events."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [
+ { name = "Global Fishing Watch" }
+]
+maintainers = []
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+
+]
+requires-python = ">= 3.12"
+dependencies = [
+  "apache-beam[gcp]~=2.59",
+  "Fiona<2",
+  "gfw-common~=0.2",
+  "jinja2-cli~=0.8",
+  "pyyaml~=6.0",
+  "s2sphere~=0.2",
+  "Shapely~=2.0",
+  "Unidecode~=1.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/GlobalFishingWatch/pipe-anchorages"
+Documentation = "https://globalfishingwatch.github.io/pipe-anchorages/"
+ChangKelog = "https://github.com/GlobalFishingWatch/pipe-anchorages/blob/main/CHANGELOG.md"
+Repository = "https://github.com/GlobalFishingWatch/pipe-anchorages"
+Issues = "https://github.com/GlobalFishingWatch/pipe-anchorages/issues"
+
+[project.scripts]
+pipe-anchorages = "main:main"
+
+[project.optional-dependencies]
+
+# Linting and code quality tools
+lint = [
+  "black~=24.1",               # Code formatting tool.
+  "isort~=5.13",               # Python imports sorting tool.
+  "mypy~=1.14",                # Static type checker.
+  "pydocstyle~=6.3",           # Python docstring style checker.
+  "ruff~=0.11",                # Linter and code analysis tool.
+  "codespell[toml]~=2.4",      # Spell checker for code.
+  "flake8~=7.0",               # Simple PEP8 checker.
+  "types-PyYAML",              # MyPy stubs for pyyaml.
+]
+
+# Development workflow and tools
+dev = [
+  "pre-commit~=3.5",          # Framework for managing pre-commit hooks.
+  "pip-tools~=7.0",           # Freezing dependencies for production containers.
+  "pip-audit~=2.7.3",         # Audit for finding vulnerabilities in dependencies.
+  "memory_profiler~=0.6",
+  "snakeviz~=2.0",
+]
+
+# Build tools
+build = [
+  "build~=1.2",             # Python PEP 517 compliant build system.
+  "setuptools~=75.2",       # Python packaging library.
+  "twine~=6.1",             # For uploading Python packages to PyPI.
+]
+
+[tool.ruff]
+fix = true
+line-length = 99
+src = ["src", "tests"]
+target-version = "py312"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+unfixable = []
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "RUF",  # Ruff-specific rules
+    "ANN",  # flake8-annotations
+    "C",    # flake8-comprehensions
+    "B",    # flake8-bugbear
+    "I",    # isort
+    "D",    # pydocstyle
+]
+ignore = [
+  "E501",    # line too long, handled by black
+  "C901",    # too complex
+  "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+lines-between-types = 1
+known-first-party = ["gfw", "tests"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.black]
+target-version = ["py312"]
+line-length = 99
+
+[tool.isort]
+profile = "black"
+line_length = 99
+known_first_party = ["gfw"]
+lines_after_imports = 2
+lines_between_sections = 1
+lines_between_types = 1
+ensure_newline_before_comments = true
+force_sort_within_sections = true
+src_paths = ["src", "tests"]
+
+[tool.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
+files = "src"
+disallow_untyped_calls = false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+addopts = "-v --cov=src --cov-report=term-missing"
+
+[tool.coverage.run]
+source = ["src", "tests"]
+branch = true
+parallel = true
+context = "${CONTEXT}"
+
+[tool.coverage.report]
+precision = 0
+skip_empty = true
+ignore_errors = false
+show_missing = true
+exclude_lines = [
+  # Have to re-enable the standard pragma
+  "pragma: no cover",
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "AbstractMethodError",
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.codespell]
+skip = '.git,env*,venv*,.venv*, build*,tmp*'
