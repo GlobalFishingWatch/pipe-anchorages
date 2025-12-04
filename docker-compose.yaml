@@ -5,8 +5,8 @@ services:
       - "gcp:/root/.config/"
     entrypoint: gcloud
 
-  dev:
-    image: gfw/pipe-anchorages-dev
+  pipeline:
+    image: gfw/pipe-anchorages
     build:
       context: .
       target: dev
@@ -14,6 +14,16 @@ services:
       - ".:/opt/project"
       - "gcp:/root/.config/"
     entrypoint: "pipe-anchorages"
+
+  dev:
+    image: gfw/pipe-anchorages
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ".:/opt/project"
+      - "gcp:/root/.config/"
+    entrypoint: /bin/bash
 
   test:
     # Runs tests using the production Docker image.

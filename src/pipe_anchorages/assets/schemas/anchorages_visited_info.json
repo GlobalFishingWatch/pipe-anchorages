@@ -1,0 +1,32 @@
+[
+    {
+        "name": "s2id",
+        "mode": "REQUIRED",
+        "type": "STRING",
+        "description": "Anchorage ID (id of the S2 grid cell)."
+    },
+    {
+        "name": "label",
+        "mode": "REQUIRED",
+        "type": "STRING",
+        "description": "Port name."
+    },
+    {
+        "name": "encounters",
+        "mode": "REQUIRED",
+        "type": "BOOLEAN",
+        "description": "Indicates wether the anchorage is present in product_events_encounter table."
+    },
+    {
+        "name": "loitering",
+        "mode": "REQUIRED",
+        "type": "BOOLEAN",
+        "description": "Indicates wether the anchorage is present in product_events_loitering table."
+    },
+    {
+        "name": "ais_gaps",
+        "mode": "REQUIRED",
+        "type": "BOOLEAN",
+        "description": "Indicates wether the anchorage is present in product_events_ais_gap table."
+    }
+]
