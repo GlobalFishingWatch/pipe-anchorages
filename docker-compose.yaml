@@ -13,7 +13,7 @@ services:
     volumes:
       - ".:/opt/project"
       - "gcp:/root/.config/"
-    entrypoint: "python main.py"
+    entrypoint: "pipe-anchorages"
 
   test:
     # Runs tests using the production Docker image.
