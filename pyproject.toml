@@ -48,7 +48,7 @@ Repository = "https://github.com/GlobalFishingWatch/pipe-anchorages"
 Issues = "https://github.com/GlobalFishingWatch/pipe-anchorages/issues"
 
 [project.scripts]
-pipe-anchorages = "pipe_anchorages.cli.main:main_legacy"
+pipe-anchorages = "pipe_anchorages.cli.main:main"
 
 [project.optional-dependencies]
 

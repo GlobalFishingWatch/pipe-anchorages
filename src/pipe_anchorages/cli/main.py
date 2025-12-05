@@ -20,7 +20,7 @@ HELP_LABELS = "Labels to audit costs over the queries."
 
 
 def run(args):
-    gaps_cli = CLI(
+    cli = CLI(
         name=NAME,
         description=DESCRIPTION,
         formatter=default_formatter(max_pos=120),
@@ -49,11 +49,7 @@ def run(args):
         allow_unknown=True
     )
 
-    return gaps_cli.execute(args)
-
-
-def main():
-    run(sys.argv[1:])
+    return cli.execute(args)
 
 
 # FROM NOW ON: LEGACY ENTRY POINT.
@@ -94,7 +90,11 @@ SUBCOMMANDS = {
 }
 
 
-def main_legacy():
+def main():
+    # This is the only line needed after the rest of the CLI commands are migrated.
+    # run(sys.argv[1:])
+
+    # TODO: Remove the following after the commands are migrated.
     logging.basicConfig(level=logging.INFO)
     logging.info("Running %s", sys.argv)
 

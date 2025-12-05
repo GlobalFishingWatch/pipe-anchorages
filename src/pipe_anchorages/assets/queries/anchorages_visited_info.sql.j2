@@ -1,9 +1,9 @@
 WITH combined_next_port_visit_events AS (
-  SELECT event_type, event_info FROM `{{ source_encounters }}`
+  SELECT 'encounter' AS event_type, event_info FROM `{{ source_encounters }}`
   UNION ALL
-  SELECT event_type, event_info FROM `{{ source_loitering }}`
+  SELECT 'loitering' AS event_type, event_info FROM `{{ source_loitering }}`
   UNION ALL
-  SELECT event_type, event_info FROM `{{ source_ais_gaps }}`
+  SELECT 'ais_gap' AS event_type, event_info FROM `{{ source_ais_gaps }}`
 ),
 
 extracted_next_port_visits AS (
