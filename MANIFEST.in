@@ -1,10 +1,10 @@
 include LICENSE
 include CHANGES.md
-include MANIFEST.in
 include README.md
-include setup.py
-include requirements-scheduler.txt
-include requirements-worker.txt
-recursive-include assets *
-recursive-include pipe_anchorages/data *
+
+recursive-include config *
+recursive-include src/**/assets *
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[cod]
 

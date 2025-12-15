@@ -1,6 +1,12 @@
 from __future__ import absolute_import
 
+from importlib.resources import files
+
 from apache_beam.options.pipeline_options import PipelineOptions
+
+from pipe_anchorages.assets import config as config_pkg
+
+default_config_file = files(config_pkg).joinpath("anchorage_cfg.yaml")
 
 
 class PortVisitsOptions(PipelineOptions):
@@ -24,7 +30,7 @@ class PortVisitsOptions(PipelineOptions):
             "Should have one vessel_id per seg_id, e.g. the `segment_info` table.",
         )
         optional.add_argument(
-            "--config", default="anchorage_cfg.yaml", help="Path to configuration file"
+            "--config", default=str(default_config_file), help="Path to configuration file"
         )
         required.add_argument(
             "--output_table",

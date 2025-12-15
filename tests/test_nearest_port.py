@@ -1,11 +1,13 @@
 import os
 from pipe_anchorages.common import LatLon
 from pipe_anchorages.nearest_port import PortFinder, Port
+from importlib.resources import files
+from pipe_anchorages.assets.data import port_lists
 
 this_dir = os.path.dirname(__file__)
 parent_dir = os.path.dirname(this_dir)
 
-wpi_finder = PortFinder(os.path.join(parent_dir, "pipe_anchorages/data/port_lists/WPI_ports.csv"))
+wpi_finder = PortFinder(files(port_lists).joinpath("WPI_ports.csv"))
 
 
 def test_nearest_port():

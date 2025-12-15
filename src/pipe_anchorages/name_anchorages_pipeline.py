@@ -1,10 +1,14 @@
 from __future__ import absolute_import, print_function, division
 
 import os
+import yaml
+import logging
 
 from collections import namedtuple
-import logging
-import yaml
+from importlib.resources import files
+
+from pipe_anchorages.assets.data import EEZ
+from pipe_anchorages.assets.data import port_lists
 
 from . import common as cmn
 from .find_anchorage_points import AnchoragePoint
@@ -14,7 +18,6 @@ from .transforms.source import QuerySource
 from .transforms.sink import NamedAnchorageSink
 from .get_override_list import get_override_list
 from .port_info_finder import PortInfoFinder
-from .port_info_finder import mangled_path
 from .port_info_finder import normalize_label
 from .options.name_anchorage_options import NameAnchorageOptions
 
@@ -91,7 +94,7 @@ class AddNamesToAnchorages(beam.PTransform):
 
     def add_iso3(self, named_anchorage):
         if named_anchorage.iso3 is None:
-            finder = get_iso3_finder(mangled_path(self.shapefile_path, "EEZ"))
+            finder = get_iso3_finder(files(EEZ).joinpath(self.shapefile_path))
             iso3 = finder.iso3(
                 named_anchorage.mean_location.lat, named_anchorage.mean_location.lon
             )
@@ -119,7 +122,7 @@ class FindUsedS2ids(beam.PTransform):
         self.override_path = override_path
         self.s2ids_in_overrides = set(
             row["s2id"]
-            for row in get_override_list(mangled_path(self.override_path, "port_lists"))
+            for row in get_override_list(files(port_lists).joinpath(self.override_path))
         )
 
     def find_used_s2ids(self, named_anchorage):
@@ -140,7 +143,7 @@ class CreateOverrideAnchorages(beam.PTransform):
 
     def create_override_anchorages(self, dummy, used_s2ids):
         used_s2ids = set(used_s2ids)
-        for row in get_override_list(mangled_path(self.override_path, "port_lists")):
+        for row in get_override_list(files(port_lists).joinpath(self.override_path)):
             if row["s2id"] not in used_s2ids:
                 yield NamedAnchoragePoint(
                     mean_location=row["latLon"],

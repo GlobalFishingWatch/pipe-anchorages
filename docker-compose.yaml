@@ -1,23 +1,29 @@
 services:
+  gcloud:
+    image: google/cloud-sdk:latest
+    volumes:
+      - "gcp:/root/.config/"
+    entrypoint: gcloud
+
   dev:
-    image: gfw/pipe-anchorages
+    image: gfw/pipe-anchorages-dev
     build:
       context: .
-      dockerfile: Dockerfile-scheduler
-    entrypoint: ["./main.py"]
+      target: dev
     volumes:
       - ".:/opt/project"
       - "gcp:/root/.config/"
+    entrypoint: "pipe-anchorages"
 
-  gcloud:
-    image: gfw/pipe-anchorages
+  test:
+    # Runs tests using the production Docker image.
+    # Intended to be executed in the GitHub CI environment.
     build:
       context: .
-      dockerfile: Dockerfile-scheduler
-    entrypoint: gcloud
-    volumes:
-      - "gcp:/root/.config/"
+      target: test
+    entrypoint: "pytest -v"
 
+# Volume to hold GCP authentication
 volumes:
   gcp:
-    external: True
+    external: true

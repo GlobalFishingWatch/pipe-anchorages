@@ -15,13 +15,14 @@ from __future__ import absolute_import, print_function, division
 import os
 import unidecode
 import six
-from . import dirnames
+from importlib.resources import files
+
+from pipe_anchorages.assets.data import EEZ
+from pipe_anchorages.assets.data import port_lists
+
+from pipe_anchorages.assets import config as config_pkg
+
 from .nearest_port import get_port_finder
-
-
-def mangled_path(x, subdir):
-    this_dir = dirnames.this_dir
-    return os.path.join(this_dir, "data", subdir, x)
 
 
 def normalize_label(lbl):
@@ -96,7 +97,7 @@ class PortInfoFinder(object):
         """
         for path in self.port_finder_paths:
             source = os.path.splitext(os.path.basename(path))[0]
-            finder = get_port_finder(mangled_path(path, "port_lists"))
+            finder = get_port_finder(files(port_lists).joinpath(path))
             port, distance = finder.find_nearest_port_and_distance(loc)
             if distance <= self.sublabel_distance_km:
                 return port, source
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     from .common import LatLon
     from .shapefile_to_iso3 import get_iso3_finder
 
-    default_config_path = os.path.join(dirnames.parent_dir, "name_anchorages_cfg.yaml")
+    default_config_path = files(config_pkg).joinpath("name_anchorages_cfg.yaml")
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -129,7 +130,7 @@ if __name__ == "__main__":
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     finder = PortInfoFinder.from_config(config)
-    isofinder = get_iso3_finder(mangled_path("EEZ_land_v3_202030.shp", "EEZ"))
+    isofinder = get_iso3_finder(files(EEZ).joinpath("EEZ_land_v3_202030.shp"))
 
     with open(args.anchorages_path) as infile, open(args.destination_path, "w") as outfile:
         reader = csv.DictReader(infile)

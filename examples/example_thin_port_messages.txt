@@ -12,7 +12,6 @@ docker-compose run dev \
     --runner dataflow \
     --labels environment=test \
     --setup_file ./setup.py \
-    --requirements_file requirements-worker.txt \
     --disk_size_gb 100 \
     --region us-central1 \
     --wait_for_job

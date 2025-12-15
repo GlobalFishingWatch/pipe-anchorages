@@ -1,6 +1,11 @@
 from __future__ import absolute_import
+from importlib.resources import files
 
 from apache_beam.options.pipeline_options import PipelineOptions
+
+from pipe_anchorages.assets import config as config_pkg
+
+default_config_file = files(config_pkg).joinpath("anchorage_cfg.yaml")
 
 
 class ThinPortMessagesOptions(PipelineOptions):
@@ -33,7 +38,7 @@ class ThinPortMessagesOptions(PipelineOptions):
         )
 
         optional.add_argument(
-            "--config", default="anchorage_cfg.yaml", help="Path to configuration file"
+            "--config", default=str(default_config_file), help="Path to configuration file"
         )
         optional.add_argument(
             "--ssvid_filter",
