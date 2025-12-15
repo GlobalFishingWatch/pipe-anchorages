@@ -39,6 +39,9 @@ ais_gaps AS (
 anchorages_with_port_id AS (
   SELECT
   s2id,
+  iso3,
+  lat,
+  lon,
   LOWER(CONCAT(iso3,"-",REGEXP_REPLACE(NORMALIZE(label),' ',''))) as id,
   label
   FROM `{{ source_named_anchorages }}`
@@ -47,6 +50,9 @@ anchorages_with_port_id AS (
 SELECT
   s2id,
   label,
+  iso3,
+  lat,
+  lon,
   encounters.id IS NOT NULL AS encounters,
   loitering.id IS NOT NULL AS loitering,
   ais_gaps.id IS NOT NULL AS ais_gaps

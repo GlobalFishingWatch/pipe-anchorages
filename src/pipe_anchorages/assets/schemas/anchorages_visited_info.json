@@ -12,6 +12,24 @@
         "description": "Port name."
     },
     {
+        "name": "iso3",
+        "mode": "REQUIRED",
+        "type": "STRING",
+        "description": "ISO3 of EEZ containing anchorage."
+    },
+    {
+        "name": "lat",
+        "mode": "REQUIRED",
+        "type": "FLOAT",
+        "description": "Latitude of the anchorage."
+    },
+    {
+        "name": "lon",
+        "mode": "REQUIRED",
+        "type": "FLOAT",
+        "description": "Longitude of the anchorage."
+    },
+    {
         "name": "encounters",
         "mode": "REQUIRED",
         "type": "BOOLEAN",
