@@ -1,5 +1,6 @@
 import textwrap
 from dataclasses import dataclass
+from functools import cached_property
 
 from pipe_anchorages.assets import schemas
 
@@ -38,7 +39,12 @@ class AnchoragesVisitedInfoTableDescription(TableDescription):
 @dataclass
 class AnchoragesVisitedInfoTableConfig(TableConfig):
     schema_file: str = "anchorages_visited_info.json"
+    staging_suffix: str = "_staging"
 
     @property
     def schema(self) -> list[dict]:
         return schemas.get_schema(self.schema_file)
+
+    @cached_property
+    def staging_table_id(self):
+        return self.table_id + self.staging_suffix

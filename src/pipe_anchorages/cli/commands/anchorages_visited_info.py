@@ -23,6 +23,9 @@ HELP_BQ_INPUT_ENCOUNTERS = "BigQuery table with with encounter events."
 HELP_BQ_INPUT_AIS_GAPS = "BigQuery table with ais gap events."
 HELP_BQ_INPUT_NAMED_ANCHORAGES = "BigQuery table with named anchorages dataset."
 HELP_BQ_OUTPUT = "BigQuery table in which to store the anchorages visited info dataset."
+HELP_BQ_STAGING_SUFFIX = "Suffix to use for the intermediate bigquery staging table."
+HELP_GCS_BUCKET = "GCS bucket to use as intermediate storage."
+HELP_GCS_PREFIX = "GCS path to use inside the gcs bucket."
 
 HELP_MOCK_BQ_CLIENTS = "If passed, mocks the BQ clients [Useful for development]."
 HELP_BQ_PROJECT = "Project to use when executing the events query."
@@ -46,6 +49,9 @@ class AnchoragesVisitedInfo(Command):
             Option("--bq-input-ais-gaps", type=str, help=HELP_BQ_INPUT_AIS_GAPS),
             Option("--bq-input-named-anchorages", type=str, help=HELP_BQ_INPUT_NAMED_ANCHORAGES),
             Option("--bq-output", type=str, help=HELP_BQ_OUTPUT),
+            Option("--bq-staging-suffix", type=str, help=HELP_BQ_STAGING_SUFFIX),
+            Option("--gcs-bucket", type=str, help=HELP_GCS_BUCKET),
+            Option("--gcs-prefix", type=str, help=HELP_GCS_PREFIX),
             Option("--mock-bq-clients", type=bool, help=HELP_MOCK_BQ_CLIENTS),
             Option("--project", type=str, help=HELP_BQ_PROJECT),
             Option("--dry-run", type=bool, help=HELP_DRY_RUN),
