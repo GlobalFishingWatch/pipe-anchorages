@@ -15,9 +15,6 @@ class AnchoragesVisitedInfoConfig(PipelineConfig):
     bq_input_ais_gaps: str
     bq_input_named_anchorages: str
     bq_output: str
-    bq_staging_suffix: str = "_staging"
-    gcs_bucket: str
-    gcs_prefix: str = "tmp"
     labels: dict = field(default_factory=dict)
     project: str = None
     dry_run: bool = False

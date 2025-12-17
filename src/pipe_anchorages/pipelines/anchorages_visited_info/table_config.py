@@ -39,7 +39,6 @@ class AnchoragesVisitedInfoTableDescription(TableDescription):
 @dataclass
 class AnchoragesVisitedInfoTableConfig(TableConfig):
     schema_file: str = "anchorages_visited_info.json"
-    staging_suffix: str = "_staging"
 
     @property
     def schema(self) -> list[dict]:
