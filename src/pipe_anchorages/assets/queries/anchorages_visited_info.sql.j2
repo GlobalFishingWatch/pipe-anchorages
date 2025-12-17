@@ -1,0 +1,65 @@
+WITH combined_next_port_visit_events AS (
+  SELECT 'encounter' AS event_type, event_info FROM `{{ source_encounters }}`
+  UNION ALL
+  SELECT 'loitering' AS event_type, event_info FROM `{{ source_loitering }}`
+  UNION ALL
+  SELECT 'ais_gap' AS event_type, event_info FROM `{{ source_ais_gaps }}`
+),
+
+extracted_next_port_visits AS (
+  SELECT DISTINCT
+    event_type,
+    JSON_EXTRACT_SCALAR(event_info, '$.main_vessel_destination_port.id') id,
+    JSON_EXTRACT_SCALAR(event_info, '$.main_vessel_destination_port.flag') flag,
+    JSON_EXTRACT_SCALAR(event_info, '$.main_vessel_destination_port.name') name
+  FROM combined_next_port_visit_events
+  WHERE JSON_EXTRACT_SCALAR(event_info, '$.main_vessel_destination_port.event_id') IS NOT NULL
+  -- there is a very small number of next port events that are missing the port id
+  AND JSON_EXTRACT_SCALAR(event_info, '$.main_vessel_destination_port.id') IS NOT NULL
+),
+
+encounters AS (
+  SELECT *
+  FROM extracted_next_port_visits
+  WHERE event_type = 'encounter'
+),
+
+loitering AS (
+  SELECT *
+  FROM extracted_next_port_visits
+  WHERE event_type = 'loitering'
+),
+
+ais_gaps AS (
+  SELECT *
+  FROM extracted_next_port_visits
+  WHERE event_type = 'ais_gap'
+),
+
+anchorages_with_port_id AS (
+  SELECT
+  s2id,
+  iso3,
+  lat,
+  lon,
+  LOWER(CONCAT(iso3,"-",REGEXP_REPLACE(NORMALIZE(label),' ',''))) as id,
+  label
+  FROM `{{ source_named_anchorages }}`
+)
+
+SELECT
+  s2id,
+  label,
+  iso3,
+  lat,
+  lon,
+  encounters.id IS NOT NULL AS encounters,
+  loitering.id IS NOT NULL AS loitering,
+  ais_gaps.id IS NOT NULL AS ais_gaps
+FROM anchorages_with_port_id
+LEFT JOIN encounters
+USING(id)
+LEFT JOIN loitering
+USING(id)
+LEFT JOIN ais_gaps
+USING(id)

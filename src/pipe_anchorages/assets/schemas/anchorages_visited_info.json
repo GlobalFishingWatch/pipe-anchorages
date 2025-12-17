@@ -1,0 +1,50 @@
+[
+    {
+        "name": "s2id",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "Anchorage ID (id of the S2 grid cell)."
+    },
+    {
+        "name": "label",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "Port name."
+    },
+    {
+        "name": "iso3",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": "ISO3 of EEZ containing anchorage."
+    },
+    {
+        "name": "lat",
+        "mode": "NULLABLE",
+        "type": "FLOAT",
+        "description": "Latitude of the anchorage."
+    },
+    {
+        "name": "lon",
+        "mode": "NULLABLE",
+        "type": "FLOAT",
+        "description": "Longitude of the anchorage."
+    },
+    {
+        "name": "encounters",
+        "mode": "NULLABLE",
+        "type": "BOOLEAN",
+        "description": "Indicates whether the anchorage is present in product_events_encounter table."
+    },
+    {
+        "name": "loitering",
+        "mode": "NULLABLE",
+        "type": "BOOLEAN",
+        "description": "Indicates whether the anchorage is present in product_events_loitering table."
+    },
+    {
+        "name": "ais_gaps",
+        "mode": "NULLABLE",
+        "type": "BOOLEAN",
+        "description": "Indicates whether the anchorage is present in product_events_ais_gap table."
+    }
+]

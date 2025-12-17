@@ -25,7 +25,7 @@ Please read the guidelines in [CONTRIBUTING.md].
 The pipeline includes a CLI that can be used to start both local test runs and
 remote full runs. Just run 
 ```shell
-docker compose run dev [anchorages|name_anchorages|port_events] --help`
+docker compose run pipeline [anchorages|name_anchorages|port_events] --help`
 ```
 and follow the instructions there.
 

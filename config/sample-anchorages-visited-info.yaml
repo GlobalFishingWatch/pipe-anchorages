@@ -1,0 +1,10 @@
+# Query parameters:
+bq_input_loitering: "global-fishing-watch.pipe_ais_v3_published.product_events_loitering"
+bq_input_encounters: "global-fishing-watch.pipe_ais_v3_published.product_events_encounter"
+bq_input_ais_gaps: "global-fishing-watch.pipe_ais_v3_published.product_events_ais_gap"
+bq_input_named_anchorages: "global-fishing-watch.anchorages.named_anchorages"
+bq_output: "world-fishing-827.scratch_tomas_ttl30d.anchorages_visited_info"
+
+# General parameters:
+dry_run: false
+project: world-fishing-827
