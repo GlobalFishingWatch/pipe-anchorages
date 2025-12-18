@@ -12,7 +12,6 @@ from pipe_anchorages.utils.bqtools import BigQueryHelper, DatePartitionedTable, 
 from pipe_anchorages.utils.ver import get_pipe_ver
 
 logger = logging.getLogger()
-env_j2 = Environment(loader=FileSystemLoader("./assets/queries/"))
 
 confidence_meaning = {
     "1": "no stop or gap; only an entry and/or exit",
@@ -26,7 +25,15 @@ DELETE FROM `{table_id}`
 WHERE date({partitioning_field}) >= '1970-01-01' or {partitioning_field} is null
 """
 
-SCHEMA_PATH = files("pipe_anchorages.assets.schemas").joinpath("generate_confidence_voyages.json")
+
+ASSETS_DIR = "pipe_anchorages.assets"
+SCHEMA_FILENAME = "generate_confidence_voyages.json"
+QUERY_FILENAME = "generate_confidence_voyages.sql.j2"
+
+SCHEMA_PATH = files(f"{ASSETS_DIR}.schemas").joinpath(SCHEMA_FILENAME)
+QUERIES_DIR = files(f"{ASSETS_DIR}.queries")
+
+env_j2 = Environment(loader=FileSystemLoader(QUERIES_DIR))
 
 
 def run(arguments):
@@ -104,7 +111,7 @@ def run(arguments):
     bq_helper.update_table(table)
 
     # Apply template
-    template = env_j2.get_template("generate_confidence_voyages.sql.j2")
+    template = env_j2.get_template(QUERY_FILENAME)
     query = template.render(
         {
             "port_visits_table": f"{args.source}",
