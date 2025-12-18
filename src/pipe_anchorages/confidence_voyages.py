@@ -3,6 +3,8 @@ import json
 import logging
 import time
 
+from importlib.resources import files
+
 from google.cloud import bigquery
 from jinja2 import Environment, FileSystemLoader
 
@@ -23,6 +25,8 @@ DROP_VOYAGES_QUERY = """
 DELETE FROM `{table_id}`
 WHERE date({partitioning_field}) >= '1970-01-01' or {partitioning_field} is null
 """
+
+SCHEMA_PATH = files("pipe_anchorages.assets.schemas").joinpath("generate_confidence_voyages.json")
 
 
 def run(arguments):
@@ -87,7 +91,7 @@ def run(arguments):
             ...
             WHERE (trip_start <= '2022-12-31' OR trip_start IS NULL)
         """,  # noqa: E501
-        schema=Schemas.load_json_schema("assets/schemas/generate_confidence_voyages.schema.json"),
+        schema=Schemas.load_json_schema(SCHEMA_PATH),
         partitioning_field="trip_start",
     )
     bq_helper.ensure_table_exists(table)
