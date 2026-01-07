@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# %% [markdown]
+# This script takes the country VMS anchorage lists provided by analysts (located in src/pipe_anchorages/assets/data/port_lists/vms_reviewed_anchorages_by_country) and turns them into homogenized files in the 
+
 # %%
 from amanda_notebook_bq_helper import *
 import numpy as np
@@ -18,7 +21,7 @@ vms_anchorages_fldr = '../../src/pipe_anchorages/assets/data/port_lists/vms_revi
 FIG_FLDR = './figures'
 PORT_LIST_FLDR = '../../src/pipe_anchorages/assets/data/port_lists'
 
-display_map = True
+display_map = False
 
 # %%
 def make_overrides(df, country_name, duplicate_option = 'nothing', overwrite=False, display_map=False,):
