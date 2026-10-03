@@ -1,9 +1,9 @@
-import argparse
-import json
 import logging
 import time
 
 from importlib.resources import files
+from types import SimpleNamespace
+from typing import Any
 
 from google.cloud import bigquery
 from jinja2 import Environment, FileSystemLoader
@@ -36,61 +36,28 @@ QUERIES_DIR = files(f"{ASSETS_DIR}.queries")
 env_j2 = Environment(loader=FileSystemLoader(QUERIES_DIR))
 
 
-def run(arguments):
-    parser = argparse.ArgumentParser(description="Generates the confidence voyages tables.")
-    parser.add_argument(
-        "-i",
-        "--source",
-        help="The BQ source table (Format str, ex: dataset.table).",
-        required=True,
-    )
-    parser.add_argument(
-        "-c",
-        "--min_confidence",
-        help="The minimal confidence to detect the voyages (Format str, ex: 3).",
-        required=True,
-        choices=list(map(str, [2, 3, 4])),
-        type=str,
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="The BQ destination table (Format str, ex: project:datset.table).",
-        required=True,
-    )
-    parser.add_argument(
-        "-labels",
-        "--labels",
-        help="Adds a labels to a table (Format: json).",
-        required=True,
-        type=json.loads,
-    )
-    parser.add_argument(
-        "--project",
-        help="The GCP project billed for the processing on this step",
-        required=True,
-    )
-    args = parser.parse_args(arguments)
-
+def run(config: SimpleNamespace, **kwargs: Any) -> None:
     start_time = time.time()
+
+    labels = config.labels or {}
 
     bq_helper = BigQueryHelper(
         bq_client=bigquery.Client(
-            project=args.project,
+            project=config.project,
         ),
-        labels=args.labels,
+        labels=labels,
     )
 
     # 1. Validate the existance of the table
-    logging.info(f"Creates the confidence voyages table <{args.output}> if it does not exists")
+    logging.info(f"Creates the confidence voyages table <{config.output}> if it does not exists")
     table = DatePartitionedTable(
-        table_id=args.output,
+        table_id=config.output,
         description=f"""
             Created by pipe-anchorages: {get_pipe_ver()}.
             * Create voyages filter per minimal confidence.
             * https://github.com/GlobalFishingWatch/pipe-research
-            * Source: {args.source}
-            * Minimal confidence: {args.min_confidence} meaning: {confidence_meaning[args.min_confidence]}.
+            * Source: {config.source}
+            * Minimal confidence: {config.min_confidence} meaning: {confidence_meaning[config.min_confidence]}.
 
             A "voyage" is defined as the combination of a vessel's previous port_visit's end and next port_visit's start.
             Every vessel's first voyage has an unknown start, so the `trip_start_*` columns are NULL. Respectively, each vessel's last voyage has an undefined end, so the `trip_end_*` columns are NULL.
@@ -114,8 +81,8 @@ def run(arguments):
     template = env_j2.get_template(QUERY_FILENAME)
     query = template.render(
         {
-            "port_visits_table": f"{args.source}",
-            "min_confidence": args.min_confidence,
+            "port_visits_table": f"{config.source}",
+            "min_confidence": config.min_confidence,
         }
     )
     # Run query and calc research positions
@@ -125,5 +92,5 @@ def run(arguments):
     )
 
     # ALL DONE
-    logger.info(f"All done, you can find the output: {args.output}")
+    logger.info(f"All done, you can find the output: {config.output}")
     logger.info(f"Execution time {(time.time()-start_time)/60} minutes")
