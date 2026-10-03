@@ -48,7 +48,7 @@ cligj==0.7.2
     # via fiona
 cloud-sql-python-connector==1.22.0
     # via apache-beam
-cryptography==48.0.1
+cryptography==50.0.0
     # via
     #   apache-beam
     #   cloud-sql-python-connector
