@@ -1,0 +1,22 @@
+# Query parameters:
+bq_in_port_events: "world-fishing-827.machine_learning_dev_ttl_120d.port_visit_msgs_v20220927_"
+bq_in_segment_info: "world-fishing-827.pipe_production_v20201001.segment_info"
+bq_out_port_visits: "world-fishing-827.scratch_tomas_ttl30d.port_visits"
+start_date: "2018-01-01"
+end_date: "2018-01-07"
+bad_segs: >-
+  (SELECT DISTINCT seg_id FROM world-fishing-827.gfw_research.pipe_v20201001_segs
+  WHERE overlapping_and_short)
+
+# Apache Beam / Dataflow options:
+job_name: portmessagestest
+project: world-fishing-827
+runner: DataflowRunner
+max_num_workers: 100
+disk_size_gb: 100
+region: us-central1
+staging_location: "gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging"
+temp_location: "gs://machine-learning-dev-ttl-30d/anchorages/temp"
+setup_file: "./setup.py"
+sdk_container_image: "gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test"
+experiments: ["use_runner_v2"]

@@ -1,0 +1,68 @@
+from importlib.resources import files
+from typing import Any
+from types import SimpleNamespace
+
+from gfw.common.cli import Command, Option
+
+from pipe_anchorages import port_visits_pipeline
+from pipe_anchorages.assets import config as config_pkg
+
+default_config_file = files(config_pkg).joinpath("anchorage_cfg.yaml")
+
+
+DESCRIPTION = """\
+Detects port visits by joining thinned port events with vessel identity and
+grouping them into entry/exit events per voyage.
+
+Besides the arguments defined here, you can also pass any pipeline option
+defined for Apache Beam PipelineOptions class. For more information, see
+    https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
+"""
+
+HELP_BQ_IN_PORT_EVENTS = "BigQuery table with thinned port events."
+HELP_BQ_IN_SEGMENT_INFO = "BigQuery table mapping vessel_id to seg_id, one vessel_id per seg_id."
+HELP_BQ_OUT_PORT_VISITS = "BigQuery table in which to store the port visits."
+HELP_START_DATE = "First date (inclusive) to generate visits."
+HELP_END_DATE = "Last date (inclusive) to generate visits."
+HELP_CONFIG = "Path to the pipeline parameters file."
+HELP_BAD_SEGS = "Subquery producing segment ids of bad segments to exclude."
+HELP_MAX_INTER_SEG_DIST_NM = (
+    "Segments more than this distance apart will not be joined when creating visits."
+)
+HELP_WAIT_FOR_JOB = "Wait until the job finishes before returning."
+
+
+class PortVisits(Command):
+
+    @property
+    def name(self):
+        return "port-visits"
+
+    @property
+    def description(self):
+        return DESCRIPTION
+
+    @property
+    def options(self):
+        return [
+            Option("--bq-in-port-events", type=str, required=True, help=HELP_BQ_IN_PORT_EVENTS),
+            Option(
+                "--bq-in-segment-info", type=str, required=True, help=HELP_BQ_IN_SEGMENT_INFO
+            ),
+            Option("--bq-out-port-visits", type=str, required=True, help=HELP_BQ_OUT_PORT_VISITS),
+            Option("--start-date", type=str, required=True, help=HELP_START_DATE),
+            Option("--end-date", type=str, required=True, help=HELP_END_DATE),
+            Option("--config", type=str, default=str(default_config_file), help=HELP_CONFIG),
+            Option("--bad-segs", type=str, help=HELP_BAD_SEGS),
+            Option(
+                "--max-inter-seg-dist-nm",
+                type=float,
+                default=60.0,
+                help=HELP_MAX_INTER_SEG_DIST_NM,
+            ),
+            Option("--wait-for-job", type=bool, default=False, help=HELP_WAIT_FOR_JOB),
+        ]
+
+    @classmethod
+    def run(cls, config: SimpleNamespace, **kwargs: Any) -> Any:
+        return port_visits_pipeline.run(config, **kwargs)
