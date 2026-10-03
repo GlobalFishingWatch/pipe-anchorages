@@ -23,7 +23,7 @@ class ConfidenceVoyages(Command):
 
     @property
     def name(self):
-        return "generate-confidence-voyages"
+        return "confidence-voyages"
 
     @property
     def description(self):

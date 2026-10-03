@@ -36,7 +36,7 @@ def run(args):
         version=__version__,
         examples=[
             "pipe-anchorages anchorages-visited-info -c config/sample-anchorages-visited.json",
-            "pipe-anchorages generate-confidence-voyages "
+            "pipe-anchorages confidence-voyages "
             "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
             "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
         ],
@@ -85,7 +85,7 @@ SUBCOMMANDS = {
     "anchorages": run_anchorages,
     "name_anchorages": run_name_anchorages,
     "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
-    "generate_confidence_voyages": lambda args: run(["generate-confidence-voyages"] + args),
+    "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
 }
 
 

@@ -2,7 +2,7 @@ from pipe_anchorages.cli import main
 
 
 BASE_ARGS = [
-    "generate-confidence-voyages",
+    "confidence-voyages",
     "--bq-in-port-visits", "project.dataset.port_visits",
     "--min-confidence", "3",
     "--bq-out-voyages", "project.dataset.voyages_c3",
