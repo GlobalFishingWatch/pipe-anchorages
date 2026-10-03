@@ -41,7 +41,7 @@ def create_queries(args, start_date, end_date):
     while start_window <= end_date:
         end_window = min(start_window + datetime.timedelta(days=shift), end_date)
         query = template.format(
-            table=args.input_table,
+            table=args.bq_in_messages,
             filter_text=filter_text,
             start=start_window,
             end=end_window,
@@ -53,19 +53,19 @@ def create_queries(args, start_date, end_date):
 def anchorage_query(args):
     return f"""
     SELECT lat as anchor_lat, lon as anchor_lon, s2id as anchor_id, label
-    FROM `{args.anchorage_table}`
+    FROM `{args.bq_in_named_anchorages}`
     """
 
 
 def prepare_output_tables(pipe_options, cloud_options, start_date, end_date):
     output_table = DatePartitionedTable(
-        table_id=pipe_options.output_table,
+        table_id=pipe_options.bq_out_port_events,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
 * Creates raw thinned messages in out port events.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
-* Sources: {pipe_options.input_table}
-* Anchorage table: {pipe_options.anchorage_table}
+* Sources: {pipe_options.bq_in_messages}
+* Anchorage table: {pipe_options.bq_in_named_anchorages}
 * Last processing date range: {start_date} - {end_date}
         """,
         schema=message_schema["fields"],
@@ -130,7 +130,7 @@ def run(options):
             start_date=start_date,
             end_date=end_date,
         )
-        | "writeThinnedRecords" >> MessageSink(known_args.output_table)
+        | "writeThinnedRecords" >> MessageSink(known_args.bq_out_port_events)
     )
 
     prepare_output_tables(known_args, cloud_options, start_date, end_date)

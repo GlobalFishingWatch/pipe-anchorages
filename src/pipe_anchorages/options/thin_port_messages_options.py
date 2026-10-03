@@ -17,22 +17,24 @@ class ThinPortMessagesOptions(PipelineOptions):
         required = parser.add_argument_group("Required")
         optional = parser.add_argument_group("Optional")
 
-        required.add_argument("--anchorage_table", help="Name of of anchorages table (BQ)")
         required.add_argument(
-            "--input_table", required=True, help="Table to pull position messages from"
+            "--bq-in-named-anchorages", required=True, help="Name of of anchorages table (BQ)"
         )
         required.add_argument(
-            "--output_table",
+            "--bq-in-messages", required=True, help="Table to pull position messages from"
+        )
+        required.add_argument(
+            "--bq-out-port-events",
             required=True,
             help="Output table (BQ) to write results to.",
         )
         required.add_argument(
-            "--start_date",
+            "--start-date",
             required=True,
             help="First date to look for entry/exit events.",
         )
         required.add_argument(
-            "--end_date",
+            "--end-date",
             required=True,
             help="Last date (inclusive) to look for entry/exit events.",
         )
@@ -41,12 +43,12 @@ class ThinPortMessagesOptions(PipelineOptions):
             "--config", default=str(default_config_file), help="Path to configuration file"
         )
         optional.add_argument(
-            "--ssvid_filter",
+            "--ssvid-filter",
             help="Subquery or list of ssvid to limit processing to.\n"
             "If prefixed by @, load from given path",
         )
         optional.add_argument(
-            "--wait_for_job",
+            "--wait-for-job",
             default=False,
             action="store_true",
             help="Wait until the job finishes before returning.",

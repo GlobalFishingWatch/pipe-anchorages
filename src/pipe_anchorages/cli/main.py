@@ -40,8 +40,10 @@ def run(args):
             "pipe-anchorages confidence-voyages "
             "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
             "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
-            "pipe-anchorages thin-port-messages --anchorage-table project.dataset.anchorages "
-            "--input-table project.dataset.messages --output-table project.dataset.output "
+            "pipe-anchorages thin-port-messages "
+            "--bq-in-named-anchorages project.dataset.anchorages "
+            "--bq-in-messages project.dataset.messages "
+            "--bq-out-port-events project.dataset.output "
             "--start-date 2024-01-01 --end-date 2024-01-07",
         ],
         logger_config=LoggerConfig(

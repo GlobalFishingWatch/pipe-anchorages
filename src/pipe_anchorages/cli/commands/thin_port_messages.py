@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from gfw.common.cli import Command, Option
 
 from pipe_anchorages import thin_port_messages_pipeline
-from pipe_anchorages.cli.beam_options import build_pipeline_options
+from pipe_anchorages.beam_options import build_pipeline_options
 from pipe_anchorages.options.thin_port_messages_options import default_config_file
 
 
@@ -17,9 +17,9 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_ANCHORAGE_TABLE = "Name of anchorages table (BQ)."
-HELP_INPUT_TABLE = "Table to pull position messages from."
-HELP_OUTPUT_TABLE = "Output table (BQ) to write results to."
+HELP_BQ_IN_NAMED_ANCHORAGES = "BigQuery table with named anchorages."
+HELP_BQ_IN_MESSAGES = "BigQuery table to pull position messages from."
+HELP_BQ_OUT_PORT_EVENTS = "BigQuery table in which to store the thinned port events."
 HELP_START_DATE = "First date to look for entry/exit events."
 HELP_END_DATE = "Last date (inclusive) to look for entry/exit events."
 HELP_CONFIG = "Path to the pipeline parameters file."
@@ -32,9 +32,9 @@ HELP_WAIT_FOR_JOB = "Wait until the job finishes before returning."
 # Deliberately excludes Beam/Dataflow-native flags (--runner, --project, ...), which
 # aren't declared here at all so they pass through as unknown args instead.
 FIELDS = [
-    "anchorage_table",
-    "input_table",
-    "output_table",
+    "bq_in_named_anchorages",
+    "bq_in_messages",
+    "bq_out_port_events",
     "start_date",
     "end_date",
     "config",
@@ -56,9 +56,14 @@ class ThinPortMessages(Command):
     @property
     def options(self):
         return [
-            Option("--anchorage-table", type=str, required=True, help=HELP_ANCHORAGE_TABLE),
-            Option("--input-table", type=str, required=True, help=HELP_INPUT_TABLE),
-            Option("--output-table", type=str, required=True, help=HELP_OUTPUT_TABLE),
+            Option(
+                "--bq-in-named-anchorages",
+                type=str,
+                required=True,
+                help=HELP_BQ_IN_NAMED_ANCHORAGES,
+            ),
+            Option("--bq-in-messages", type=str, required=True, help=HELP_BQ_IN_MESSAGES),
+            Option("--bq-out-port-events", type=str, required=True, help=HELP_BQ_OUT_PORT_EVENTS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
             Option("--config", type=str, default=str(default_config_file), help=HELP_CONFIG),
