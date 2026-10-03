@@ -17,18 +17,18 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_IN_SEGMENTS = "BigQuery table with segment destinations, partitioned by day."
-HELP_OUT_ANCHORAGES = "BigQuery table in which to store the anchorage points."
+HELP_OUT_ANCHORAGE_POINTS = "BigQuery table in which to store the anchorage points."
 HELP_START_DATE = "First date to look for stationary positions."
 HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
 HELP_CONFIG = "Path to the pipeline parameters file."
 HELP_FISHING_SSVID_LIST = "GCS location of a newline-separated list of fishing vessel ids."
 
 
-class Anchorages(Command):
+class AnchoragePoints(Command):
 
     @property
     def name(self):
-        return "anchorages"
+        return "anchorage-points"
 
     @property
     def description(self):
@@ -39,7 +39,12 @@ class Anchorages(Command):
         return [
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option("--bq-in-segments", type=str, required=True, help=HELP_IN_SEGMENTS),
-            Option("--bq-out-anchorages", type=str, required=True, help=HELP_OUT_ANCHORAGES),
+            Option(
+                "--bq-out-anchorage-points",
+                type=str,
+                required=True,
+                help=HELP_OUT_ANCHORAGE_POINTS,
+            ),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
             Option("--config", type=str, required=True, help=HELP_CONFIG),

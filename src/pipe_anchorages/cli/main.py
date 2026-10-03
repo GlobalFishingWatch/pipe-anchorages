@@ -9,7 +9,7 @@ from gfw.common.cli.formatting import default_formatter
 
 from pipe_anchorages.version import __version__
 from pipe_anchorages.cli.commands import (
-    Anchorages,
+    AnchoragePoints,
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
     PortStateTransitions,
@@ -31,7 +31,7 @@ def run(args):
         description=DESCRIPTION,
         formatter=default_formatter(max_pos=120),
         subcommands=[
-            Anchorages,
+            AnchoragePoints,
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
             PortStateTransitions,
@@ -58,10 +58,10 @@ def run(args):
             "--bq-in-segment-info project.dataset.segment_info "
             "--bq-out-port-visits project.dataset.port_visits "
             "--start-date 2024-01-01 --end-date 2024-01-07",
-            "pipe-anchorages anchorages "
+            "pipe-anchorages anchorage-points "
             "--bq-in-messages project.dataset.messages "
             "--bq-in-segments project.dataset.segments "
-            "--bq-out-anchorages project.dataset.anchorages "
+            "--bq-out-anchorage-points project.dataset.anchorage_points "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
             "--config anchorage_cfg.yaml "
             "--fishing-ssvid-list gs://bucket/fishing_mmsi.txt",
@@ -96,7 +96,7 @@ SUBCOMMANDS = {
     "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
     "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
     "port_visits": lambda args: run(["port-visits"] + args),
-    "anchorages": lambda args: run(["anchorages"] + args),
+    "anchorages": lambda args: run(["anchorage-points"] + args),
 }
 
 

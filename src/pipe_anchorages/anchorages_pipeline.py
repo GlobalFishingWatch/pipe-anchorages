@@ -117,7 +117,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         fishing_vessel_list,
     )
 
-    (anchorage_points | AnchorageSink(config.bq_out_anchorages, config, cloud_options))
+    (anchorage_points | AnchorageSink(config.bq_out_anchorage_points, config, cloud_options))
 
     result = p.run()
 
