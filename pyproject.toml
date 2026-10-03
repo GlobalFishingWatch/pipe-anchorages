@@ -20,9 +20,11 @@ description = "Tools for finding anchorages and associated port-visit events."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [
- { name = "Global Fishing Watch" }
+    { name = "GFW Engineering Team", email = "engineering-team@globalfishingwatch.org" },
 ]
-maintainers = []
+maintainers = [
+    { name = "Tomás J. Link", email = "tomas.link@globalfishingwatch.org" },
+]
 classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.12",
