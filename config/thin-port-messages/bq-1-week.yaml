@@ -5,7 +5,15 @@ bq_out_port_events: "world-fishing-827.scratch_tomas_ttl30d.port_visit_msgs"
 start_date: "2018-01-01"
 end_date: "2018-01-07"
 
-# General parameters:
-# --project (and any other Apache Beam/Dataflow option) is resolved from the CLI's
-# unparsed args, not from this config file -- pass it directly on the command line,
-# e.g.: pipe-anchorages thin-port-messages -c bq-1-week.yaml --project world-fishing-827
+# Apache Beam / Dataflow options:
+job_name: porteventstest
+project: world-fishing-827
+runner: DataflowRunner
+max_num_workers: 100
+disk_size_gb: 100
+region: us-central1
+staging_location: "gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging"
+temp_location: "gs://machine-learning-dev-ttl-30d/anchorages/temp"
+setup_file: "./setup.py"
+sdk_container_image: "gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test"
+experiments: ["use_runner_v2"]
