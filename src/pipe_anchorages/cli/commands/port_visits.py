@@ -20,7 +20,7 @@ defined for Apache Beam PipelineOptions class. For more information, see
 """
 
 HELP_BQ_IN_PORT_EVENTS = "BigQuery table with thinned port events."
-HELP_BQ_IN_SEGMENT_INFO = "BigQuery table mapping vessel_id to seg_id, one vessel_id per seg_id."
+HELP_IN_SEGMENT_INFO = "BigQuery table mapping vessel_id to seg_id, one vessel_id per seg_id."
 HELP_BQ_OUT_PORT_VISITS = "BigQuery table in which to store the port visits."
 HELP_START_DATE = "First date (inclusive) to generate visits."
 HELP_END_DATE = "Last date (inclusive) to generate visits."
@@ -46,9 +46,7 @@ class PortVisits(Command):
     def options(self):
         return [
             Option("--bq-in-port-events", type=str, required=True, help=HELP_BQ_IN_PORT_EVENTS),
-            Option(
-                "--bq-in-segment-info", type=str, required=True, help=HELP_BQ_IN_SEGMENT_INFO
-            ),
+            Option("--bq-in-segment-info", type=str, required=True, help=HELP_IN_SEGMENT_INFO),
             Option("--bq-out-port-visits", type=str, required=True, help=HELP_BQ_OUT_PORT_VISITS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
