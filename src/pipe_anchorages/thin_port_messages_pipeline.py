@@ -9,7 +9,7 @@ from google.cloud import bigquery
 import apache_beam as beam
 from apache_beam.options.pipeline_options import StandardOptions
 from apache_beam.runners import PipelineState
-from gfw.common.beam.pipeline.base import Pipeline as GfwPipeline
+from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.schema.message_schema import message_schema
@@ -98,7 +98,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
     # CLI args, with sensible org-wide defaults -- domain-specific fields come
     # straight off `config` instead, not through a beam *Options(PipelineOptions)
     # view, since those are already validated and typed by the CLI layer itself.
-    gfw_pipeline = GfwPipeline(
+    gfw_pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
         labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
     )

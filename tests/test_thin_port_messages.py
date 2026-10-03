@@ -3,7 +3,7 @@ import argparse
 import pytest
 
 from apache_beam.options.pipeline_options import GoogleCloudOptions
-from gfw.common.beam.pipeline.base import Pipeline as GfwPipeline
+from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages.cli import main
 
@@ -51,7 +51,7 @@ def test_cli_requires_named_anchorages_table(mocker):
 
 
 def test_gfw_pipeline_resolves_project_and_labels_from_config():
-    # thin_port_messages_pipeline.run() builds a GfwPipeline, and translates
+    # thin_port_messages_pipeline.run() builds a Pipeline, and translates
     # config.labels (a dict, from the CLI's shared --labels option) into the
     # list-of-"key=value" strings GoogleCloudOptions.labels actually expects --
     # this exercises that translation directly, without needing a full pipeline run.
@@ -68,7 +68,7 @@ def test_gfw_pipeline_resolves_project_and_labels_from_config():
     # their own (still legacy) commands are actually invoked.
     labels = {"team": "pipeline", "env": "prod"}
 
-    gfw_pipeline = GfwPipeline(
+    gfw_pipeline = Pipeline(
         project="test-project",
         runner="DirectRunner",
         labels=[f"{key}={value}" for key, value in labels.items()],
