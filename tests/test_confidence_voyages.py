@@ -3,9 +3,9 @@ from pipe_anchorages.cli import main
 
 BASE_ARGS = [
     "generate-confidence-voyages",
-    "--source", "project.dataset.port_visits",
+    "--bq-in-port-visits", "project.dataset.port_visits",
     "--min-confidence", "3",
-    "--output", "project.dataset.voyages_c3",
+    "--bq-out-voyages", "project.dataset.voyages_c3",
     "--project", "test-project",
 ]
 

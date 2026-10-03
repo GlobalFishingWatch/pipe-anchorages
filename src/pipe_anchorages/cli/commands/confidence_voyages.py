@@ -13,9 +13,9 @@ A "voyage" is the combination of a vessel's previous port_visit's end and next
 port_visit's start.
 """
 
-HELP_SOURCE = "The BQ source table (Format str, ex: dataset.table)."
+HELP_BQ_IN_PORT_VISITS = "BigQuery table with port visits (Format str, ex: dataset.table)."
 HELP_MIN_CONFIDENCE = "The minimal confidence to detect the voyages (Format str, ex: 3)."
-HELP_OUTPUT = "The BQ destination table (Format str, ex: project.dataset.table)."
+HELP_BQ_OUT_VOYAGES = "BigQuery table in which to store the voyages (ex: project.dataset.table)."
 HELP_PROJECT = "The GCP project billed for the processing of this step."
 
 
@@ -32,7 +32,7 @@ class ConfidenceVoyages(Command):
     @property
     def options(self):
         return [
-            Option("--source", type=str, required=True, help=HELP_SOURCE),
+            Option("--bq-in-port-visits", type=str, required=True, help=HELP_BQ_IN_PORT_VISITS),
             Option(
                 "--min-confidence",
                 type=str,
@@ -40,7 +40,7 @@ class ConfidenceVoyages(Command):
                 choices=["2", "3", "4"],
                 help=HELP_MIN_CONFIDENCE,
             ),
-            Option("--output", type=str, required=True, help=HELP_OUTPUT),
+            Option("--bq-out-voyages", type=str, required=True, help=HELP_BQ_OUT_VOYAGES),
             Option("--project", type=str, required=True, help=HELP_PROJECT),
         ]
 

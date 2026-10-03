@@ -49,14 +49,16 @@ def run(config: SimpleNamespace, **kwargs: Any) -> None:
     )
 
     # 1. Validate the existance of the table
-    logging.info(f"Creates the confidence voyages table <{config.output}> if it does not exists")
+    logging.info(
+        f"Creates the confidence voyages table <{config.bq_out_voyages}> if it does not exists"
+    )
     table = DatePartitionedTable(
-        table_id=config.output,
+        table_id=config.bq_out_voyages,
         description=f"""
             Created by pipe-anchorages: {get_pipe_ver()}.
             * Create voyages filter per minimal confidence.
             * https://github.com/GlobalFishingWatch/pipe-research
-            * Source: {config.source}
+            * Source: {config.bq_in_port_visits}
             * Minimal confidence: {config.min_confidence} meaning: {confidence_meaning[config.min_confidence]}.
 
             A "voyage" is defined as the combination of a vessel's previous port_visit's end and next port_visit's start.
@@ -81,7 +83,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> None:
     template = env_j2.get_template(QUERY_FILENAME)
     query = template.render(
         {
-            "port_visits_table": f"{config.source}",
+            "port_visits_table": f"{config.bq_in_port_visits}",
             "min_confidence": config.min_confidence,
         }
     )
@@ -92,5 +94,5 @@ def run(config: SimpleNamespace, **kwargs: Any) -> None:
     )
 
     # ALL DONE
-    logger.info(f"All done, you can find the output: {config.output}")
+    logger.info(f"All done, you can find the output: {config.bq_out_voyages}")
     logger.info(f"Execution time {(time.time()-start_time)/60} minutes")

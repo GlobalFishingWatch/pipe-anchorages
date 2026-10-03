@@ -36,8 +36,9 @@ def run(args):
         version=__version__,
         examples=[
             "pipe-anchorages anchorages-visited-info -c config/sample-anchorages-visited.json",
-            "pipe-anchorages generate-confidence-voyages --source project.dataset.port_visits "
-            "--min-confidence 3 --output project.dataset.voyages_c3 --project world-fishing-827",
+            "pipe-anchorages generate-confidence-voyages "
+            "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
+            "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
         ],
         logger_config=LoggerConfig(
             warning_level=[
