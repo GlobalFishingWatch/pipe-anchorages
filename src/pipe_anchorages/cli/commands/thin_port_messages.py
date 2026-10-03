@@ -1,11 +1,13 @@
+from importlib.resources import files
 from typing import Any
 from types import SimpleNamespace
 
 from gfw.common.cli import Command, Option
 
 from pipe_anchorages import thin_port_messages_pipeline
-from pipe_anchorages.beam_options import build_pipeline_options
-from pipe_anchorages.options.thin_port_messages_options import default_config_file
+from pipe_anchorages.assets import config as config_pkg
+
+default_config_file = files(config_pkg).joinpath("anchorage_cfg.yaml")
 
 
 DESCRIPTION = """\
@@ -27,20 +29,6 @@ HELP_SSVID_FILTER = (
     "Subquery or list of ssvid to limit processing to. If prefixed by @, load from given path."
 )
 HELP_WAIT_FOR_JOB = "Wait until the job finishes before returning."
-
-# This command's own domain-specific option dests, fed to build_pipeline_options().
-# Deliberately excludes Beam/Dataflow-native flags (--runner, --project, ...), which
-# aren't declared here at all so they pass through as unknown args instead.
-FIELDS = [
-    "bq_in_named_anchorages",
-    "bq_in_messages",
-    "bq_out_port_events",
-    "start_date",
-    "end_date",
-    "config",
-    "ssvid_filter",
-    "wait_for_job",
-]
 
 
 class ThinPortMessages(Command):
@@ -68,10 +56,9 @@ class ThinPortMessages(Command):
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
             Option("--config", type=str, default=str(default_config_file), help=HELP_CONFIG),
             Option("--ssvid-filter", type=str, help=HELP_SSVID_FILTER),
-            Option("--wait-for-job", type=bool, help=HELP_WAIT_FOR_JOB),
+            Option("--wait-for-job", type=bool, default=False, help=HELP_WAIT_FOR_JOB),
         ]
 
     @classmethod
     def run(cls, config: SimpleNamespace, **kwargs: Any) -> Any:
-        options = build_pipeline_options(config, FIELDS)
-        return thin_port_messages_pipeline.run(options)
+        return thin_port_messages_pipeline.run(config, **kwargs)
