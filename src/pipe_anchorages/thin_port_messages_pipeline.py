@@ -93,13 +93,6 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
 
 
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
-    # gfw.common.beam.pipeline.base.Pipeline resolves the generic Beam/Dataflow
-    # infrastructure (runner, project, temp_location, ...) from the leftover unknown
-    # args -- either raw CLI flags (config.unknown_unparsed_args) or config-file
-    # keys that aren't one of this command's own Options (config.unknown_parsed_args)
-    # -- with sensible org-wide defaults. Domain-specific fields come straight off
-    # `config` instead, not through a beam *Options(PipelineOptions) view, since
-    # those are already validated and typed by the CLI layer itself.
     gfw_pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
         labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
