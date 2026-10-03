@@ -9,6 +9,7 @@ from gfw.common.cli.formatting import default_formatter
 
 from pipe_anchorages.version import __version__
 from pipe_anchorages.cli.commands import (
+    Anchorages,
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
     PortStateTransitions,
@@ -30,6 +31,7 @@ def run(args):
         description=DESCRIPTION,
         formatter=default_formatter(max_pos=120),
         subcommands=[
+            Anchorages,
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
             PortStateTransitions,
@@ -56,6 +58,13 @@ def run(args):
             "--bq-in-segment-info project.dataset.segment_info "
             "--bq-out-port-visits project.dataset.port_visits "
             "--start-date 2024-01-01 --end-date 2024-01-07",
+            "pipe-anchorages anchorages "
+            "--bq-in-messages project.dataset.messages "
+            "--bq-in-segments project.dataset.segments "
+            "--bq-out-anchorages project.dataset.anchorages "
+            "--start-date 2024-01-01 --end-date 2024-01-07 "
+            "--config anchorage_cfg.yaml "
+            "--fishing-ssvid-list gs://bucket/fishing_mmsi.txt",
         ],
         logger_config=LoggerConfig(
             warning_level=[
@@ -76,23 +85,18 @@ def run(args):
 # FROM NOW ON: LEGACY ENTRY POINT.
 # TODO: REMOVE AFTER MIGRATING THE REST OF THE COMMANDS.
 
-def run_anchorages(args):
-    from pipe_anchorages.anchorages import run as run_anchorages
-    run_anchorages(args)
-
-
 def run_name_anchorages(args):
     from pipe_anchorages.name_anchorages import run as run_name_anchorages
     run_name_anchorages(args)
 
 
 SUBCOMMANDS = {
-    "anchorages": run_anchorages,
     "name_anchorages": run_name_anchorages,
     "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
     "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
     "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
     "port_visits": lambda args: run(["port-visits"] + args),
+    "anchorages": lambda args: run(["anchorages"] + args),
 }
 
 

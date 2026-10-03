@@ -1,19 +1,21 @@
-from apache_beam.options.pipeline_options import GoogleCloudOptions
+import datetime
+import logging
+
+from types import SimpleNamespace
+from typing import Any
+
+import apache_beam as beam
 from apache_beam.runners import PipelineState
+from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
-from pipe_anchorages.options.anchorage_options import AnchorageOptions
 from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.transforms.sink import AnchorageSink
 from pipe_anchorages.transforms.source import QuerySource
 
-import apache_beam as beam
-import datetime
-import logging
 
-
-def create_queries(args):
+def create_queries(config):
     template = """
     WITH
 
@@ -51,8 +53,8 @@ def create_queries(args):
     JOIN destinations
     USING (seg_id, table_suffix)
     """
-    start_window = datetime.datetime.strptime(args.start_date, "%Y-%m-%d")
-    end_window = datetime.datetime.strptime(args.end_date, "%Y-%m-%d")
+    start_window = datetime.datetime.strptime(config.start_date, "%Y-%m-%d")
+    end_window = datetime.datetime.strptime(config.end_date, "%Y-%m-%d")
 
     queries = []
     start = start_window
@@ -61,8 +63,8 @@ def create_queries(args):
         end = min(start + datetime.timedelta(days=999), end_window)
         queries.append(
             template.format(
-                position_table=args.messages_table,
-                segment_table=args.segments_table,
+                position_table=config.bq_in_messages,
+                segment_table=config.bq_in_segments,
                 start=start,
                 end=end,
             )
@@ -78,17 +80,22 @@ def has_location_record(item):
     return isinstance(rcd, VesselLocationRecord)
 
 
-def run(options):
-    known_args = options.view_as(AnchorageOptions)
-    cloud_options = options.view_as(GoogleCloudOptions)
+def run(config: SimpleNamespace, **kwargs: Any) -> int:
+    gfw_pipeline = Pipeline(
+        unparsed_args=config.unknown_unparsed_args,
+        labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
+        **config.unknown_parsed_args,
+        **kwargs,
+    )
+    cloud_options = gfw_pipeline.cloud_options
 
-    config = cmn.load_config(known_args.config)
+    params = cmn.load_config(config.config)
 
-    queries = create_queries(known_args)
+    queries = create_queries(config)
 
-    p = beam.Pipeline(options=options)
+    p = gfw_pipeline.pipeline
 
-    fishing_vessels = p | beam.io.ReadFromText(known_args.fishing_ssvid_list)
+    fishing_vessels = p | beam.io.ReadFromText(config.fishing_ssvid_list)
     fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
 
     source = [
@@ -100,17 +107,17 @@ def run(options):
         source
         | cmn.CreateVesselRecords()
         | "FilterOutInfo" >> beam.Filter(has_location_record)
-        | cmn.CreateTaggedRecords(config["min_required_positions"])
+        | cmn.CreateTaggedRecords(params["min_required_positions"])
     )
 
     anchorage_points = tagged_records | FindAnchoragePoints(
-        datetime.timedelta(minutes=config["stationary_period_min_duration_minutes"]),
-        config["stationary_period_max_distance_km"],
-        config["min_unique_vessels_for_anchorage"],
+        datetime.timedelta(minutes=params["stationary_period_min_duration_minutes"]),
+        params["stationary_period_max_distance_km"],
+        params["min_unique_vessels_for_anchorage"],
         fishing_vessel_list,
     )
 
-    (anchorage_points | AnchorageSink(known_args.output_table, known_args, cloud_options))
+    (anchorage_points | AnchorageSink(config.bq_out_anchorages, config, cloud_options))
 
     result = p.run()
 

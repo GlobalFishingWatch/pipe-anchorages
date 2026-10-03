@@ -1,0 +1,20 @@
+# Query parameters:
+bq_in_messages: "world-fishing-827.pipe_production_v20201001.position_messages_"
+bq_in_segments: "world-fishing-827.pipe_production_v20201001.segments_"
+bq_out_anchorages: "world-fishing-827.scratch_tomas_ttl30d.unnamed_anchorages"
+start_date: "2017-01-01"
+end_date: "2017-01-31"
+config: "src/pipe_anchorages/assets/config/anchorage_cfg.yaml"
+fishing_ssvid_list: "gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt"
+
+# Apache Beam / Dataflow options:
+job_name: unnamed-anchorages
+project: world-fishing-827
+runner: DataflowRunner
+max_num_workers: 200
+machine_type: custom-1-13312-ext
+disk_size_gb: 200
+staging_location: "gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging"
+temp_location: "gs://machine-learning-dev-ttl-120d/anchorages/temp"
+setup_file: "./setup.py"
+requirements_file: "requirements-worker-frozen.txt"
