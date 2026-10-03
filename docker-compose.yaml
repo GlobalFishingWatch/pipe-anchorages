@@ -15,21 +15,33 @@ services:
       - "gcp:/root/.config/"
     entrypoint: "pipe-anchorages"
 
-  dev:
-    image: gfw/pipe-anchorages
+  dev: &dev
+    image: gfw/pipe-anchorages-dev
     build:
-      context: .
       target: dev
     volumes:
       - ".:/opt/project"
       - "gcp:/root/.config/"
     entrypoint: /bin/bash
 
+  dev_no_gcp:
+    image: gfw/pipe-anchorages-dev
+    # Dev container without GCP credentials.
+    <<: *dev
+    volumes:
+      - ".:/opt/project"
+
+  prod:
+    image: gfw/pipe-anchorages-prod
+    build:
+      target: prod
+    entrypoint: /bin/bash
+
   test:
+    image: gfw/pipe-anchorages-test
     # Runs tests using the production Docker image.
     # Intended to be executed in the GitHub CI environment.
     build:
-      context: .
       target: test
     entrypoint: "pytest -v"
 

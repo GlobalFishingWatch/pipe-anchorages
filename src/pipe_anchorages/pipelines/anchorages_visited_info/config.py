@@ -1,14 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
-# This command does not use beam but PipelineConfig has generic functionality.
-# TODO: move PipelineConfig to a more generic package inside gfw-common lib.
-from gfw.common.beam.pipeline.config import PipelineConfig
+from gfw.common.config import PipelineConfig
 
 
-# TODO: Move kw_only=True to base class for consistency.
-# TODO: This allows to declare positional arguments in the subclass.
-@dataclass(kw_only=True)
+@dataclass(frozen=True, kw_only=True)
 class AnchoragesVisitedInfoConfig(PipelineConfig):
     bq_input_loitering: str
     bq_input_encounters: str

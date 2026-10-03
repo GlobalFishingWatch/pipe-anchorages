@@ -2,13 +2,23 @@
 
 VENV_NAME:=.venv
 REQS_PROD:=requirements.txt
+SETUP_FILE:=pyproject.toml
+SOURCES = src
+
 DOCKER_DEV_SERVICE:=dev
-DOCKER_CI_TEST_SERVICE:=test
+DOCKER_DEV_NO_GCP_SERVICE:=dev_no_gcp
+DOCKER_PROD_SERVICE:=prod
+DOCKER_TEST_SERVICE:=test
 
 GCP_PROJECT:=world-fishing-827
 GCP_DOCKER_VOLUME:=gcp
 
-sources = src
+PYTHON_VERSION:=3.12
+UV_VERSION := 0.10.9
+
+VENV:=uv venv
+PIP:=uv pip
+PIP_COMPILE:=uv pip compile
 
 # ---------------------
 # DOCKER
@@ -18,58 +28,63 @@ sources = src
 docker-build:
 	docker compose build
 
-.PHONY: docker-volume  ## Creates the docker volume for GCP. 
+.PHONY: docker-volume  ## Creates the docker volume for GCP.
 docker-volume:
 	docker volume create --name ${GCP_DOCKER_VOLUME}
 
 .PHONY: docker-gcp ## gcp: Authenticates to google cloud and configure the project.
-docker-gcp:
-	make docker-volume
+docker-gcp: docker-volume
 	docker compose run gcloud auth application-default login
 	docker compose run gcloud config set project ${GCP_PROJECT}
 	docker compose run gcloud auth application-default set-quota-project ${GCP_PROJECT}
 
-.PHONY: docker-ci-test ## Runs tests using prod image, exporting coverage.xml report.
-docker-ci-test:
-	docker compose run --rm ${DOCKER_CI_TEST_SERVICE}
+.PHONY: docker-test ## Runs tests using prod image, exporting coverage.xml report.
+docker-test:
+	docker compose run --rm ${DOCKER_TEST_SERVICE}
 
 .PHONY: docker-shell ## Enters to docker container shell.
-docker-shell:
+docker-shell: docker-volume
 	docker compose run --rm -it ${DOCKER_DEV_SERVICE}
 
 .PHONY: reqs  ## Compiles requirements.txt with pip-tools.
 reqs:
-	docker compose run --rm ${DOCKER_DEV_SERVICE} -c \
-		'pip-compile -o ${REQS_PROD} -v'
+	docker compose run --rm ${DOCKER_DEV_NO_GCP_SERVICE} -c \
+		'${PIP_COMPILE} -o ${REQS_PROD} ${SETUP_FILE} -v'
 
 .PHONY: reqs-upgrade  ## Upgrades requirements.txt with pip-tools.
 reqs-upgrade:
-	docker compose run --rm ${DOCKER_DEV_SERVICE} -c \
-		'pip-compile -o ${REQS_PROD} -U -v'
+	docker compose run --rm ${DOCKER_DEV_NO_GCP_SERVICE} -c \
+		'${PIP_COMPILE} -o ${REQS_PROD} ${SETUP_FILE} -U -v'
 
 # ---------------------
 # VIRTUAL ENVIRONMENT
 # ---------------------
 
+.PHONY: uv  ## Installs UV
+uv:
+	curl -LsSf https://astral.sh/uv/install.sh | UV_VERSION=$(UV_VERSION) sh
+	uv python pin ${PYTHON_VERSION}
+
 .PHONY: venv  ## Creates virtual environment.
 venv:
-	python -m venv ${VENV_NAME}
+	${VENV} ${VENV_NAME}
 
 .PHONY: upgrade-pip  ## Upgrades pip.
 upgrade-pip:
-	python -m pip install -U pip
+	${PIP} install pip==25.2
 
 .PHONY: install-test  ## Install and only test dependencies.
 install-test: upgrade-pip
-	python -m pip install -r requirements-test.txt
+	${PIP} install -r requirements-test.txt
 
 .PHONY: install  ## Install the package in editable mode & all dependencies for local development.
-install: upgrade-pip install-test
-	python -m pip install -e .[lint,dev,build]
+install: upgrade-pip
+	${PIP} install -e .[lint,dev,build]
+	make install-test
 
 .PHONY: test  ## Run all unit tests exporting coverage.xml report.
 test:
-	python -m pytest -m "not integration" --cov-report term --cov-report=xml --cov=$(sources)
+	python -m pytest -m "not integration" --cov-report term --cov-report=xml --cov=$(SOURCES)
 
 # ---------------------
 # QUALITY CHECKS
@@ -82,15 +97,15 @@ hooks:
 
 .PHONY: format  ## Auto-format python source files according with PEP8.
 format:
-	python -m black $(sources)
-	python -m ruff check --fix $(sources)
-	python -m ruff format $(sources)
+	python -m black $(SOURCES)
+	python -m ruff check --fix $(SOURCES)
+	python -m ruff format $(SOURCES)
 
 .PHONY: lint  ## Lint python source files.
 lint:
-	python -m ruff check $(sources)
-	python -m ruff format --check $(sources)
-	python -m black $(sources) --check --diff
+	python -m ruff check $(SOURCES)
+	python -m ruff format --check $(SOURCES)
+	python -m black $(SOURCES) --check --diff
 
 .PHONY: codespell  ## Use Codespell to do spell checking.
 codespell:

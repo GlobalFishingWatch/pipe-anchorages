@@ -20,19 +20,22 @@ description = "Tools for finding anchorages and associated port-visit events."
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [
- { name = "Global Fishing Watch" }
+    { name = "GFW Engineering Team", email = "engineering-team@globalfishingwatch.org" },
 ]
-maintainers = []
+maintainers = [
+    { name = "Tomás J. Link", email = "tomas.link@globalfishingwatch.org" },
+]
 classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 
 ]
 requires-python = ">= 3.12"
 dependencies = [
-  "apache-beam[gcp]~=2.69",
+  "apache-beam[gcp]~=2.76",
   "Fiona<2",
-  "gfw-common[beam]~=0.2",
+  "gfw-common[beam]~=0.16",
   "jinja2-cli~=0.8",
   "pyyaml~=6.0",
   "s2sphere~=0.2",
@@ -43,7 +46,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/GlobalFishingWatch/pipe-anchorages"
 Documentation = "https://globalfishingwatch.github.io/pipe-anchorages/"
-ChangKelog = "https://github.com/GlobalFishingWatch/pipe-anchorages/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/GlobalFishingWatch/pipe-anchorages/blob/main/CHANGES.md"
 Repository = "https://github.com/GlobalFishingWatch/pipe-anchorages"
 Issues = "https://github.com/GlobalFishingWatch/pipe-anchorages/issues"
 
@@ -54,9 +57,9 @@ pipe-anchorages = "pipe_anchorages.cli.main:main"
 
 # Linting and code quality tools
 lint = [
-  "black~=24.1",               # Code formatting tool.
-  "isort~=5.13",               # Python imports sorting tool.
-  "mypy~=1.14",                # Static type checker.
+  "black~=25.1",               # Code formatting tool.
+  "isort~=6.0",                # Python imports sorting tool.
+  "mypy~=1.15",                # Static type checker.
   "pydocstyle~=6.3",           # Python docstring style checker.
   "ruff~=0.11",                # Linter and code analysis tool.
   "codespell[toml]~=2.4",      # Spell checker for code.
@@ -66,9 +69,9 @@ lint = [
 
 # Development workflow and tools
 dev = [
-  "pre-commit~=3.5",          # Framework for managing pre-commit hooks.
+  "pre-commit~=4.2",          # Framework for managing pre-commit hooks.
   "pip-tools~=7.0",           # Freezing dependencies for production containers.
-  "pip-audit~=2.7.3",         # Audit for finding vulnerabilities in dependencies.
+  "pip-audit~=2.8",           # Audit for finding vulnerabilities in dependencies.
   "memory_profiler~=0.6",
   "snakeviz~=2.0",
 ]
@@ -76,7 +79,7 @@ dev = [
 # Build tools
 build = [
   "build~=1.2",             # Python PEP 517 compliant build system.
-  "setuptools~=75.2",       # Python packaging library.
+  "setuptools~=78.1",       # Python packaging library.
   "twine~=6.1",             # For uploading Python packages to PyPI.
 ]
 
