@@ -1,10 +1,13 @@
 import argparse
 
+from types import SimpleNamespace
+
 import pytest
 
 from apache_beam.options.pipeline_options import GoogleCloudOptions
 from gfw.common.beam.pipeline.base import Pipeline
 
+from pipe_anchorages import thin_port_messages_pipeline
 from pipe_anchorages.cli import main
 
 
@@ -78,3 +81,43 @@ def test_gfw_pipeline_resolves_project_and_labels_from_config():
     assert isinstance(cloud_options, GoogleCloudOptions)
     assert cloud_options.project == "test-project"
     assert sorted(cloud_options.labels) == ["env=prod", "team=pipeline"]
+
+
+def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
+    # Any Apache Beam/Dataflow option can be set from the --config-file YAML, not
+    # just the CLI flags -- the CLI framework routes config-file keys that aren't
+    # one of this command's own Options into config.unknown_parsed_args, and run()
+    # must forward that dict into Pipeline(**options), the same way pipe-gaps'
+    # PipelineFactory does with its own `**self._config.unknown_parsed_args`.
+    #
+    # Only patches Pipeline itself, not the Beam transforms downstream -- those
+    # build a real DAG against a mocked Pipeline and fail past the point this test
+    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock), which
+    # is expected and ignored here.
+    mock_pipeline_cls = mocker.patch("pipe_anchorages.thin_port_messages_pipeline.Pipeline")
+
+    config = SimpleNamespace(
+        bq_in_messages="project.dataset.messages",
+        bq_in_named_anchorages="project.dataset.anchorages",
+        bq_out_port_events="project.dataset.output",
+        start_date="2024-01-01",
+        end_date="2024-01-07",
+        ssvid_filter=None,
+        config="unused.yaml",
+        wait_for_job=False,
+        labels={"team": "pipeline"},
+        unknown_unparsed_args=[],
+        unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
+    )
+
+    try:
+        thin_port_messages_pipeline.run(config)
+    except Exception:
+        pass
+
+    mock_pipeline_cls.assert_called_once_with(
+        unparsed_args=[],
+        labels=["team=pipeline"],
+        project="test-project",
+        max_num_workers=50,
+    )
