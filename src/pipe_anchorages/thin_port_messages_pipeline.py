@@ -63,10 +63,10 @@ def anchorage_query(config):
 
 def prepare_output_tables(config, cloud_options, start_date, end_date):
     output_table = DatePartitionedTable(
-        table_id=config.bq_out_port_events,
+        table_id=config.bq_out_port_transition_messages,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
-* Creates raw thinned messages in out port events.
+* Creates filtered position messages flagging candidate port transitions.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
 * Sources: {config.bq_in_messages}
 * Anchorage table: {config.bq_in_named_anchorages}
@@ -106,7 +106,11 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
 
     p = gfw_pipeline.pipeline
 
-    params = cmn.load_config(config.config)
+    # Ensure that S2 Cell sizes are large enough that we don't miss ports.
+    anchorage_visit_max_distance = max(
+        config.anchorage_entry_distance_km, config.anchorage_exit_distance_km
+    )
+    assert anchorage_visit_max_distance * cmn.VISIT_SAFETY_FACTOR < 2 * cmn.approx_visit_cell_size
 
     queries = create_queries(config, start_date, end_date)
 
@@ -131,15 +135,15 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         tagged_records
         | "thinRecords" >> SmartThinRecords(
             anchorages=anchorages,
-            anchorage_entry_dist=params["anchorage_entry_distance_km"],
-            anchorage_exit_dist=params["anchorage_exit_distance_km"],
-            stopped_begin_speed=params["stopped_begin_speed_knots"],
-            stopped_end_speed=params["stopped_end_speed_knots"],
-            min_gap_minutes=params["minimum_port_gap_duration_minutes"],
+            anchorage_entry_dist=config.anchorage_entry_distance_km,
+            anchorage_exit_dist=config.anchorage_exit_distance_km,
+            stopped_begin_speed=config.stopped_begin_speed_knots,
+            stopped_end_speed=config.stopped_end_speed_knots,
+            min_gap_minutes=config.minimum_port_gap_duration_minutes,
             start_date=start_date,
             end_date=end_date,
         )
-        | "writeThinnedRecords" >> MessageSink(config.bq_out_port_events)
+        | "writeThinnedRecords" >> MessageSink(config.bq_out_port_transition_messages)
     )
 
     prepare_output_tables(config, cloud_options, start_date, end_date)
