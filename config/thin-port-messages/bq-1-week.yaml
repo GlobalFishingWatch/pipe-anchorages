@@ -1,0 +1,11 @@
+# Query parameters:
+bq_in_named_anchorages: "global-fishing-watch.anchorages.named_anchorages"
+bq_in_messages: "world-fishing-827.pipe_ais_v3_internal.research_messages"
+bq_out_port_events: "world-fishing-827.scratch_tomas_ttl30d.port_events"
+start_date: "2024-01-01"
+end_date: "2024-01-07"
+
+# General parameters:
+# --project (and any other Apache Beam/Dataflow option) is resolved from the CLI's
+# unparsed args, not from this config file -- pass it directly on the command line,
+# e.g.: pipe-anchorages thin-port-messages -c bq-1-week.yaml --project world-fishing-827
