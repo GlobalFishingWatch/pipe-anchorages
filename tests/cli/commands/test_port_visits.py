@@ -10,7 +10,7 @@ from pipe_anchorages.cli import main
 
 BASE_ARGS = [
     "port-visits",
-    "--bq-in-port-events", "project.dataset.port_events",
+    "--bq-in-port-transition-messages", "project.dataset.port_transition_messages",
     "--bq-in-segment-info", "project.dataset.segment_info",
     "--bq-out-port-visits", "project.dataset.port_visits",
     "--start-date", "2024-01-01",
@@ -28,7 +28,7 @@ def test_cli_executes_run(mocker):
 
     mock_run.assert_called_once()
     config = mock_run.call_args[0][0]
-    assert config.bq_in_port_events == "project.dataset.port_events"
+    assert config.bq_in_port_transition_messages == "project.dataset.port_transition_messages"
     assert config.bq_in_segment_info == "project.dataset.segment_info"
     assert config.bq_out_port_visits == "project.dataset.port_visits"
     assert config.start_date == "2024-01-01"
@@ -36,19 +36,22 @@ def test_cli_executes_run(mocker):
     assert config.bad_segs is None
     assert config.max_inter_seg_dist_nm == 60.0
     assert config.wait_for_job is False
+    assert config.anchorage_entry_distance_km == 3.0
+    assert config.anchorage_exit_distance_km == 4.0
+    assert config.stopped_begin_speed_knots == 0.2
+    assert config.stopped_end_speed_knots == 0.5
+    assert config.minimum_port_gap_duration_minutes == 240.0
 
 
-def test_cli_requires_port_events_table(mocker):
+def test_cli_requires_port_transition_messages_table(mocker):
     mocker.patch(
         "pipe_anchorages.cli.commands.port_visits.port_visits_pipeline.run",
         return_value=0,
     )
-    args = [
-        a for a in BASE_ARGS
-        if a not in ("--bq-in-port-events", "project.dataset.port_events")
-    ]
+    excluded = ("--bq-in-port-transition-messages", "project.dataset.port_transition_messages")
+    args = [a for a in BASE_ARGS if a not in excluded]
 
-    with pytest.raises(argparse.ArgumentTypeError, match="bq_in_port_events"):
+    with pytest.raises(argparse.ArgumentTypeError, match="bq_in_port_transition_messages"):
         main.run(args)
 
 
@@ -65,15 +68,19 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     mock_pipeline_cls = mocker.patch("pipe_anchorages.port_visits_pipeline.Pipeline")
 
     config = SimpleNamespace(
-        bq_in_port_events="project.dataset.port_events",
+        bq_in_port_transition_messages="project.dataset.port_transition_messages",
         bq_in_segment_info="project.dataset.segment_info",
         bq_out_port_visits="project.dataset.port_visits",
         start_date="2024-01-01",
         end_date="2024-01-07",
-        config="unused.yaml",
         bad_segs=None,
         max_inter_seg_dist_nm=60.0,
         wait_for_job=False,
+        anchorage_entry_distance_km=3.0,
+        anchorage_exit_distance_km=4.0,
+        stopped_begin_speed_knots=0.2,
+        stopped_end_speed_knots=0.5,
+        minimum_port_gap_duration_minutes=240.0,
         labels={"team": "pipeline"},
         unknown_unparsed_args=[],
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},

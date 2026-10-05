@@ -1,13 +1,10 @@
-from importlib.resources import files
 from typing import Any
 from types import SimpleNamespace
 
 from gfw.common.cli import Command, Option
 
 from pipe_anchorages import port_visits_pipeline
-from pipe_anchorages.assets import config as config_pkg
-
-default_config_file = files(config_pkg).joinpath("anchorage_cfg.yaml")
+from pipe_anchorages.cli.commands.port_transition_messages import PortTransitionMessages
 
 
 DESCRIPTION = """\
@@ -19,12 +16,11 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_IN_PORT_EVENTS = "BigQuery table with thinned port events."
+HELP_IN_PORT_TRANSITION_MESSAGES = "BigQuery table with filtered port transition messages."
 HELP_IN_SEGMENT_INFO = "BigQuery table mapping vessel_id to seg_id, one vessel_id per seg_id."
 HELP_OUT_PORT_VISITS = "BigQuery table in which to store the port visits."
 HELP_START_DATE = "First date (inclusive) to generate visits."
 HELP_END_DATE = "Last date (inclusive) to generate visits."
-HELP_CONFIG = "Path to the pipeline parameters file."
 HELP_BAD_SEGS = "Subquery producing segment ids of bad segments to exclude."
 HELP_MAX_INTER_SEG_DIST_NM = (
     "Segments more than this distance apart will not be joined when creating visits."
@@ -45,12 +41,16 @@ class PortVisits(Command):
     @property
     def options(self):
         return [
-            Option("--bq-in-port-events", type=str, required=True, help=HELP_IN_PORT_EVENTS),
+            Option(
+                "--bq-in-port-transition-messages",
+                type=str,
+                required=True,
+                help=HELP_IN_PORT_TRANSITION_MESSAGES,
+            ),
             Option("--bq-in-segment-info", type=str, required=True, help=HELP_IN_SEGMENT_INFO),
             Option("--bq-out-port-visits", type=str, required=True, help=HELP_OUT_PORT_VISITS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
-            Option("--config", type=str, default=str(default_config_file), help=HELP_CONFIG),
             Option("--bad-segs", type=str, help=HELP_BAD_SEGS),
             Option(
                 "--max-inter-seg-dist-nm",
@@ -59,6 +59,7 @@ class PortVisits(Command):
                 help=HELP_MAX_INTER_SEG_DIST_NM,
             ),
             Option("--wait-for-job", type=bool, default=False, help=HELP_WAIT_FOR_JOB),
+            *PortTransitionMessages.transition_options(),
         ]
 
     @classmethod
