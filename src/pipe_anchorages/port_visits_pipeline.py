@@ -129,13 +129,13 @@ Creates the visits to port table.
 
 
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
-    gfw_pipeline = Pipeline(
+    pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
         labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
         **config.unknown_parsed_args,
         **kwargs,
     )
-    cloud_options = gfw_pipeline.cloud_options
+    cloud_options = pipeline.cloud_options
 
     # Ensure that S2 Cell sizes are large enough that we don't miss ports.
     anchorage_visit_max_distance = max(
@@ -143,7 +143,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
     )
     assert anchorage_visit_max_distance * cmn.VISIT_SAFETY_FACTOR < 2 * cmn.approx_visit_cell_size
 
-    p = gfw_pipeline.pipeline
+    p = pipeline.pipeline
 
     start_time = strdate_to_utcdatetime(config.start_date)
     end_time = strdate_to_utcdatetime(config.end_date)
@@ -188,7 +188,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         ]
     )
 
-    runner = gfw_pipeline.pipeline_options.view_as(StandardOptions).runner
+    runner = pipeline.pipeline_options.view_as(StandardOptions).runner
     if config.wait_for_job or runner == "DirectRunner":
         result.wait_until_finish()
 
