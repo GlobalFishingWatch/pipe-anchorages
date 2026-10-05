@@ -117,9 +117,18 @@ flowchart LR
 <div align="justify">
 
 This repository follows the conventions documented in [pipe-docs] (GFW's shared documentation hub
-for pipeline repositories). See [preparing the development environment] and [git workflow] there
-for the common steps -- cloning, Docker setup, installing dependencies, pre-commit hooks, and how
-branches/PRs are managed.
+for pipeline repositories). First, clone the repository:
+
+</div>
+
+```shell
+git clone https://github.com/GlobalFishingWatch/pipe-anchorages.git
+```
+
+<div align="justify">
+
+Then see [preparing the development environment] and [git workflow] in [pipe-docs] for the rest --
+Docker setup, installing dependencies, pre-commit hooks, and how branches/PRs are managed.
 
 This repository's CLI and Apache Beam pipeline infrastructure are built on [gfw-common].
 
