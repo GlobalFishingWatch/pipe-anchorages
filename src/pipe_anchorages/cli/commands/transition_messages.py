@@ -43,11 +43,11 @@ HELP_MIN_GAP = (
 )
 
 
-class AnchorageTransitionMessages(Command):
+class TransitionMessages(Command):
 
     @property
     def name(self):
-        return "anchorage-transition-messages"
+        return "transition-messages"
 
     @property
     def description(self):
@@ -80,10 +80,7 @@ class AnchorageTransitionMessages(Command):
             ),
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option(
-                "--bq-out-anchorage-transition-messages",
-                type=str,
-                required=True,
-                help=HELP_OUT_MESSAGES,
+                "--bq-out-transition-messages", type=str, required=True, help=HELP_OUT_MESSAGES
             ),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
