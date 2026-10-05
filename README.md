@@ -70,15 +70,18 @@ side stage that cross-references the results against other GFW pipelines' event 
 
 ```mermaid
 flowchart TD
-    AP["anchorage-points<br/>cluster stationary positions"]
-    NA["named-anchorages<br/>assign names"]
-    TM["transition-messages<br/>flag candidate port transitions"]
-    PV["port-visits<br/>resolve entry/exit events"]
-    CV["confidence-voyages<br/>group visits into voyages"]
-    AVI["anchorages-visited-info<br/>cross-reference other event types"]
-    LOI[("loitering events<br/>(pipe-loitering)")]
-    ENC[("encounter events<br/>(pipe-encounters)")]
-    GAP[("gap events<br/>(pipe-gaps)")]
+    AP["`**anchorage-points**<br/>cluster stationary positions`"]
+    NA["`**named-anchorages**<br/>assign names`"]
+    TM["`**transition-messages**<br/>flag candidate port transitions`"]
+    PV["`**port-visits**<br/>resolve entry/exit events`"]
+    CV["`**confidence-voyages**<br/>group visits into voyages`"]
+    AVI["`**anchorages-visited-info**<br/>cross-reference other event types`"]
+
+    subgraph OTHER["`**Other GFW pipelines**`"]
+        LOI[("loitering events<br/>(pipe-loitering)")]
+        ENC[("encounter events<br/>(pipe-encounters)")]
+        GAP[("gap events<br/>(pipe-gaps)")]
+    end
 
     AP --> NA --> TM --> PV --> CV
     NA --> AVI
