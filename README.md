@@ -13,7 +13,7 @@
 </p>
 
 Finds where vessels anchor, names those places, and derives the port visits and voyages vessels
-make between them -- all from AIS position data.
+make between them -- from vessel position data, AIS or VMS.
 
 [pipe-docs]: https://github.com/GlobalFishingWatch/pipe-docs
 [preparing the development environment]: https://github.com/GlobalFishingWatch/pipe-docs/blob/main/CONTRIBUTING.md#preparing-the-development-environment
@@ -50,6 +50,12 @@ vessel's full track against those named anchorages to detect port-visit entry/ex
 voyages between them. The clustering thresholds, naming priority, and entry/exit/stop-speed rules
 this repository implements are the same ones GFW publishes as its own methodology for this
 dataset. [[2]](#2) [[3]](#3)
+
+The anchorage clustering and naming stages (`anchorage-points`/`named-anchorages`) are run
+manually/occasionally, against AIS position data. The port-visit detection chain
+(`transition-messages`/`port-visits`/`confidence-voyages`) and `anchorages-visited-info`, though,
+run in production *daily* against both AIS and VMS vessel tracks, reusing the same named-anchorages
+reference table either way.
 
 </div>
 
