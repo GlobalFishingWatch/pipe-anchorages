@@ -49,7 +49,7 @@ def create_queries(config, start_date, end_date):
     while start_window <= end_date:
         end_window = min(start_window + datetime.timedelta(days=shift), end_date)
         yield template.format(
-            table=config.bq_in_port_transition_messages,
+            table=config.bq_in_anchorage_transition_messages,
             vid_table=config.bq_in_segment_info,
             condition=condition,
             start=start_window,
@@ -107,7 +107,7 @@ def prepare_output_tables(config, cloud_options, start_date, end_date):
 Created by the anchorages_pipeline: {get_pipe_ver()}.
 Creates the visits to port table.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
-* Sources: {config.bq_in_port_transition_messages}
+* Sources: {config.bq_in_anchorage_transition_messages}
 * Vessel id to join identification: {config.bq_in_segment_info}
 * Skip bad segments: {"Yes" if config.bad_segs else "No"}
 * Segments more than this distance apart will not be joined when creating visits: {config.max_inter_seg_dist_nm}
@@ -139,7 +139,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
 
     # Ensure that S2 Cell sizes are large enough that we don't miss ports.
     anchorage_visit_max_distance = max(
-        config.anchorage_entry_distance_km, config.anchorage_exit_distance_km
+        config.anchorage_entry_dist_km, config.anchorage_exit_dist_km
     )
     assert anchorage_visit_max_distance * cmn.VISIT_SAFETY_FACTOR < 2 * cmn.approx_visit_cell_size
 
@@ -164,10 +164,10 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         | beam.Map(from_msg)
         | beam.GroupByKey()
         | CreateInOutEvents(
-            anchorage_entry_dist=config.anchorage_entry_distance_km,
-            anchorage_exit_dist=config.anchorage_exit_distance_km,
-            stopped_begin_speed=config.stopped_begin_speed_knots,
-            stopped_end_speed=config.stopped_end_speed_knots,
+            anchorage_entry_dist=config.anchorage_entry_dist_km,
+            anchorage_exit_dist=config.anchorage_exit_dist_km,
+            stopped_begin_speed=config.stopping_speed_knots,
+            stopped_end_speed=config.starting_speed_knots,
             min_gap_minutes=config.minimum_port_gap_duration_minutes,
             end_time=end_time,
         )
