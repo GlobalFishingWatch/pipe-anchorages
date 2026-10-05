@@ -25,7 +25,7 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_IN_NAMED_ANCHORAGES = "BigQuery table with named anchorages."
+HELP_IN_ANCHORAGES = "BigQuery table with named anchorages."
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_OUT_MESSAGES = "BigQuery table in which to store the filtered messages."
 HELP_START_DATE = "First date to look for entry/exit events."
@@ -72,12 +72,7 @@ class TransitionMessages(Command):
     @property
     def options(self):
         return [
-            Option(
-                "--bq-in-named-anchorages",
-                type=str,
-                required=True,
-                help=HELP_IN_NAMED_ANCHORAGES,
-            ),
+            Option("--bq-in-named-anchorages", type=str, required=True, help=HELP_IN_ANCHORAGES),
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option(
                 "--bq-out-transition-messages", type=str, required=True, help=HELP_OUT_MESSAGES
