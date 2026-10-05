@@ -111,7 +111,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
     anchorage_points = tagged_records | FindAnchoragePoints(
         datetime.timedelta(minutes=config.stationary_period_min_duration_minutes),
         config.stationary_period_max_distance_km,
-        config.min_unique_vessels_for_anchorage,
+        config.min_unique_vessels,
         fishing_vessel_list,
     )
 

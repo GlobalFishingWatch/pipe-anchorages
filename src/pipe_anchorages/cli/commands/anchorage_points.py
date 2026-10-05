@@ -28,7 +28,7 @@ HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES = (
 HELP_STATIONARY_PERIOD_MAX_DISTANCE_KM = (
     "Max drift radius (km) from a position while still considered stationary there."
 )
-HELP_MIN_UNIQUE_VESSELS_FOR_ANCHORAGE = (
+HELP_MIN_UNIQUE_VESSELS = (
     "Minimum number of distinct vessels that must visit a cluster for it to count as an anchorage."
 )
 
@@ -49,10 +49,11 @@ class AnchoragePoints(Command):
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option("--bq-in-segments", type=str, required=True, help=HELP_IN_SEGMENTS),
             Option("--bq-out-anchorage-points", type=str, required=True, help=HELP_OUT_POINTS),
+            Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
-            Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
             Option("--min-positions", type=int, default=200, help=HELP_MIN_POSITIONS),
+            Option("--min-unique-vessels", type=int, default=20, help=HELP_MIN_UNIQUE_VESSELS),
             Option(
                 "--stationary-period-min-duration-minutes",
                 type=int,
@@ -64,12 +65,6 @@ class AnchoragePoints(Command):
                 type=float,
                 default=0.5,
                 help=HELP_STATIONARY_PERIOD_MAX_DISTANCE_KM,
-            ),
-            Option(
-                "--min-unique-vessels-for-anchorage",
-                type=int,
-                default=20,
-                help=HELP_MIN_UNIQUE_VESSELS_FOR_ANCHORAGE,
             ),
         ]
 

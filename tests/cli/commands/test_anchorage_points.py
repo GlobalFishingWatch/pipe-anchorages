@@ -38,7 +38,7 @@ def test_cli_executes_run(mocker):
     assert config.min_positions == 200
     assert config.stationary_period_min_duration_minutes == 720
     assert config.stationary_period_max_distance_km == 0.5
-    assert config.min_unique_vessels_for_anchorage == 20
+    assert config.min_unique_vessels == 20
 
 
 def test_cli_requires_gcs_in_fishing_ssvids(mocker):
@@ -79,7 +79,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         min_positions=200,
         stationary_period_min_duration_minutes=720,
         stationary_period_max_distance_km=0.5,
-        min_unique_vessels_for_anchorage=20,
+        min_unique_vessels=20,
         labels={"team": "pipeline"},
         unknown_unparsed_args=[],
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
