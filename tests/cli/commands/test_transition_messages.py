@@ -79,7 +79,7 @@ def test_transition_options_are_shared_with_port_visits():
     assert flags["--min-anchorage-gap-minutes"].default == 240.0
 
 
-def test_gfw_pipeline_resolves_project_and_labels_from_config():
+def test_pipeline_resolves_project_and_labels_from_config():
     # thin_port_messages_pipeline.run() builds a Pipeline, and translates
     # config.labels (a dict, from the CLI's shared --labels option) into the
     # list-of-"key=value" strings GoogleCloudOptions.labels actually expects --
@@ -97,13 +97,13 @@ def test_gfw_pipeline_resolves_project_and_labels_from_config():
     # imported when their own (still legacy) commands are actually invoked.
     labels = {"team": "pipeline", "env": "prod"}
 
-    gfw_pipeline = Pipeline(
+    pipeline = Pipeline(
         project="test-project",
         runner="DirectRunner",
         labels=[f"{key}={value}" for key, value in labels.items()],
     )
 
-    cloud_options = gfw_pipeline.cloud_options
+    cloud_options = pipeline.cloud_options
     assert isinstance(cloud_options, GoogleCloudOptions)
     assert cloud_options.project == "test-project"
     assert sorted(cloud_options.labels) == ["env=prod", "team=pipeline"]

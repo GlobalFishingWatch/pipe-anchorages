@@ -93,18 +93,18 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
 
 
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
-    gfw_pipeline = Pipeline(
+    pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
         labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
         **config.unknown_parsed_args,
         **kwargs,
     )
-    cloud_options = gfw_pipeline.cloud_options
+    cloud_options = pipeline.cloud_options
 
     start_date = datetime.datetime.strptime(config.start_date, "%Y-%m-%d").date()
     end_date = datetime.datetime.strptime(config.end_date, "%Y-%m-%d").date()
 
-    p = gfw_pipeline.pipeline
+    p = pipeline.pipeline
 
     # Ensure that S2 Cell sizes are large enough that we don't miss ports.
     anchorage_visit_max_distance = max(
@@ -158,7 +158,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         ]
     )
 
-    runner = gfw_pipeline.pipeline_options.view_as(StandardOptions).runner
+    runner = pipeline.pipeline_options.view_as(StandardOptions).runner
     if config.wait_for_job or runner == "DirectRunner":
         result.wait_until_finish()
 
