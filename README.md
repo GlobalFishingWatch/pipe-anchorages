@@ -78,7 +78,7 @@ flowchart LR
     AVI["anchorages-visited-info<br/>cross-reference other event types"]
     LOI[("loitering events<br/>(pipe-loitering)")]
     ENC[("encounter events<br/>(pipe-encounters)")]
-    GAP[("AIS gap events<br/>(pipe-gaps)")]
+    GAP[("gap events<br/>(pipe-gaps)")]
 
     AP --> NA --> TM --> PV --> CV
     NA --> AVI
@@ -107,7 +107,7 @@ flowchart LR
   visit's end and the next visit's start -- at a configurable minimum confidence level.
 - **`anchorages-visited-info`** is independent of that chain: it cross-references the named
   anchorages dataset against loitering ([pipe-loitering]), encounter ([pipe-encounters]), and
-  AIS-gap ([pipe-gaps]) events, producing a reference table of boolean presence indicators per
+  gap ([pipe-gaps]) events, producing a reference table of boolean presence indicators per
   anchorage.
 
 </div>
@@ -172,7 +172,7 @@ complete track.</td>
 </tr>
 <tr>
 <td width="1%" nowrap><code>anchorages&#8209;visited&#8209;info</code></td>
-<td>Cross-references named anchorages against loitering/encounter/AIS-gap events into a boolean
+<td>Cross-references named anchorages against loitering/encounter/gap events into a boolean
 presence-indicator table.</td>
 </tr>
 </table>
