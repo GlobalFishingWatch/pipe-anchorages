@@ -45,7 +45,7 @@ def test_cli_executes_run(mocker):
     assert config.anchorage_exit_dist_km == 4.0
     assert config.stopping_speed_knots == 0.2
     assert config.starting_speed_knots == 0.5
-    assert config.minimum_port_gap_duration_minutes == 240.0
+    assert config.min_anchorage_gap_minutes == 240.0
 
 
 def test_cli_requires_named_anchorages_table(mocker):
@@ -74,13 +74,13 @@ def test_transition_options_are_shared_with_port_visits():
         "--anchorage-exit-dist-km",
         "--stopping-speed-knots",
         "--starting-speed-knots",
-        "--minimum-port-gap-duration-minutes",
+        "--min-anchorage-gap-minutes",
     }
     assert flags["--anchorage-entry-dist-km"].default == 3.0
     assert flags["--anchorage-exit-dist-km"].default == 4.0
     assert flags["--stopping-speed-knots"].default == 0.2
     assert flags["--starting-speed-knots"].default == 0.5
-    assert flags["--minimum-port-gap-duration-minutes"].default == 240.0
+    assert flags["--min-anchorage-gap-minutes"].default == 240.0
 
 
 def test_gfw_pipeline_resolves_project_and_labels_from_config():
@@ -142,7 +142,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         anchorage_exit_dist_km=4.0,
         stopping_speed_knots=0.2,
         starting_speed_knots=0.5,
-        minimum_port_gap_duration_minutes=240.0,
+        min_anchorage_gap_minutes=240.0,
         labels={"team": "pipeline"},
         unknown_unparsed_args=[],
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},

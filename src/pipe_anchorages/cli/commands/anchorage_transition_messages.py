@@ -25,11 +25,9 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_BQ_IN_NAMED_ANCHORAGES = "BigQuery table with named anchorages."
-HELP_BQ_IN_MESSAGES = "BigQuery table to pull position messages from."
-HELP_BQ_OUT_ANCHORAGE_TRANSITION_MESSAGES = (
-    "BigQuery table in which to store the filtered messages."
-)
+HELP_IN_NAMED_ANCHORAGES = "BigQuery table with named anchorages."
+HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
+HELP_OUT_MESSAGES = "BigQuery table in which to store the filtered messages."
 HELP_START_DATE = "First date to look for entry/exit events."
 HELP_END_DATE = "Last date (inclusive) to look for entry/exit events."
 HELP_SSVID_FILTER = (
@@ -40,8 +38,8 @@ HELP_ENTRY_DIST_KM = "Max distance (km) from an anchorage to count as an entry."
 HELP_EXIT_DIST_KM = "Min distance (km) from an anchorage to count as an exit."
 HELP_STOPPING_KNOTS = "Speed (knots) below which a vessel is considered stopped."
 HELP_STARTING_KNOTS = "Speed (knots) above which a stopped vessel is moving again."
-HELP_MINIMUM_PORT_GAP_DURATION_MINUTES = (
-    "Minimum gap (minutes) between two records for them to count as separate port visits."
+HELP_MIN_GAP = (
+    "Minimum gap (minutes) between two records for them to count as separate anchorage visits."
 )
 
 
@@ -68,12 +66,7 @@ class AnchorageTransitionMessages(Command):
             Option("--anchorage-exit-dist-km", type=float, default=4.0, help=HELP_EXIT_DIST_KM),
             Option("--stopping-speed-knots", type=float, default=0.2, help=HELP_STOPPING_KNOTS),
             Option("--starting-speed-knots", type=float, default=0.5, help=HELP_STARTING_KNOTS),
-            Option(
-                "--minimum-port-gap-duration-minutes",
-                type=float,
-                default=240.0,
-                help=HELP_MINIMUM_PORT_GAP_DURATION_MINUTES,
-            ),
+            Option("--min-anchorage-gap-minutes", type=float, default=240.0, help=HELP_MIN_GAP),
         ]
 
     @property
@@ -83,14 +76,14 @@ class AnchorageTransitionMessages(Command):
                 "--bq-in-named-anchorages",
                 type=str,
                 required=True,
-                help=HELP_BQ_IN_NAMED_ANCHORAGES,
+                help=HELP_IN_NAMED_ANCHORAGES,
             ),
-            Option("--bq-in-messages", type=str, required=True, help=HELP_BQ_IN_MESSAGES),
+            Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option(
                 "--bq-out-anchorage-transition-messages",
                 type=str,
                 required=True,
-                help=HELP_BQ_OUT_ANCHORAGE_TRANSITION_MESSAGES,
+                help=HELP_OUT_MESSAGES,
             ),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
