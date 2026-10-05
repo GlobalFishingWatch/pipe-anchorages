@@ -63,7 +63,6 @@ def run(args):
             "--bq-in-segments project.dataset.segments "
             "--bq-out-anchorage-points project.dataset.anchorage_points "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
-            "--config anchorage_cfg.yaml "
             "--fishing-ssvid-list gs://bucket/fishing_mmsi.txt",
         ],
         logger_config=LoggerConfig(

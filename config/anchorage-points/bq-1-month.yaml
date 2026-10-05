@@ -4,7 +4,6 @@ bq_in_segments: "world-fishing-827.pipe_production_v20201001.segments_"
 bq_out_anchorage_points: "world-fishing-827.scratch_tomas_ttl30d.unnamed_anchorages"
 start_date: "2017-01-01"
 end_date: "2017-01-31"
-config: "src/pipe_anchorages/assets/config/anchorage_cfg.yaml"
 fishing_ssvid_list: "gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt"
 
 # Apache Beam / Dataflow options:

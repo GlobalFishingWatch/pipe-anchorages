@@ -20,8 +20,17 @@ HELP_IN_SEGMENTS = "BigQuery table with segment destinations, partitioned by day
 HELP_OUT_ANCHORAGE_POINTS = "BigQuery table in which to store the anchorage points."
 HELP_START_DATE = "First date to look for stationary positions."
 HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
-HELP_CONFIG = "Path to the pipeline parameters file."
 HELP_FISHING_SSVID_LIST = "GCS location of a newline-separated list of fishing vessel ids."
+HELP_MIN_REQUIRED_POSITIONS = "Minimum number of positions a segment needs to be considered."
+HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES = (
+    "Minimum time (minutes) a vessel must stay within the stationary radius to count."
+)
+HELP_STATIONARY_PERIOD_MAX_DISTANCE_KM = (
+    "Max drift radius (km) from a position while still considered stationary there."
+)
+HELP_MIN_UNIQUE_VESSELS_FOR_ANCHORAGE = (
+    "Minimum number of distinct vessels that must visit a cluster for it to count as an anchorage."
+)
 
 
 class AnchoragePoints(Command):
@@ -47,9 +56,32 @@ class AnchoragePoints(Command):
             ),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
-            Option("--config", type=str, required=True, help=HELP_CONFIG),
             Option(
                 "--fishing-ssvid-list", type=str, required=True, help=HELP_FISHING_SSVID_LIST
+            ),
+            Option(
+                "--min-required-positions",
+                type=int,
+                default=200,
+                help=HELP_MIN_REQUIRED_POSITIONS,
+            ),
+            Option(
+                "--stationary-period-min-duration-minutes",
+                type=int,
+                default=720,
+                help=HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES,
+            ),
+            Option(
+                "--stationary-period-max-distance-km",
+                type=float,
+                default=0.5,
+                help=HELP_STATIONARY_PERIOD_MAX_DISTANCE_KM,
+            ),
+            Option(
+                "--min-unique-vessels-for-anchorage",
+                type=int,
+                default=20,
+                help=HELP_MIN_UNIQUE_VESSELS_FOR_ANCHORAGE,
             ),
         ]
 

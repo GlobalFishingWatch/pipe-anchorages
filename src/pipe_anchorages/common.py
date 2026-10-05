@@ -6,7 +6,6 @@ from collections import namedtuple
 import apache_beam as beam
 import s2sphere
 import six
-import yaml
 
 from .records import InvalidRecord, VesselInfoRecord, VesselLocationRecord, VesselRecord
 
@@ -147,20 +146,6 @@ class CreateTaggedRecordsByDay(beam.PTransform):
             | beam.Map(self.dedup_by_timestamp)
             | beam.Map(self.tag_records)
         )
-
-
-def load_config(path):
-    with open(path) as f:
-        config = yaml.load(f.read(), Loader=yaml.FullLoader)
-
-    anchorage_visit_max_distance = max(
-        config["anchorage_entry_distance_km"], config["anchorage_exit_distance_km"]
-    )
-
-    # Ensure that S2 Cell sizes are large enough that we don't miss ports
-    assert anchorage_visit_max_distance * VISIT_SAFETY_FACTOR < 2 * approx_visit_cell_size
-
-    return config
 
 
 def mean(iterable):

@@ -89,8 +89,6 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
     )
     cloud_options = gfw_pipeline.cloud_options
 
-    params = cmn.load_config(config.config)
-
     queries = create_queries(config)
 
     p = gfw_pipeline.pipeline
@@ -107,13 +105,13 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         source
         | cmn.CreateVesselRecords()
         | "FilterOutInfo" >> beam.Filter(has_location_record)
-        | cmn.CreateTaggedRecords(params["min_required_positions"])
+        | cmn.CreateTaggedRecords(config.min_required_positions)
     )
 
     anchorage_points = tagged_records | FindAnchoragePoints(
-        datetime.timedelta(minutes=params["stationary_period_min_duration_minutes"]),
-        params["stationary_period_max_distance_km"],
-        params["min_unique_vessels_for_anchorage"],
+        datetime.timedelta(minutes=config.stationary_period_min_duration_minutes),
+        config.stationary_period_max_distance_km,
+        config.min_unique_vessels_for_anchorage,
         fishing_vessel_list,
     )
 
