@@ -92,13 +92,8 @@ def test_pipeline_resolves_project_and_labels_from_config():
     # Uses explicit kwargs (project=/runner=) rather than unparsed_args=, which is
     # what run() itself passes through in production for real Beam/Dataflow flags:
     # unparsed_args triggers apache_beam's own PipelineOptions(...), which does a
-    # *global* scan of every currently-imported PipelineOptions subclass -- safe in
-    # a real single-command process, but collides here with this same test *session*
-    # also importing other not-yet-migrated pipelines' *Options(PipelineOptions)
-    # classes (name_anchorage_options.py and friends), which still redeclare
-    # overlapping flag names like --output_table. Not a production risk: each CLI
-    # invocation is its own process, and those sibling classes are only ever lazily
-    # imported when their own (still legacy) commands are actually invoked.
+    # *global* scan of every currently-imported PipelineOptions subclass. Explicit
+    # kwargs keep this test isolated from that scan entirely.
     labels = {"team": "pipeline", "env": "prod"}
 
     pipeline = Pipeline(
@@ -122,12 +117,8 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     #
     # Only patches Pipeline itself, not the Beam transforms downstream -- those
     # build a real DAG against a mocked Pipeline and fail past the point this test
-    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock, or a
-    # bare PipelineOptions() call that picks up every currently-imported
-    # PipelineOptions subclass -- including sibling, not-yet-migrated ones like
-    # NameAnchorageOptions -- and fails parsing pytest's own argv against their
-    # union; SystemExit, not Exception, so it needs its own except clause below),
-    # which is expected and ignored here.
+    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock), which
+    # is expected and ignored here.
     mock_pipeline_cls = mocker.patch("pipe_anchorages.thin_port_messages_pipeline.Pipeline")
 
     config = SimpleNamespace(
@@ -152,7 +143,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         # Silences the real (expected, ignored) DAG's own noisy logging -- see comment above.
         logging.disable(logging.CRITICAL)
         thin_port_messages_pipeline.run(config)
-    except (Exception, SystemExit):
+    except Exception:
         pass
     finally:
         logging.disable(logging.NOTSET)
