@@ -81,17 +81,17 @@ def has_location_record(item):
 
 
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
-    gfw_pipeline = Pipeline(
+    pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
         labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
         **config.unknown_parsed_args,
         **kwargs,
     )
-    cloud_options = gfw_pipeline.cloud_options
+    cloud_options = pipeline.cloud_options
 
     queries = create_queries(config)
 
-    p = gfw_pipeline.pipeline
+    p = pipeline.pipeline
 
     fishing_vessels = p | beam.io.ReadFromText(config.fishing_ssvid_list)
     fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
