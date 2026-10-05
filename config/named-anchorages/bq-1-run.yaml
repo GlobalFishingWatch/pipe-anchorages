@@ -1,0 +1,15 @@
+# Query parameters:
+bq_in_anchorage_points: "machine_learning_dev_ttl_120d.unnamed_anchorages_test"
+bq_out_named_anchorages: "world-fishing-827.scratch_tomas_ttl30d.named_anchorages"
+
+# Apache Beam / Dataflow options:
+job_name: named-anchorages
+project: world-fishing-827
+runner: DataflowRunner
+max_num_workers: 200
+disk_size_gb: 100
+region: us-central1
+staging_location: "gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging"
+temp_location: "gs://machine-learning-dev-ttl-120d/anchorages/temp"
+setup_file: "./setup.py"
+requirements_file: "requirements-worker-frozen.txt"
