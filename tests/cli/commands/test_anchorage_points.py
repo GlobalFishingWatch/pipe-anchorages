@@ -15,7 +15,7 @@ BASE_ARGS = [
     "--bq-out-anchorage-points", "project.dataset.anchorage_points",
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
-    "--fishing-ssvid-list", "gs://bucket/fishing_mmsi.txt",
+    "--gcs-in-fishing-ssvids", "gs://bucket/fishing_mmsi.txt",
 ]
 
 
@@ -34,22 +34,22 @@ def test_cli_executes_run(mocker):
     assert config.bq_out_anchorage_points == "project.dataset.anchorage_points"
     assert config.start_date == "2024-01-01"
     assert config.end_date == "2024-01-07"
-    assert config.fishing_ssvid_list == "gs://bucket/fishing_mmsi.txt"
-    assert config.min_required_positions == 200
+    assert config.gcs_in_fishing_ssvids == "gs://bucket/fishing_mmsi.txt"
+    assert config.min_positions == 200
     assert config.stationary_period_min_duration_minutes == 720
     assert config.stationary_period_max_distance_km == 0.5
     assert config.min_unique_vessels_for_anchorage == 20
 
 
-def test_cli_requires_fishing_ssvid_list(mocker):
+def test_cli_requires_gcs_in_fishing_ssvids(mocker):
     mocker.patch(
         "pipe_anchorages.cli.commands.anchorage_points.anchorages_pipeline.run",
         return_value=0,
     )
-    excluded = ("--fishing-ssvid-list", "gs://bucket/fishing_mmsi.txt")
+    excluded = ("--gcs-in-fishing-ssvids", "gs://bucket/fishing_mmsi.txt")
     args = [a for a in BASE_ARGS if a not in excluded]
 
-    with pytest.raises(argparse.ArgumentTypeError, match="fishing_ssvid_list"):
+    with pytest.raises(argparse.ArgumentTypeError, match="gcs_in_fishing_ssvids"):
         main.run(args)
 
 
@@ -75,8 +75,8 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         bq_out_anchorage_points="project.dataset.anchorage_points",
         start_date="2024-01-01",
         end_date="2024-01-07",
-        fishing_ssvid_list="gs://bucket/fishing_mmsi.txt",
-        min_required_positions=200,
+        gcs_in_fishing_ssvids="gs://bucket/fishing_mmsi.txt",
+        min_positions=200,
         stationary_period_min_duration_minutes=720,
         stationary_period_max_distance_km=0.5,
         min_unique_vessels_for_anchorage=20,

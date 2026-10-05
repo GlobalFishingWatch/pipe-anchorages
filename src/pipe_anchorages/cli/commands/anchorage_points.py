@@ -17,11 +17,11 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_IN_SEGMENTS = "BigQuery table with segment destinations, partitioned by day."
-HELP_OUT_ANCHORAGE_POINTS = "BigQuery table in which to store the anchorage points."
+HELP_OUT_POINTS = "BigQuery table in which to store the anchorage points."
 HELP_START_DATE = "First date to look for stationary positions."
 HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
-HELP_FISHING_SSVID_LIST = "GCS location of a newline-separated list of fishing vessel ids."
-HELP_MIN_REQUIRED_POSITIONS = "Minimum number of positions a segment needs to be considered."
+HELP_FISHING_SSVIDS = "Newline-separated list of fishing vessel ids."
+HELP_MIN_POSITIONS = "Minimum number of positions a segment needs to be considered."
 HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES = (
     "Minimum time (minutes) a vessel must stay within the stationary radius to count."
 )
@@ -48,23 +48,11 @@ class AnchoragePoints(Command):
         return [
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option("--bq-in-segments", type=str, required=True, help=HELP_IN_SEGMENTS),
-            Option(
-                "--bq-out-anchorage-points",
-                type=str,
-                required=True,
-                help=HELP_OUT_ANCHORAGE_POINTS,
-            ),
+            Option("--bq-out-anchorage-points", type=str, required=True, help=HELP_OUT_POINTS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
-            Option(
-                "--fishing-ssvid-list", type=str, required=True, help=HELP_FISHING_SSVID_LIST
-            ),
-            Option(
-                "--min-required-positions",
-                type=int,
-                default=200,
-                help=HELP_MIN_REQUIRED_POSITIONS,
-            ),
+            Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
+            Option("--min-positions", type=int, default=200, help=HELP_MIN_POSITIONS),
             Option(
                 "--stationary-period-min-duration-minutes",
                 type=int,

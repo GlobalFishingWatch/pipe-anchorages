@@ -93,7 +93,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
 
     p = pipeline.pipeline
 
-    fishing_vessels = p | beam.io.ReadFromText(config.fishing_ssvid_list)
+    fishing_vessels = p | beam.io.ReadFromText(config.gcs_in_fishing_ssvids)
     fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
 
     source = [
@@ -105,7 +105,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         source
         | cmn.CreateVesselRecords()
         | "FilterOutInfo" >> beam.Filter(has_location_record)
-        | cmn.CreateTaggedRecords(config.min_required_positions)
+        | cmn.CreateTaggedRecords(config.min_positions)
     )
 
     anchorage_points = tagged_records | FindAnchoragePoints(
