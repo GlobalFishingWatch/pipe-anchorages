@@ -9,14 +9,16 @@ from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages import thin_port_messages_pipeline
 from pipe_anchorages.cli import main
-from pipe_anchorages.cli.commands.port_transition_messages import PortTransitionMessages
+from pipe_anchorages.cli.commands.anchorage_transition_messages import (
+    AnchorageTransitionMessages,
+)
 
 
 BASE_ARGS = [
-    "port-transition-messages",
+    "anchorage-transition-messages",
     "--bq-in-named-anchorages", "project.dataset.anchorages",
     "--bq-in-messages", "project.dataset.messages",
-    "--bq-out-port-transition-messages", "project.dataset.output",
+    "--bq-out-anchorage-transition-messages", "project.dataset.output",
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
 ]
@@ -24,7 +26,8 @@ BASE_ARGS = [
 
 def test_cli_executes_run(mocker):
     mock_run = mocker.patch(
-        "pipe_anchorages.cli.commands.port_transition_messages.thin_port_messages_pipeline.run",
+        "pipe_anchorages.cli.commands.anchorage_transition_messages"
+        ".thin_port_messages_pipeline.run",
         return_value=0,
     )
 
@@ -34,20 +37,21 @@ def test_cli_executes_run(mocker):
     config = mock_run.call_args[0][0]
     assert config.bq_in_named_anchorages == "project.dataset.anchorages"
     assert config.bq_in_messages == "project.dataset.messages"
-    assert config.bq_out_port_transition_messages == "project.dataset.output"
+    assert config.bq_out_anchorage_transition_messages == "project.dataset.output"
     assert config.start_date == "2024-01-01"
     assert config.end_date == "2024-01-07"
     assert config.wait_for_job is False
-    assert config.anchorage_entry_distance_km == 3.0
-    assert config.anchorage_exit_distance_km == 4.0
-    assert config.stopped_begin_speed_knots == 0.2
-    assert config.stopped_end_speed_knots == 0.5
+    assert config.anchorage_entry_dist_km == 3.0
+    assert config.anchorage_exit_dist_km == 4.0
+    assert config.stopping_speed_knots == 0.2
+    assert config.starting_speed_knots == 0.5
     assert config.minimum_port_gap_duration_minutes == 240.0
 
 
 def test_cli_requires_named_anchorages_table(mocker):
     mocker.patch(
-        "pipe_anchorages.cli.commands.port_transition_messages.thin_port_messages_pipeline.run",
+        "pipe_anchorages.cli.commands.anchorage_transition_messages"
+        ".thin_port_messages_pipeline.run",
         return_value=0,
     )
     args = [
@@ -63,19 +67,19 @@ def test_transition_options_are_shared_with_port_visits():
     # port-visits imports and reuses this method rather than redeclaring the
     # same 5 Options, so the two commands can't drift apart. Locking in the
     # exact flag names/defaults here protects that shared contract.
-    flags = {opt.flags[0]: opt for opt in PortTransitionMessages.transition_options()}
+    flags = {opt.flags[0]: opt for opt in AnchorageTransitionMessages.transition_options()}
 
     assert set(flags) == {
-        "--anchorage-entry-distance-km",
-        "--anchorage-exit-distance-km",
-        "--stopped-begin-speed-knots",
-        "--stopped-end-speed-knots",
+        "--anchorage-entry-dist-km",
+        "--anchorage-exit-dist-km",
+        "--stopping-speed-knots",
+        "--starting-speed-knots",
         "--minimum-port-gap-duration-minutes",
     }
-    assert flags["--anchorage-entry-distance-km"].default == 3.0
-    assert flags["--anchorage-exit-distance-km"].default == 4.0
-    assert flags["--stopped-begin-speed-knots"].default == 0.2
-    assert flags["--stopped-end-speed-knots"].default == 0.5
+    assert flags["--anchorage-entry-dist-km"].default == 3.0
+    assert flags["--anchorage-exit-dist-km"].default == 4.0
+    assert flags["--stopping-speed-knots"].default == 0.2
+    assert flags["--starting-speed-knots"].default == 0.5
     assert flags["--minimum-port-gap-duration-minutes"].default == 240.0
 
 
@@ -91,10 +95,10 @@ def test_gfw_pipeline_resolves_project_and_labels_from_config():
     # *global* scan of every currently-imported PipelineOptions subclass -- safe in
     # a real single-command process, but collides here with this same test *session*
     # also importing other not-yet-migrated pipelines' *Options(PipelineOptions)
-    # classes (anchorage_options.py and friends), which still redeclare overlapping
-    # flag names like --output_table. Not a production risk: each CLI invocation is
-    # its own process, and those sibling classes are only ever lazily imported when
-    # their own (still legacy) commands are actually invoked.
+    # classes (name_anchorage_options.py and friends), which still redeclare
+    # overlapping flag names like --output_table. Not a production risk: each CLI
+    # invocation is its own process, and those sibling classes are only ever lazily
+    # imported when their own (still legacy) commands are actually invoked.
     labels = {"team": "pipeline", "env": "prod"}
 
     gfw_pipeline = Pipeline(
@@ -118,22 +122,26 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     #
     # Only patches Pipeline itself, not the Beam transforms downstream -- those
     # build a real DAG against a mocked Pipeline and fail past the point this test
-    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock), which
-    # is expected and ignored here.
+    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock, or a
+    # bare PipelineOptions() call that picks up every currently-imported
+    # PipelineOptions subclass -- including sibling, not-yet-migrated ones like
+    # NameAnchorageOptions -- and fails parsing pytest's own argv against their
+    # union; SystemExit, not Exception, so it needs its own except clause below),
+    # which is expected and ignored here.
     mock_pipeline_cls = mocker.patch("pipe_anchorages.thin_port_messages_pipeline.Pipeline")
 
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
         bq_in_named_anchorages="project.dataset.anchorages",
-        bq_out_port_transition_messages="project.dataset.output",
+        bq_out_anchorage_transition_messages="project.dataset.output",
         start_date="2024-01-01",
         end_date="2024-01-07",
         ssvid_filter=None,
         wait_for_job=False,
-        anchorage_entry_distance_km=3.0,
-        anchorage_exit_distance_km=4.0,
-        stopped_begin_speed_knots=0.2,
-        stopped_end_speed_knots=0.5,
+        anchorage_entry_dist_km=3.0,
+        anchorage_exit_dist_km=4.0,
+        stopping_speed_knots=0.2,
+        starting_speed_knots=0.5,
         minimum_port_gap_duration_minutes=240.0,
         labels={"team": "pipeline"},
         unknown_unparsed_args=[],
@@ -142,7 +150,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
 
     try:
         thin_port_messages_pipeline.run(config)
-    except Exception:
+    except (Exception, SystemExit):
         pass
 
     mock_pipeline_cls.assert_called_once_with(

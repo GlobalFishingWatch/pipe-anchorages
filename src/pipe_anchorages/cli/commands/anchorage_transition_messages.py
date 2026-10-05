@@ -27,27 +27,29 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_BQ_IN_NAMED_ANCHORAGES = "BigQuery table with named anchorages."
 HELP_BQ_IN_MESSAGES = "BigQuery table to pull position messages from."
-HELP_BQ_OUT_PORT_TRANSITION_MESSAGES = "BigQuery table in which to store the filtered messages."
+HELP_BQ_OUT_ANCHORAGE_TRANSITION_MESSAGES = (
+    "BigQuery table in which to store the filtered messages."
+)
 HELP_START_DATE = "First date to look for entry/exit events."
 HELP_END_DATE = "Last date (inclusive) to look for entry/exit events."
 HELP_SSVID_FILTER = (
     "Subquery or list of ssvid to limit processing to. If prefixed by @, load from given path."
 )
 HELP_WAIT_FOR_JOB = "Wait until the job finishes before returning."
-HELP_ANCHORAGE_ENTRY_DISTANCE_KM = "Max distance (km) from an anchorage to count as an entry."
-HELP_ANCHORAGE_EXIT_DISTANCE_KM = "Min distance (km) from an anchorage to count as an exit."
-HELP_STOPPED_BEGIN_SPEED_KNOTS = "Speed (knots) below which a vessel is considered stopped."
-HELP_STOPPED_END_SPEED_KNOTS = "Speed (knots) above which a stopped vessel is moving again."
+HELP_ENTRY_DIST_KM = "Max distance (km) from an anchorage to count as an entry."
+HELP_EXIT_DIST_KM = "Min distance (km) from an anchorage to count as an exit."
+HELP_STOPPING_KNOTS = "Speed (knots) below which a vessel is considered stopped."
+HELP_STARTING_KNOTS = "Speed (knots) above which a stopped vessel is moving again."
 HELP_MINIMUM_PORT_GAP_DURATION_MINUTES = (
     "Minimum gap (minutes) between two records for them to count as separate port visits."
 )
 
 
-class PortTransitionMessages(Command):
+class AnchorageTransitionMessages(Command):
 
     @property
     def name(self):
-        return "port-transition-messages"
+        return "anchorage-transition-messages"
 
     @property
     def description(self):
@@ -62,30 +64,10 @@ class PortTransitionMessages(Command):
         two can never drift apart.
         """
         return [
-            Option(
-                "--anchorage-entry-distance-km",
-                type=float,
-                default=3.0,
-                help=HELP_ANCHORAGE_ENTRY_DISTANCE_KM,
-            ),
-            Option(
-                "--anchorage-exit-distance-km",
-                type=float,
-                default=4.0,
-                help=HELP_ANCHORAGE_EXIT_DISTANCE_KM,
-            ),
-            Option(
-                "--stopped-begin-speed-knots",
-                type=float,
-                default=0.2,
-                help=HELP_STOPPED_BEGIN_SPEED_KNOTS,
-            ),
-            Option(
-                "--stopped-end-speed-knots",
-                type=float,
-                default=0.5,
-                help=HELP_STOPPED_END_SPEED_KNOTS,
-            ),
+            Option("--anchorage-entry-dist-km", type=float, default=3.0, help=HELP_ENTRY_DIST_KM),
+            Option("--anchorage-exit-dist-km", type=float, default=4.0, help=HELP_EXIT_DIST_KM),
+            Option("--stopping-speed-knots", type=float, default=0.2, help=HELP_STOPPING_KNOTS),
+            Option("--starting-speed-knots", type=float, default=0.5, help=HELP_STARTING_KNOTS),
             Option(
                 "--minimum-port-gap-duration-minutes",
                 type=float,
@@ -105,10 +87,10 @@ class PortTransitionMessages(Command):
             ),
             Option("--bq-in-messages", type=str, required=True, help=HELP_BQ_IN_MESSAGES),
             Option(
-                "--bq-out-port-transition-messages",
+                "--bq-out-anchorage-transition-messages",
                 type=str,
                 required=True,
-                help=HELP_BQ_OUT_PORT_TRANSITION_MESSAGES,
+                help=HELP_BQ_OUT_ANCHORAGE_TRANSITION_MESSAGES,
             ),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
