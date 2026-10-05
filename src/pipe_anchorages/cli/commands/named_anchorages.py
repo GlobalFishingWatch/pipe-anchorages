@@ -17,13 +17,13 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_IN_ANCHORAGE_POINTS = "BigQuery table with unnamed anchorage points to assign names to."
-HELP_OUT_NAMED_ANCHORAGES = "BigQuery table in which to store the named anchorages."
+HELP_IN_POINTS = "BigQuery table with unnamed anchorage points to assign names to."
+HELP_OUT_NAMED = "BigQuery table in which to store the named anchorages."
 HELP_SHAPEFILE = "Path to the shapefile used to assign a country (iso3) to each anchorage."
-HELP_LABEL_DISTANCE_KM = (
+HELP_LABEL_DIST_KM = (
     "Max distance (km) from a reference place for an anchorage to inherit its label."
 )
-HELP_SUBLABEL_DISTANCE_KM = (
+HELP_SUBLABEL_DIST_KM = (
     "Max distance (km) from a reference place for an anchorage to also inherit its sublabel."
 )
 HELP_ANCHORAGE_OVERRIDES = (
@@ -53,26 +53,11 @@ class NamedAnchorages(Command):
     @property
     def options(self):
         return [
-            Option(
-                "--bq-in-anchorage-points",
-                type=str,
-                required=True,
-                help=HELP_IN_ANCHORAGE_POINTS,
-            ),
-            Option(
-                "--bq-out-named-anchorages",
-                type=str,
-                required=True,
-                help=HELP_OUT_NAMED_ANCHORAGES,
-            ),
+            Option("--bq-in-anchorage-points", type=str, required=True, help=HELP_IN_POINTS),
+            Option("--bq-out-named-anchorages", type=str, required=True, help=HELP_OUT_NAMED),
             Option("--shapefile", type=str, default="EEZ_Land_v3_202030.shp", help=HELP_SHAPEFILE),
-            Option("--label-distance-km", type=float, default=4.0, help=HELP_LABEL_DISTANCE_KM),
-            Option(
-                "--sublabel-distance-km",
-                type=float,
-                default=1.0,
-                help=HELP_SUBLABEL_DISTANCE_KM,
-            ),
+            Option("--label-distance-km", type=float, default=4.0, help=HELP_LABEL_DIST_KM),
+            Option("--sublabel-distance-km", type=float, default=1.0, help=HELP_SUBLABEL_DIST_KM),
             Option(
                 "--anchorage-overrides",
                 type=str,
