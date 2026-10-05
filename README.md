@@ -70,24 +70,24 @@ side stage that cross-references the results against other GFW pipelines' event 
 
 ```mermaid
 flowchart TD
-    AP["`**anchorage-points**<br/>cluster stationary positions`"]
-    NA["`**named-anchorages**<br/>assign names`"]
-    TM["`**transition-messages**<br/>flag candidate port transitions`"]
-    PV["`**port-visits**<br/>resolve entry/exit events`"]
-    CV["`**confidence-voyages**<br/>group visits into voyages`"]
-    AVI["`**anchorages-visited-info**<br/>cross-reference other event types`"]
+    AP{{"<b>anchorage-points</b><br/>cluster stationary positions"}}
+    NA{{"<b>named-anchorages</b><br/>assign names"}}
+    TM{{"<b>transition-messages</b><br/>flag candidate port transitions"}}
+    PV{{"<b>port-visits</b><br/>resolve entry/exit events"}}
+    CV{{"<b>confidence-voyages</b><br/>group visits into voyages"}}
+    AVI{{"<b>anchorages-visited-info</b><br/>cross-reference other event types"}}
 
-    subgraph OTHER["`**Other GFW pipelines**`"]
+    subgraph OTHER["<b>Other GFW pipelines</b>"]
         LOI[("loitering events<br/>(pipe-loitering)")]
         ENC[("encounter events<br/>(pipe-encounters)")]
         GAP[("gap events<br/>(pipe-gaps)")]
     end
 
-    AP --> NA --> TM --> PV --> CV
-    NA --> AVI
-    LOI --> AVI
-    ENC --> AVI
-    GAP --> AVI
+    AP ==> NA ==> TM ==> PV ==> CV
+    NA ==> AVI
+    LOI ==> AVI
+    ENC ==> AVI
+    GAP ==> AVI
 ```
 
 <div align="justify">
