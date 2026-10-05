@@ -42,7 +42,7 @@ def test_cli_executes_run(mocker):
     assert config.anchorage_exit_dist_km == 4.0
     assert config.stopping_speed_knots == 0.2
     assert config.starting_speed_knots == 0.5
-    assert config.minimum_port_gap_duration_minutes == 240.0
+    assert config.min_anchorage_gap_minutes == 240.0
 
 
 def test_cli_requires_anchorage_transition_messages_table(mocker):
@@ -89,7 +89,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         anchorage_exit_dist_km=4.0,
         stopping_speed_knots=0.2,
         starting_speed_knots=0.5,
-        minimum_port_gap_duration_minutes=240.0,
+        min_anchorage_gap_minutes=240.0,
         labels={"team": "pipeline"},
         unknown_unparsed_args=[],
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},

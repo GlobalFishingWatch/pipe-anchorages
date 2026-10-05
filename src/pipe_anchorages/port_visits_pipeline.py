@@ -168,7 +168,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
             anchorage_exit_dist=config.anchorage_exit_dist_km,
             stopped_begin_speed=config.stopping_speed_knots,
             stopped_end_speed=config.starting_speed_knots,
-            min_gap_minutes=config.minimum_port_gap_duration_minutes,
+            min_gap_minutes=config.min_anchorage_gap_minutes,
             end_time=end_time,
         )
         | CreatePortVisits(config.max_inter_seg_dist_nm)
