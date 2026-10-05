@@ -33,6 +33,8 @@ class ConfidenceVoyages(Command):
     def options(self):
         return [
             Option("--bq-in-port-visits", type=str, required=True, help=HELP_BQ_IN_PORT_VISITS),
+            Option("--bq-out-voyages", type=str, required=True, help=HELP_BQ_OUT_VOYAGES),
+            Option("--project", type=str, required=True, help=HELP_PROJECT),
             Option(
                 "--min-confidence",
                 type=str,
@@ -40,8 +42,6 @@ class ConfidenceVoyages(Command):
                 choices=["2", "3", "4"],
                 help=HELP_MIN_CONFIDENCE,
             ),
-            Option("--bq-out-voyages", type=str, required=True, help=HELP_BQ_OUT_VOYAGES),
-            Option("--project", type=str, required=True, help=HELP_PROJECT),
         ]
 
     @classmethod
