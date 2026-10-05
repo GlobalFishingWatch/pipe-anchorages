@@ -69,7 +69,7 @@ side stage that cross-references the results against other GFW pipelines' event 
 </div>
 
 ```mermaid
-flowchart LR
+flowchart TD
     AP["anchorage-points<br/>cluster stationary positions"]
     NA["named-anchorages<br/>assign names"]
     TM["transition-messages<br/>flag candidate port transitions"]
