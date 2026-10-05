@@ -16,13 +16,13 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_IN_TRANSITION_MESSAGES = "BigQuery table with filtered transition messages."
+HELP_MESSAGES = "BigQuery table with filtered transition messages."
 HELP_IN_SEGMENT_INFO = "BigQuery table mapping vessel_id to seg_id, one vessel_id per seg_id."
 HELP_OUT_PORT_VISITS = "BigQuery table in which to store the port visits."
 HELP_START_DATE = "First date (inclusive) to generate visits."
 HELP_END_DATE = "Last date (inclusive) to generate visits."
 HELP_BAD_SEGS = "Subquery producing segment ids of bad segments to exclude."
-HELP_MAX_INTER_SEG_DIST_NM = (
+HELP_INTERSEG_DIST = (
     "Segments more than this distance apart will not be joined when creating visits."
 )
 HELP_WAIT_FOR_JOB = "Wait until the job finishes before returning."
@@ -41,23 +41,13 @@ class PortVisits(Command):
     @property
     def options(self):
         return [
-            Option(
-                "--bq-in-transition-messages",
-                type=str,
-                required=True,
-                help=HELP_IN_TRANSITION_MESSAGES,
-            ),
+            Option("--bq-in-transition-messages", type=str, required=True, help=HELP_MESSAGES),
             Option("--bq-in-segment-info", type=str, required=True, help=HELP_IN_SEGMENT_INFO),
             Option("--bq-out-port-visits", type=str, required=True, help=HELP_OUT_PORT_VISITS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
             Option("--bad-segs", type=str, help=HELP_BAD_SEGS),
-            Option(
-                "--max-inter-seg-dist-nm",
-                type=float,
-                default=60.0,
-                help=HELP_MAX_INTER_SEG_DIST_NM,
-            ),
+            Option("--max-inter-seg-dist-nm", type=float, default=60.0, help=HELP_INTERSEG_DIST),
             Option("--wait-for-job", type=bool, default=False, help=HELP_WAIT_FOR_JOB),
             *TransitionMessages.transition_options(),
         ]
