@@ -1,7 +1,8 @@
 <h1 align="center" style="border-bottom: none;"> pipe-anchorages </h1>
+
 <p align="center">
-  <a href="https://codecov.io/gh/GlobalFishingWatch/pipe-anchorages" > 
-     <img alt="Coverage" src="https://codecov.io/gh/GlobalFishingWatch/pipe-anchorages/graph/badge.svg?token=FSPWG081MD"/> 
+  <a href="https://codecov.io/gh/GlobalFishingWatch/pipe-anchorages" >
+     <img alt="Coverage" src="https://codecov.io/gh/GlobalFishingWatch/pipe-anchorages/graph/badge.svg?token=FSPWG081MD"/>
   </a>
   <a>
     <img alt="Python versions" src="https://img.shields.io/badge/python-3.12%20%7C%203.13-blue ">
@@ -11,323 +12,209 @@
   </a>
 </p>
 
+Finds where vessels anchor, names those places, and derives the port visits and voyages vessels
+make between them -- all from AIS position data.
 
-This repository contains pipelines for finding anchorages and associated port-visit events.
+[pipe-docs]: https://github.com/GlobalFishingWatch/pipe-docs
+[preparing the development environment]: https://github.com/GlobalFishingWatch/pipe-docs/blob/main/CONTRIBUTING.md#preparing-the-development-environment
+[git workflow]: https://github.com/GlobalFishingWatch/pipe-docs/blob/main/CONTRIBUTING.md#git-workflow
+[gfw-common]: https://github.com/GlobalFishingWatch/gfw-common
+[pipe-loitering]: https://github.com/GlobalFishingWatch/pipe-loitering
+[pipe-encounters]: https://github.com/GlobalFishingWatch/pipe-encounters
+[pipe-gaps]: https://github.com/GlobalFishingWatch/pipe-gaps
+[Makefile]: Makefile
 
-[CONTRIBUTING.md]: CONTRIBUTING.md
+**Table of contents**:
+- [Introduction](#introduction)
+- [How it works](#how-it-works)
+- [Development](#development)
+- [Usage](#usage)
+    * [Using the CLI](#using-the-cli)
+    * [Config files](#config-files)
+- [References](#references)
 
-## How to Contribute
+## Introduction
 
-Please read the guidelines in [CONTRIBUTING.md].
+<div align="justify">
 
-## CLI
+Global Fishing Watch processes billions of AIS position messages to track vessel activity at
+sea. [[1]](#1) A large share of that activity isn't *at* sea at all: vessels spend much of their
+time stopped near the coast -- at a port, an anchorage, a transshipment point -- before heading
+back out. Knowing *where* those stops happen, *what* that place is called, and *when* a vessel
+entered and left it is the basis for a wide range of downstream analysis: port-call statistics,
+fishing-access agreements, labor and IUU-fishing risk assessments, and more.
 
-The pipeline includes a CLI that can be used to start both local test runs and
-remote full runs. Just run 
-```shell
-docker compose run pipeline [anchorages|name_anchorages|port_events] --help`
-```
-and follow the instructions there.
+`pipe-anchorages` answers those questions. It clusters stationary vessel positions near the coast
+into candidate anchorage points, assigns each one a human-readable name, and then re-walks each
+vessel's full track against those named anchorages to detect port-visit entry/exit events and the
+voyages between them. The clustering thresholds, naming priority, and entry/exit/stop-speed rules
+this repository implements are the same ones GFW publishes as its own methodology for this
+dataset. [[2]](#2) [[3]](#3)
 
-### Updating the Named Anchorages
+</div>
 
-The most common manual task is updating the named anchorages, which needs to be done whenever
-anchorage overrides is edited. If you need to build and upload a new docker container use the
-following commands:
+## How it works
 
-```shell
-    docker build -f Dockerfile -t gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test .
-    docker push gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test
-```
+<div align="justify">
 
-Then run:
-```shell
-docker-compose run name_anchorages \
-    --job_name name-anchorages \
-    --input_table CURRENT_UNNAMED_ANCHORAGES \
-    --output_table TARGET_DATASET.TARGET_TABLE \
-    --config ./name_anchorages_cfg.yaml \
-    --max_num_workers 100 \
-    --fishing_ssvid_list gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
-    --project world-fishing-827 \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-120d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1 \
-    --sdk_container_image gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test \
-    --experiments=use_runner_v2
-```
-where `CURRENT_UNNAMED_ANCHORAGES` is the current (typically most recent) unnamed anchorages
-table and `TARGET_DATASET.TARGET_TABLE` is where the unnamed anchorages are stored.  I often
-put this in a temporary table for inspection, then copy it to it's final destination.
+The pipeline is a chain of five stages, each its own CLI command (see [Usage](#usage)), plus one
+side stage that cross-references the results against other GFW pipelines' event data:
 
+</div>
 
-### Creating Anchorage Points
+```mermaid
+flowchart LR
+    AP["anchorage-points<br/>cluster stationary positions"]
+    NA["named-anchorages<br/>assign names"]
+    TM["transition-messages<br/>flag candidate port transitions"]
+    PV["port-visits<br/>resolve entry/exit events"]
+    CV["confidence-voyages<br/>group visits into voyages"]
+    AVI["anchorages-visited-info<br/>cross-reference other event types"]
+    LOI[("loitering events<br/>(pipe-loitering)")]
+    ENC[("encounter events<br/>(pipe-encounters)")]
+    GAP[("AIS gap events<br/>(pipe-gaps)")]
 
-
-Run:
-```shell
-docker compose run anchorages \
-    --job_name JOB-NAME \
-    --start_date YYYY-MM-DD \
-    --end_date YYYY-MM-DD \
-    --messages_thinned_table DATASET.messages_thinned_ \
-    --output_table OUTPUT_DATASET_NAME.OUTPUT_TABLE_NAME \
-    --config anchorage_cfg.yaml \
-    --max_num_workers MAX_WORKER \
-    --fishing_ssvid_list GCS_LOCATION_OF_FISHING_SSVID_LIST \
-    --project PROJECT-NAME \
-    --requirements_file requirements-worker-frozen.txt \
-    --staging_location GCS_STAGING_LOCATION \
-    --temp_location GCS_TEMPLOCATION \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --worker_machine_type=custom-1-13312-ext \
-    --disk_size_gb 200
+    AP --> NA --> TM --> PV --> CV
+    NA --> AVI
+    LOI --> AVI
+    ENC --> AVI
+    GAP --> AVI
 ```
 
-Standard dataflow options must also be specified.
+<div align="justify">
 
-For example, to run all years:
-```shell
-docker compose run anchorages \
-    --job_name unnamed-anchorages \
-    --start_date 2012-01-01 \
-    --end_date 2019-06-30 \
-    --messages_thinned_table pipe_production_b.messages_thinned_ \
-    --output_table machine_learning_dev_ttl_120d.unnamed_anchorages_v20190816 \
-    --config anchorage_cfg.yaml \
-    --max_num_workers 300 \
-    --fishing_ssvid_list gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
-    --project world-fishing-827 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-120d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --worker_machine_type=custom-1-13312-ext \
-    --disk_size_gb 200
-```
+- **`anchorage-points`** clusters stationary AIS positions near the coast into candidate anchorage
+  points -- a purely behavioral/geometric entity (an S2-cell cluster where enough distinct vessels
+  sat still for long enough), independent of any port database. An anchorage exists whether or not
+  it's near a known port.
+- **`named-anchorages`** assigns each anchorage point a human-readable name, by nearest-match
+  lookup against reference port and place gazetteers, with a manually-curated override list
+  (corrections, forced removals) taking priority over the automated lookup.
+- **`transition-messages`** flags candidate state transitions -- entering/exiting a named anchorage,
+  stopping/starting to move within one -- from raw position messages, processed in bounded
+  per-segment/per-day windows. Because it only sees one window at a time, it conservatively keeps
+  ambiguous boundary records rather than discarding them.
+- **`port-visits`** re-processes those candidate transitions against each vessel's *complete* track
+  history, resolving the boundary cases `transition-messages` couldn't and assembling the final
+  port-visit entry/exit events.
+- **`confidence-voyages`** groups consecutive port visits into voyages -- the span between one
+  visit's end and the next visit's start -- at a configurable minimum confidence level.
+- **`anchorages-visited-info`** is independent of that chain: it cross-references the named
+  anchorages dataset against loitering ([pipe-loitering]), encounter ([pipe-encounters]), and
+  AIS-gap ([pipe-gaps]) events, producing a reference table of boolean presence indicators per
+  anchorage.
 
-Or to run a minimal testing run:
-```shell
-docker compose run anchorages \
-    --job_name unnamed-anchorages \
-    --start_date 2017-01-01 \
-    --end_date 2017-01-31 \
-    --messages_thinned_table machine_learning_dev_ttl_120d.messages_segmented_ \
-    --output_table machine_learning_dev_ttl_120d.unnamed_anchorages_test \
-    --config anchorage_cfg.yaml \
-    --max_num_workers 200 \
-    --fishing_ssvid_list gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
-    --project world-fishing-827 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-120d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --worker_machine_type=custom-1-13312-ext \
-    --disk_size_gb 200
-```
-*Note that `fishing_ssvid_list` should refer to a file on GCS.*
+</div>
 
+## Development
 
-### Naming Anchorage Points
+<div align="justify">
 
-After a set of anchorages is created, names are assigned using `name_anchorages_main`
+This repository follows the conventions documented in [pipe-docs] (GFW's shared documentation hub
+for pipeline repositories). See [preparing the development environment] and [git workflow] there
+for the common steps -- cloning, Docker setup, installing dependencies, pre-commit hooks, and how
+branches/PRs are managed.
 
-For example:
+This repository's CLI and Apache Beam pipeline infrastructure are built on [gfw-common].
 
-```shell
-docker-compose run name_anchorages \
-    --job_name name-anchorages \
-    --input_table machine_learning_dev_ttl_120d.unnamed_anchorages_test \
-    --output_table machine_learning_dev_ttl_120d.named_anchorages_test \
-    --config ./name_anchorages_cfg.yaml \
-    --max_num_workers 200 \
-    --fishing_ssvid_list gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
-    --project world-fishing-827 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-120d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100
-```
+Once your environment is set up, the [Makefile] in this repository exposes the usual targets:
+`make docker-build`, `make docker-shell`, `make test`, `make format`, `make lint`, among others --
+run `make help` for the full list. No repository-specific system dependency is required beyond
+what [pipe-docs] already covers.
 
-or
+</div>
 
-```shell
-docker-compose run name_anchorages \
-    --job_name name-anchorages \
-    --input_table anchorages.unnamed_anchorages_v20190816 \
-    --output_table machine_learning_dev_ttl_120d.named_anchorages_v20210429 \
-    --config ./name_anchorages_cfg.yaml \
-    --max_num_workers 100 \
-    --fishing_ssvid_list gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
-    --project world-fishing-827 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-120d/anchorages/anchorages/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-120d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1
-```
+## Usage
 
-### Updating Port Events
+### Using the CLI
 
-#### Manually
+<div align="justify">
 
-To update a day of events, run, for example:
+`pipe-anchorages`'s CLI covers every stage of the pipeline. Run `pipe-anchorages -h` for the
+authoritative, up-to-date list, or `pipe-anchorages <command> -h` for a command's own parameters.
+
+</div>
+
+<table>
+<tr>
+<th width="1%" nowrap>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td width="1%" nowrap><code>anchorage&#8209;points</code></td>
+<td>Clusters stationary vessel positions near the coast into candidate (unnamed) anchorage
+points.</td>
+</tr>
+<tr>
+<td width="1%" nowrap><code>named&#8209;anchorages</code></td>
+<td>Assigns names to anchorage points, from a reference port/place gazetteer and a manual
+override list.</td>
+</tr>
+<tr>
+<td width="1%" nowrap><code>transition&#8209;messages</code></td>
+<td>Flags candidate port-related state transitions from raw position messages near named
+anchorages.</td>
+</tr>
+<tr>
+<td width="1%" nowrap><code>port&#8209;visits</code></td>
+<td>Resolves candidate transitions into final port-visit entry/exit events, using each vessel's
+complete track.</td>
+</tr>
+<tr>
+<td width="1%" nowrap><code>confidence&#8209;voyages</code></td>
+<td>Groups consecutive port visits into voyages, at a given minimum confidence level.</td>
+</tr>
+<tr>
+<td width="1%" nowrap><code>anchorages&#8209;visited&#8209;info</code></td>
+<td>Cross-references named anchorages against loitering/encounter/AIS-gap events into a boolean
+presence-indicator table.</td>
+</tr>
+</table>
+
+<div align="justify">
+
+Example:
+
+</div>
 
 ```shell
-docker-compose run thin_port_messages \
-    --job_name porteventstest \
-    --input_table pipe_production_v20201001.position_messages_ \
-    --anchorage_table anchorages.named_anchorages_v20201104 \
-    --start_date 2018-01-01 \
-    --end_date 2018-01-07 \
-    --output_table machine_learning_dev_ttl_120d.port_visit_msgs_v20220927_ \
-    --project world-fishing-827 \
-    --max_num_workers 100 \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1 \
-    --sdk_container_image gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test \
-    --experiments=use_runner_v2
+pipe-anchorages anchorage-points \
+    --bq-in-messages world-fishing-827.pipe_production_v20201001.position_messages_ \
+    --bq-in-segments world-fishing-827.pipe_production_v20201001.segments_ \
+    --bq-out-anchorage-points world-fishing-827.scratch_ttl30d.anchorage_points \
+    --start-date 2024-01-01 --end-date 2024-01-31 \
+    --gcs-in-fishing-ssvids gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt
 ```
+
+### Config files
+
+<div align="justify">
+
+Besides plain CLI flags, every command also accepts a config file via the built-in `-c`/
+`--config-file` flag (YAML or JSON), with CLI flags taking precedence over matching config-file
+keys. A runnable example for each command lives under `config/<command-name>/`, e.g.
+[config/anchorage-points/bq-1-month.yaml](config/anchorage-points/bq-1-month.yaml) -- use these
+as a starting point rather than hand-writing one from scratch.
 
 ```shell
-docker-compose run port_visits \
-    --job_name portmessagestest \
-    --thinned_message_table machine_learning_dev_ttl_120d.port_visit_msgs_v20220927_ \
-    --end_date 2018-01-07 \
-    --vessel_id_table pipe_production_v20201001.segment_info \
-    --anchorage_table anchorages.named_anchorages_v20201104 \
-    --output_table machine_learning_dev_ttl_120d.port_visits_v20220927_ \
-    --project world-fishing-827 \
-    --max_num_workers 100 \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1 \
-    --sdk_container_image gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test \
-    --experiments=use_runner_v2 \
-    --bad_segs "(SELECT DISTINCT seg_id FROM world-fishing-827.gfw_research.pipe_v20201001_segs WHERE overlapping_and_short)"
+pipe-anchorages anchorage-points -c config/anchorage-points/bq-1-month.yaml
 ```
 
-```shell
-docker-compose run port_events \
-    --job_name porteventstest \
-    --input_table pipe_production_v20201001.position_messages_ \
-    --anchorage_table anchorages.named_anchorages_v20201104 \
-    --start_date 2018-01-01 \
-    --end_date 2018-12-31 \
-    --output_table machine_learning_dev_ttl_120d.raw_port_events_v20210506_ \
-    --state_table machine_learning_dev_ttl_120d.port_port_state_v20210506_ \
-    --project world-fishing-827 \
-    --max_num_workers 100 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1 \
-    --ssvid_filter '(select case(vi_ssvid as string) from machine_learning_dev_ttl_120d.vessel_list_new_visits_5_6_21)'
-```
+</div>
 
-```shell
-docker-compose run port_events \
-    --job_name porteventstest \
-    --input_table pipe_production_v20201001.position_messages_ \
-    --anchorage_table anchorages.named_anchorages_v20201104 \
-    --start_date 2017-01-01 \
-    --end_date 2021-4-30 \
-    --output_table machine_learning_dev_ttl_120d.port_event_test_v20210506_events_ \
-    --state_table machine_learning_dev_ttl_120d.port_event__test_v20210506_batch_state_ \
-    --project world-fishing-827 \
-    --max_num_workers 100 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1
-```
+## References
 
-For a full list of options run:
+<a id="1">[1]</a> Kroodsma, D. A., Mayorga, J., Hochberg, T., Miller, N. A., Boerder, K., Ferretti,
+F., Wilson, A., Bergman, B., White, T. D., Block, B. A., Woods, P., Sullivan, B., Costello, C. J.,
+Worm, B. (2018). Tracking the global footprint of fisheries. Science, 359(6378), 904-908.
+https://doi.org/10.1126/science.aao5646
 
-    python -m port_events -h
+<a id="2">[2]</a> Global Fishing Watch. Anchorages, Ports and Voyages Data: methodology for
+anchorage detection, naming, and port-visit identification.
+https://globalfishingwatch.org/datasets-and-code-anchorages/
 
-
-To create a corresponding day of visits do:
-```shell
-docker-compose run port_visits \
-    --job_name portvisitstest \
-    --events_table machine_learning_dev_ttl_120d.raw_port_events_v20210506_ \
-    --vessel_id_table pipe_production_v20201001.segment_info \
-    --bad_segs_table "(SELECT DISTINCT seg_id FROM world-fishing-827.gfw_research.pipe_v20201001_segs WHERE overlapping_and_short)" \
-    --start_date 2018-01-01 \
-    --end_date 2018-12-31 \
-    --output_table machine_learning_dev_ttl_120d.port_visit_test_v20210506_stableid \
-    --project world-fishing-827 \
-    --max_num_workers 50 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1
-```
-
-```shell
-docker-compose run port_visits \
-    --job_name portvisitstest \
-    --events_table machine_learning_dev_ttl_120d.port_event_test_v20210506_events_ \
-    --vessel_id_table pipe_production_v20201001.segment_info \
-    --bad_segs_table "(SELECT DISTINCT seg_id FROM world-fishing-827.gfw_research.pipe_v20201001_segs WHERE overlapping_and_short)" \
-    --start_date 2017-01-01 \
-    --end_date 2021-04-30 \
-    --output_table machine_learning_dev_ttl_120d.port_visit_test_v20210506_stableid \
-    --project world-fishing-827 \
-    --max_num_workers 50 \
-    --requirements_file requirements-worker-frozen.txt \
-    --project world-fishing-827 \
-    --staging_location gs://machine-learning-dev-ttl-30d/anchorages/portevents/output/staging \
-    --temp_location gs://machine-learning-dev-ttl-30d/anchorages/temp \
-    --setup_file ./setup.py \
-    --runner DataflowRunner \
-    --disk_size_gb 100 \
-    --region us-central1
-```
-
-
-### Config file
-
-Parameters controlling the generation of anchorages and port_visits is stored
-in a `.yaml` file. By default this information is read from `config.yaml`, but
-a different configuration can be specified use the `--config` flag.
+<a id="3">[3]</a> Global Fishing Watch. Ports and Voyages of Fishing Vessels (research project).
+https://globalfishingwatch.org/research-project-ports-and-voyages/
 
 # License
 
