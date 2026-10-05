@@ -86,24 +86,8 @@ def run(args):
     return cli.execute(args)
 
 
-# Legacy snake_case aliases, kept so existing callers (docker-compose, DAGs, ...) don't break.
-SUBCOMMANDS = {
-    "name_anchorages": lambda args: run(["named-anchorages"] + args),
-    "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
-    "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
-    "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
-    "port_visits": lambda args: run(["port-visits"] + args),
-    "anchorages": lambda args: run(["anchorage-locations"] + args),
-}
-
-
 def main():
-    args = sys.argv[1:]
-
-    if args and args[0] in SUBCOMMANDS:
-        SUBCOMMANDS[args[0]](args[1:])
-    else:
-        run(args)
+    run(sys.argv[1:])
 
 
 if __name__ == "__main__":
