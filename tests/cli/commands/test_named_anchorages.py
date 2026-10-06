@@ -1,4 +1,5 @@
 import argparse
+import logging
 
 from types import SimpleNamespace
 
@@ -74,9 +75,13 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     )
 
     try:
+        # Silences the real (expected, ignored) DAG's own noisy logging -- see comment above.
+        logging.disable(logging.CRITICAL)
         name_anchorages_pipeline.run(config)
     except Exception:
         pass
+    finally:
+        logging.disable(logging.NOTSET)
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],
