@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from gfw.common.config import PipelineConfig
 
@@ -11,7 +11,6 @@ class AnchoragesVisitedInfoConfig(PipelineConfig):
     bq_input_ais_gaps: str
     bq_input_named_anchorages: str
     bq_output: str
-    labels: dict = field(default_factory=dict)
     project: str = None
     dry_run: bool = False
 
