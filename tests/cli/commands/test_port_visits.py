@@ -102,7 +102,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],
-        labels=["team=pipeline"],
+        labels={"team": "pipeline"},
         project="test-project",
         max_num_workers=50,
     )
