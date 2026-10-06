@@ -56,9 +56,7 @@ def create_queries(args, start_date, end_date):
 
 def from_msg(x):
     x_new = x.copy()
-    x_new["timestamp"] = datetime.datetime.utcfromtimestamp(x_new["timestamp"]).replace(
-        tzinfo=pytz.utc
-    )
+    x_new["timestamp"] = datetime.datetime.fromtimestamp(x_new["timestamp"], datetime.UTC)
     ssvid = x_new.pop("ssvid")
     seg_id = x_new.pop("seg_id")
     vessel_id = x_new.pop("vessel_id")
