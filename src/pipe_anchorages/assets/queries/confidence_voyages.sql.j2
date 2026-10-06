@@ -1,9 +1,9 @@
-#StandardSql
-# A "voyage" is defined as the combination of a vessel's previous port_visit's end and next port_visit's start.
-# Every vessel's first voyage has an unknown start, so the `trip_start_*` columns are NULL. Respectively, each vessel's last voyage has an undefined end, so the `trip_end_*` columns are NULL.
+-- A "voyage" is the combination of a vessel's previous port visit's end and its next port visit's start.
+-- Every vessel's first voyage has an unknown start, so the `trip_start_*` columns are NULL.
+-- Likewise, each vessel's last voyage has an undefined end, so the `trip_end_*` columns are NULL.
 
 WITH
-port_vist_rownumber AS (
+port_visit_rownumber AS (
   SELECT
     ssvid,
     vessel_id,
@@ -42,8 +42,8 @@ bq_voyages AS (
         FORMAT('%012x', TIMESTAMP_DIFF(previous_port_visit.end_timestamp, TIMESTAMP('1970-01-01'), MILLISECOND))
       )
     ) AS trip_id
-  FROM port_vist_rownumber next_port_visit
-  FULL JOIN port_vist_rownumber previous_port_visit
+  FROM port_visit_rownumber next_port_visit
+  FULL JOIN port_visit_rownumber previous_port_visit
   ON next_port_visit.vessel_id = previous_port_visit.vessel_id
   AND next_port_visit.rn = previous_port_visit.rn + 1
 )
