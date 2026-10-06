@@ -81,7 +81,7 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
         bq_client=bigquery.Client(
             project=cloud_options.project,
         ),
-        labels=dict([entry.split("=") for entry in cloud_options.labels]),
+        labels=config.labels or {},
     )
 
     bq_helper.ensure_table_exists(output_table)
@@ -95,7 +95,7 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
     pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
-        labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
+        labels=config.labels or None,
         **config.unknown_parsed_args,
         **kwargs,
     )

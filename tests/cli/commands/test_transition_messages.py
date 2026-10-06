@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 
 from types import SimpleNamespace
@@ -81,10 +82,12 @@ def test_transition_options_are_shared_with_port_visits():
 
 
 def test_pipeline_resolves_project_and_labels_from_config():
-    # thin_port_messages_pipeline.run() builds a Pipeline, and translates
-    # config.labels (a dict, from the CLI's shared --labels option) into the
-    # list-of-"key=value" strings GoogleCloudOptions.labels actually expects --
-    # this exercises that translation directly, without needing a full pipeline run.
+    # thin_port_messages_pipeline.run() builds a Pipeline, passing config.labels (a
+    # dict, from the CLI's shared --labels option) straight through --
+    # PipelineOptions.from_dictionary() JSON-encodes a dict value into a single
+    # --labels=<json> flag, which GoogleCloudOptions understands natively (same
+    # format as Beam's own documented --labels='{ "key": "value" }' usage). This
+    # exercises that translation directly, without needing a full pipeline run.
     #
     # Uses explicit kwargs (project=/runner=) rather than unparsed_args=, which is
     # what run() itself passes through in production for real Beam/Dataflow flags:
@@ -101,13 +104,13 @@ def test_pipeline_resolves_project_and_labels_from_config():
     pipeline = Pipeline(
         project="test-project",
         runner="DirectRunner",
-        labels=[f"{key}={value}" for key, value in labels.items()],
+        labels=labels,
     )
 
     cloud_options = pipeline.cloud_options
     assert isinstance(cloud_options, GoogleCloudOptions)
     assert cloud_options.project == "test-project"
-    assert sorted(cloud_options.labels) == ["env=prod", "team=pipeline"]
+    assert json.loads(cloud_options.labels[0]) == labels
 
 
 def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
@@ -156,7 +159,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],
-        labels=["team=pipeline"],
+        labels={"team": "pipeline"},
         project="test-project",
         max_num_workers=50,
     )
