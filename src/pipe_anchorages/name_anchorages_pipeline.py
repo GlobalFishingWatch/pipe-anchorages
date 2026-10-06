@@ -184,7 +184,7 @@ def create_query(config):
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
     pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
-        labels=[f"{key}={value}" for key, value in (config.labels or {}).items()],
+        labels=config.labels or None,
         **config.unknown_parsed_args,
         **kwargs,
     )
