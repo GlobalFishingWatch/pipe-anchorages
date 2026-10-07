@@ -130,12 +130,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
 
     pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
-        # Beam's GoogleCloudOptions wants labels as ["key=value"]; handing it the
-        # CLI's dict makes it json-stringify the whole thing, which later crashes
-        # cloud_to_labels() (no "=" to split on).
-        labels=[f"{key}={value}" for key, value in config.labels.items()]
-        if config.labels
-        else None,
+        labels=config.labels or None,
         **config.unknown_parsed_args,
         **kwargs,
     )
