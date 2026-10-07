@@ -1,5 +1,4 @@
 import argparse
-import logging
 
 from types import SimpleNamespace
 
@@ -49,18 +48,11 @@ def test_cli_requires_bq_out_named_anchorages(mocker):
         main.run(args)
 
 
-def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
+def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init):
     # Same forwarding contract as the other migrated pipelines: config-file keys
     # that aren't one of this command's own Options land in config.unknown_parsed_args,
     # and run() must forward that dict into Pipeline(**options), matching pipe-gaps'
     # PipelineFactory.
-    #
-    # Only patches Pipeline itself, not the Beam transforms downstream -- those build
-    # a real DAG against a mocked Pipeline and fail past the point this test cares
-    # about (e.g. apache_beam's own pickling of a DoFn against a Mock), which is
-    # expected and ignored here.
-    mock_pipeline_cls = mocker.patch("pipe_anchorages.name_anchorages_pipeline.Pipeline")
-
     config = SimpleNamespace(
         bq_in_anchorage_locations="project.dataset.anchorage_locations",
         bq_out_named_anchorages="project.dataset.named_anchorages",
@@ -75,14 +67,9 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
     )
 
-    try:
-        # Silences the real (expected, ignored) DAG's own noisy logging -- see comment above.
-        logging.disable(logging.CRITICAL)
-        name_anchorages_pipeline.run(config)
-    except Exception:
-        pass
-    finally:
-        logging.disable(logging.NOTSET)
+    mock_pipeline_cls = capture_pipeline_init(
+        "pipe_anchorages.name_anchorages_pipeline.Pipeline", name_anchorages_pipeline.run, config
+    )
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],

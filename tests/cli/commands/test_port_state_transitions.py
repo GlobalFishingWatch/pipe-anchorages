@@ -1,6 +1,5 @@
 import argparse
 import json
-import logging
 
 from types import SimpleNamespace
 
@@ -109,19 +108,12 @@ def test_pipeline_resolves_project_and_labels_from_config():
     assert json.loads(cloud_options.labels[0]) == labels
 
 
-def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
+def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init):
     # Any Apache Beam/Dataflow option can be set from the --config-file YAML, not
     # just the CLI flags -- the CLI framework routes config-file keys that aren't
     # one of this command's own Options into config.unknown_parsed_args, and run()
     # must forward that dict into Pipeline(**options), the same way pipe-gaps'
     # PipelineFactory does with its own `**self._config.unknown_parsed_args`.
-    #
-    # Only patches Pipeline itself, not the Beam transforms downstream -- those
-    # build a real DAG against a mocked Pipeline and fail past the point this test
-    # cares about (e.g. apache_beam's own pickling of a DoFn against a Mock), which
-    # is expected and ignored here.
-    mock_pipeline_cls = mocker.patch("pipe_anchorages.thin_port_messages_pipeline.Pipeline")
-
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
         bq_in_named_anchorages="project.dataset.anchorages",
@@ -140,14 +132,11 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
     )
 
-    try:
-        # Silences the real (expected, ignored) DAG's own noisy logging -- see comment above.
-        logging.disable(logging.CRITICAL)
-        thin_port_messages_pipeline.run(config)
-    except Exception:
-        pass
-    finally:
-        logging.disable(logging.NOTSET)
+    mock_pipeline_cls = capture_pipeline_init(
+        "pipe_anchorages.thin_port_messages_pipeline.Pipeline",
+        thin_port_messages_pipeline.run,
+        config,
+    )
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],

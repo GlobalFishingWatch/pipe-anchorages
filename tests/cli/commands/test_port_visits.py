@@ -1,5 +1,4 @@
 import argparse
-import logging
 
 from types import SimpleNamespace
 
@@ -57,18 +56,11 @@ def test_cli_requires_port_state_transitions_table(mocker):
         main.run(args)
 
 
-def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
+def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init):
     # Same forwarding contract as thin_port_messages_pipeline.run(): config-file keys
     # that aren't one of this command's own Options land in config.unknown_parsed_args,
     # and run() must forward that dict into Pipeline(**options), matching pipe-gaps'
     # PipelineFactory (`**self._config.unknown_parsed_args`).
-    #
-    # Only patches Pipeline itself, not the Beam transforms downstream -- those build
-    # a real DAG against a mocked Pipeline and fail past the point this test cares
-    # about (e.g. apache_beam's own pickling of a DoFn against a Mock), which is
-    # expected and ignored here.
-    mock_pipeline_cls = mocker.patch("pipe_anchorages.port_visits_pipeline.Pipeline")
-
     config = SimpleNamespace(
         bq_in_port_state_transitions="project.dataset.port_state_transitions",
         bq_in_segment_info="project.dataset.segment_info",
@@ -88,14 +80,9 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
         unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
     )
 
-    try:
-        # Silences the real (expected, ignored) DAG's own noisy logging -- see comment above.
-        logging.disable(logging.CRITICAL)
-        port_visits_pipeline.run(config)
-    except Exception:
-        pass
-    finally:
-        logging.disable(logging.NOTSET)
+    mock_pipeline_cls = capture_pipeline_init(
+        "pipe_anchorages.port_visits_pipeline.Pipeline", port_visits_pipeline.run, config
+    )
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],
