@@ -2,20 +2,20 @@ import datetime
 import logging
 
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, Callable
 
 import apache_beam as beam
 from apache_beam.runners import PipelineState
 
 from gfw.common.beam.pipeline.base import Pipeline
 from gfw.common.beam.pipeline.dag import LinearDag
+from gfw.common.beam.transforms import ReadFromBigQuery, WriteToBigQueryWrapper
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
 from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.pipelines.anchorage_points.config import AnchoragePointsConfig
-from pipe_anchorages.transforms.sink import AnchorageSink
-from pipe_anchorages.transforms.source import QuerySource
+from pipe_anchorages.utils.ver import get_pipe_ver
 from pipe_anchorages.version import __version__
 
 logger = logging.getLogger(__name__)
@@ -86,6 +86,80 @@ def has_location_record(item):
     return isinstance(rcd, VesselLocationRecord)
 
 
+def encode_anchorage(anchorage) -> dict:
+    return {
+        "lat": anchorage.mean_location.lat,
+        "lon": anchorage.mean_location.lon,
+        "total_visits": anchorage.total_visits,
+        "drift_radius": anchorage.rms_drift_radius,
+        "top_destination": anchorage.top_destination,
+        "unique_stationary_ssvid": len(anchorage.vessels),
+        "unique_stationary_fishing_ssvid": len(anchorage.fishing_vessels),
+        "unique_active_ssvid": anchorage.active_ssvids,
+        "unique_total_ssvid": anchorage.total_ssvids,
+        "active_ssvid_days": anchorage.active_ssvid_days,
+        "stationary_ssvid_days": anchorage.stationary_ssvid_days,
+        "stationary_fishing_ssvid_days": anchorage.stationary_fishing_ssvid_days,
+        "s2id": anchorage.s2id,
+    }
+
+
+ANCHORAGE_POINTS_SCHEMA = [
+    {
+        "name": "lat", "type": "float", "mode": "nullable",
+        "description": "The mean latitude where the anchorage happened.",
+    },
+    {
+        "name": "lon", "type": "float", "mode": "nullable",
+        "description": "The mean longitude where the anchorage happened.",
+    },
+    {
+        "name": "total_visits", "type": "integer", "mode": "nullable",
+        "description": "The total visits to the anchorage.",
+    },
+    {
+        "name": "drift_radius", "type": "float", "mode": "nullable",
+        "description": "The rms drift radius.",
+    },
+    {
+        "name": "top_destination", "type": "string", "mode": "nullable",
+        "description": "The top destination.",
+    },
+    {
+        "name": "unique_stationary_ssvid", "type": "integer", "mode": "nullable",
+        "description": "The unique stationary ssvid.",
+    },
+    {
+        "name": "unique_stationary_fishing_ssvid", "type": "integer", "mode": "nullable",
+        "description": "The unique stationary fishing ssvid.",
+    },
+    {
+        "name": "unique_active_ssvid", "type": "integer", "mode": "nullable",
+        "description": "The unique active ssvid.",
+    },
+    {
+        "name": "unique_total_ssvid", "type": "integer", "mode": "nullable",
+        "description": "The unique total ssvid.",
+    },
+    {
+        "name": "active_ssvid_days", "type": "float", "mode": "nullable",
+        "description": "The active ssvid days.",
+    },
+    {
+        "name": "stationary_ssvid_days", "type": "float", "mode": "nullable",
+        "description": "The stationary ssvid days.",
+    },
+    {
+        "name": "stationary_fishing_ssvid_days", "type": "float", "mode": "nullable",
+        "description": "The stationary fishing ssvid days",
+    },
+    {
+        "name": "s2id", "type": "string", "mode": "nullable",
+        "description": "The s2id.",
+    },
+]
+
+
 class AnchoragePointsCore(beam.PTransform):
     """Turns position messages into anchorage points.
 
@@ -125,6 +199,36 @@ class AnchoragePointsCore(beam.PTransform):
         )
 
 
+class AnchoragePointsSink(beam.PTransform):
+    """Encodes AnchoragePoints and writes them to BigQuery.
+
+    Takes the same WriteToBigQuery-like factory that gfw-common's
+    WriteToBigQueryWrapper takes, so tests can inject a fake BigQuery client
+    (--mock-bq-clients) instead of a real one.
+    """
+
+    def __init__(
+        self,
+        table: str,
+        description: str,
+        factory: Callable = WriteToBigQueryWrapper.get_client_factory(),
+    ) -> None:
+        self._table = table
+        self._description = description
+        self._factory = factory
+
+    def expand(self, xs):
+        return xs | beam.Map(encode_anchorage) | WriteToBigQueryWrapper(
+            table=self._table,
+            schema=ANCHORAGE_POINTS_SCHEMA,
+            write_to_bigquery_factory=self._factory,
+            write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE,
+            additional_bq_parameters={
+                "destinationTableProperties": {"description": self._description},
+            },
+        )
+
+
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
     config = AnchoragePointsConfig.from_namespace(config, version=__version__)
 
@@ -134,15 +238,30 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         **config.unknown_parsed_args,
         **kwargs,
     )
-    cloud_options = pipeline.cloud_options
+
+    read_factory = ReadFromBigQuery.get_client_factory(mocked=bool(config.mock_bq_clients))
+    write_factory = WriteToBigQueryWrapper.get_client_factory(mocked=bool(config.mock_bq_clients))
+
+    description = f"""
+Created by the pipe-anchorages pipeline: {get_pipe_ver()}.
+Creates the anchorage table.
+* https://github.com/GlobalFishingWatch/pipe-anchorages
+* Messages source: {config.bq_in_messages}
+* Segments source: {config.bq_in_segments}
+        """
 
     dag = LinearDag(
         sources=[
-            f"Source_{i}" >> QuerySource(query, cloud_options)
+            f"Source_{i}"
+            >> ReadFromBigQuery(
+                query=query,
+                read_from_bigquery_factory=read_factory,
+                read_from_bigquery_kwargs={"bigquery_job_labels": config.labels or {}},
+            )
             for i, query in enumerate(create_queries(config))
         ],
         core=AnchoragePointsCore(config),
-        sinks=(AnchorageSink(config.bq_out_anchorage_points, config, cloud_options),),
+        sinks=(AnchoragePointsSink(config.bq_out_anchorage_points, description, write_factory),),
     )
     dag.apply(pipeline.pipeline)
 

@@ -66,6 +66,11 @@ class AnchorageLocations(Command):
                 default=0.5,
                 help=HELP_STATIONARY_PERIOD_MAX_DISTANCE_KM,
             ),
+            Option(
+                "--mock-bq-clients",
+                type=bool,
+                help="If passed, mocks the BQ clients [Useful for development].",
+            ),
         ]
 
     @classmethod

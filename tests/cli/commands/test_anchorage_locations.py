@@ -7,7 +7,7 @@ import pytest
 from apache_beam.runners import PipelineState
 
 from pipe_anchorages.pipelines.anchorage_points import main as anchorage_points
-from pipe_anchorages.transforms.sink import AnchorageSink
+from pipe_anchorages.pipelines.anchorage_points.main import AnchoragePointsSink
 from pipe_anchorages.cli import main
 
 
@@ -43,6 +43,27 @@ def test_cli_executes_run(mocker):
     assert config.stationary_period_min_duration_minutes == 720
     assert config.stationary_period_max_distance_km == 0.5
     assert config.min_unique_vessels == 20
+
+
+def test_cli_executes_run_with_mock_bq_clients(tmp_path):
+    # End-to-end: the pipeline really constructs its Beam DAG and runs it
+    # through the DirectRunner, but with BigQuery sources/sinks swapped for
+    # the gfw-common fakes, and the fishing-vessels file pointed at /tmp.
+    fishing_ssvids = tmp_path / "fishing_mmsi.txt"
+    fishing_ssvids.write_text("416000001\n")
+
+    args = []
+    for a in BASE_ARGS:
+        if a == "gs://bucket/fishing_mmsi.txt":
+            args.append(str(fishing_ssvids))
+        else:
+            args.append(a)
+    args.append("--mock-bq-clients")
+    args.extend(["--project", "test-project"])
+
+    result = main.run(args)
+    exit_code = result[0] if isinstance(result, tuple) else result
+    assert exit_code == 0
 
 
 def test_cli_requires_gcs_in_fishing_ssvids(mocker):
@@ -135,4 +156,4 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
     assert len(captured["sources"]) == 1
     assert isinstance(captured["core"], anchorage_points.AnchoragePointsCore)
     assert len(captured["sinks"]) == 1
-    assert isinstance(captured["sinks"][0], AnchorageSink)
+    assert isinstance(captured["sinks"][0], AnchoragePointsSink)

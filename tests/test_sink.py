@@ -3,6 +3,10 @@ import s2sphere
 
 from pipe_anchorages import find_anchorage_points
 from pipe_anchorages import common
+from pipe_anchorages.pipelines.anchorage_points.main import (
+    ANCHORAGE_POINTS_SCHEMA,
+    encode_anchorage,
+)
 from pipe_anchorages.transforms import sink
 
 
@@ -40,13 +44,12 @@ class TestAnchorageSink(object):
     def test_encoder(self):
         anchorage = self.AnchoragePoint_from_S2Token("0d1b968b", [37, 49, 2])
 
-        asink = sink.AnchorageSink(None, None, None)
-        encoded = asink.encode(anchorage)
+        encoded = encode_anchorage(anchorage)
 
-        assert len(encoded) == len(asink.spec)
+        assert len(encoded) == len(ANCHORAGE_POINTS_SCHEMA)
 
         type_map = {int: "integer", str: "string", six.text_type: "string", float: "float"}
 
         for k, v in encoded.items():
-            t, desc = asink.spec[k]
-            assert type_map[type(v)] == t, (k, type(v), t)
+            schema = next(s for s in ANCHORAGE_POINTS_SCHEMA if s["name"] == k)
+            assert type_map[type(v)] == schema["type"], (k, type(v), schema["type"])
