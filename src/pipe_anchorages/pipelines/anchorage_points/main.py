@@ -15,7 +15,10 @@ from pipe_anchorages import common as cmn
 from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
 from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.pipelines.anchorage_points.config import AnchoragePointsConfig
-from pipe_anchorages.utils.ver import get_pipe_ver
+from pipe_anchorages.pipelines.anchorage_points.table_config import (
+    AnchoragePointsTableConfig,
+    AnchoragePointsTableDescription,
+)
 from pipe_anchorages.version import __version__
 
 logger = logging.getLogger(__name__)
@@ -104,62 +107,6 @@ def encode_anchorage(anchorage) -> dict:
     }
 
 
-ANCHORAGE_POINTS_SCHEMA = [
-    {
-        "name": "lat", "type": "float", "mode": "nullable",
-        "description": "The mean latitude where the anchorage happened.",
-    },
-    {
-        "name": "lon", "type": "float", "mode": "nullable",
-        "description": "The mean longitude where the anchorage happened.",
-    },
-    {
-        "name": "total_visits", "type": "integer", "mode": "nullable",
-        "description": "The total visits to the anchorage.",
-    },
-    {
-        "name": "drift_radius", "type": "float", "mode": "nullable",
-        "description": "The rms drift radius.",
-    },
-    {
-        "name": "top_destination", "type": "string", "mode": "nullable",
-        "description": "The top destination.",
-    },
-    {
-        "name": "unique_stationary_ssvid", "type": "integer", "mode": "nullable",
-        "description": "The unique stationary ssvid.",
-    },
-    {
-        "name": "unique_stationary_fishing_ssvid", "type": "integer", "mode": "nullable",
-        "description": "The unique stationary fishing ssvid.",
-    },
-    {
-        "name": "unique_active_ssvid", "type": "integer", "mode": "nullable",
-        "description": "The unique active ssvid.",
-    },
-    {
-        "name": "unique_total_ssvid", "type": "integer", "mode": "nullable",
-        "description": "The unique total ssvid.",
-    },
-    {
-        "name": "active_ssvid_days", "type": "float", "mode": "nullable",
-        "description": "The active ssvid days.",
-    },
-    {
-        "name": "stationary_ssvid_days", "type": "float", "mode": "nullable",
-        "description": "The stationary ssvid days.",
-    },
-    {
-        "name": "stationary_fishing_ssvid_days", "type": "float", "mode": "nullable",
-        "description": "The stationary fishing ssvid days",
-    },
-    {
-        "name": "s2id", "type": "string", "mode": "nullable",
-        "description": "The s2id.",
-    },
-]
-
-
 class AnchoragePointsCore(beam.PTransform):
     """Turns position messages into anchorage points.
 
@@ -209,22 +156,22 @@ class AnchoragePointsSink(beam.PTransform):
 
     def __init__(
         self,
-        table: str,
-        description: str,
+        table_config: AnchoragePointsTableConfig,
         factory: Callable = WriteToBigQueryWrapper.get_client_factory(),
     ) -> None:
-        self._table = table
-        self._description = description
+        self._table_config = table_config
         self._factory = factory
 
     def expand(self, xs):
         return xs | beam.Map(encode_anchorage) | WriteToBigQueryWrapper(
-            table=self._table,
-            schema=ANCHORAGE_POINTS_SCHEMA,
+            table=self._table_config.table_id,
+            schema=self._table_config.schema,
             write_to_bigquery_factory=self._factory,
             write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE,
             additional_bq_parameters={
-                "destinationTableProperties": {"description": self._description},
+                "destinationTableProperties": {
+                    "description": self._table_config.description.render()
+                },
             },
         )
 
@@ -232,23 +179,27 @@ class AnchoragePointsSink(beam.PTransform):
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
     config = AnchoragePointsConfig.from_namespace(config, version=__version__)
 
-    pipeline = Pipeline(
-        unparsed_args=config.unknown_unparsed_args,
-        labels=config.labels or None,
-        **config.unknown_parsed_args,
-        **kwargs,
-    )
-
     read_factory = ReadFromBigQuery.get_client_factory(mocked=bool(config.mock_bq_clients))
     write_factory = WriteToBigQueryWrapper.get_client_factory(mocked=bool(config.mock_bq_clients))
 
-    description = f"""
-Created by the pipe-anchorages pipeline: {get_pipe_ver()}.
-Creates the anchorage table.
-* https://github.com/GlobalFishingWatch/pipe-anchorages
-* Messages source: {config.bq_in_messages}
-* Segments source: {config.bq_in_segments}
-        """
+    table_config = AnchoragePointsTableConfig(
+        table_id=config.bq_out_anchorage_points,
+        description=AnchoragePointsTableDescription(
+            version=__version__,
+            relevant_params={
+                "bq_in_messages": config.bq_in_messages,
+                "bq_in_segments": config.bq_in_segments,
+                "start_date": config.start_date,
+                "end_date": config.end_date,
+                "min_positions": config.min_positions,
+                "min_unique_vessels": config.min_unique_vessels,
+                "stationary_period_min_duration_minutes": (
+                    config.stationary_period_min_duration_minutes
+                ),
+                "stationary_period_max_distance_km": config.stationary_period_max_distance_km,
+            },
+        ),
+    )
 
     dag = LinearDag(
         sources=[
@@ -261,11 +212,20 @@ Creates the anchorage table.
             for i, query in enumerate(create_queries(config))
         ],
         core=AnchoragePointsCore(config),
-        sinks=(AnchoragePointsSink(config.bq_out_anchorage_points, description, write_factory),),
+        sinks=(AnchoragePointsSink(table_config, write_factory),),
     )
-    dag.apply(pipeline.pipeline)
 
-    result = pipeline.pipeline.run()
+    pipeline = Pipeline(
+        name="pipe-anchorages",
+        version=__version__,
+        dag=dag,
+        unparsed_args=config.unknown_unparsed_args,
+        labels=config.labels or None,
+        **config.unknown_parsed_args,
+        **kwargs,
+    )
+
+    result, _ = pipeline.run()
 
     success_states = set(
         [PipelineState.DONE, PipelineState.RUNNING, PipelineState.UNKNOWN, PipelineState.PENDING]

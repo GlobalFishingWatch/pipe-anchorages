@@ -78,7 +78,7 @@ def test_cli_requires_gcs_in_fishing_ssvids(mocker):
         main.run(args)
 
 
-def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init):
+def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init, mocker):
     # Same forwarding contract as thin_port_messages_pipeline.run()/port_visits_pipeline.run():
     # config-file keys that aren't one of this command's own Options land in
     # config.unknown_parsed_args, and run() must forward that dict into
@@ -106,6 +106,9 @@ def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init
     )
 
     mock_pipeline_cls.assert_called_once_with(
+        name="pipe-anchorages",
+        version=mocker.ANY,
+        dag=mocker.ANY,
         unparsed_args=[],
         labels={"team": "pipeline"},
         project="test-project",
