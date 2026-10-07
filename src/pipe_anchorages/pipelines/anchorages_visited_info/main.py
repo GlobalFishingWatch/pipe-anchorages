@@ -63,6 +63,7 @@ def run(
         destination=table_config.table_id,
         write_disposition="WRITE_TRUNCATE",
         create_disposition="CREATE_IF_NEEDED",
+        labels=config.labels or {},
     )
     query_result.query_job.result()
 

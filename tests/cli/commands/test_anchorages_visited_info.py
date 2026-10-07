@@ -1,3 +1,5 @@
+from gfw.common.bigquery.helper import BigQueryHelper
+
 from pipe_anchorages.cli import main
 
 
@@ -15,3 +17,12 @@ BASE_ARGS = [
 
 def test_cli_executes_run():
     main.run(BASE_ARGS)
+
+
+def test_cli_forwards_labels_to_query_job(mocker):
+    run_query = mocker.spy(BigQueryHelper, "run_query")
+
+    main.run([*BASE_ARGS, "--labels", "team=pipeline", "env=dev"])
+
+    run_query.assert_called_once()
+    assert run_query.call_args.kwargs["labels"] == {"team": "pipeline", "env": "dev"}
