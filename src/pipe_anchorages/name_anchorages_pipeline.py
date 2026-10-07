@@ -221,7 +221,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         )
     )
 
-    (named_anchorages | NamedAnchorageSink(config.bq_out_named_anchorages, config, cloud_options))
+    (named_anchorages | NamedAnchorageSink(config.bq_out_named_anchorages, config))
 
     result = p.run()
 

@@ -1,8 +1,5 @@
-import logging
-
 from apache_beam import Map, PTransform, io
 from apache_beam.transforms.window import TimestampedValue
-from google.cloud import bigquery
 from pipe_anchorages.objects.namedtuples import epoch
 from pipe_anchorages.schema.message_schema import message_schema
 from pipe_anchorages.schema.named_anchorage import build as build_named_anchorage_schema
@@ -11,21 +8,6 @@ from pipe_anchorages.schema.port_visit import port_visit_schema
 
 
 def cloud_to_labels(ll): return {x.split("=")[0]: x.split("=")[1] for x in ll}
-
-
-def get_table(bqclient, project: str, tablename: str):
-    dataset_id, table_name = tablename.split(".")
-    dataset_ref = bigquery.DatasetReference(project, dataset_id)
-    table_ref = dataset_ref.table(table_name)
-    return bqclient.get_table(table_ref)  # API request
-
-
-def load_labels(project: str, tablename: str, labels: dict):
-    bqclient = bigquery.Client(project=project)
-    table = get_table(bqclient, project, tablename)
-    table.labels = labels
-    bqclient.update_table(table, ["labels"])  # API request
-    logging.info(f"Update labels to output table <{table}>")
 
 
 class MessageSink(PTransform):
@@ -68,12 +50,11 @@ class MessageSink(PTransform):
 
 
 class NamedAnchorageSink(PTransform):
-    def __init__(self, table, args, cloud_options):
+    def __init__(self, table, args):
         self.table = table
         self.args = args
         self.write_disposition = io.BigQueryDisposition.WRITE_TRUNCATE
         self.ver = get_pipe_ver()
-        self.labels = cloud_to_labels(cloud_options.labels) if cloud_options else None
 
     def encode(self, anchorage):
         return {
@@ -108,9 +89,6 @@ Creates the named anchorage table.
 * Source: {self.args.bq_in_anchorage_locations}
 * Shapefile used: {self.args.shapefile}
         """
-
-    def update_labels(self):
-        load_labels(self.project, self.table, self.labels)
 
     def expand(self, xs):
         return (
