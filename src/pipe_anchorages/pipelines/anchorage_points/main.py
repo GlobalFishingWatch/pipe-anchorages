@@ -203,9 +203,9 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
 
     dag = LinearDag(
         sources=[
-            f"Source_{i}"
-            >> ReadFromBigQuery(
+            ReadFromBigQuery(
                 query=query,
+                label=f"Source_{i}",
                 read_from_bigquery_factory=read_factory,
                 read_from_bigquery_kwargs={"bigquery_job_labels": config.labels or {}},
             )
