@@ -176,11 +176,27 @@ class AnchoragePointsSink(beam.PTransform):
         )
 
 
-def run(config: SimpleNamespace, **kwargs: Any) -> int:
+def run(
+    config: SimpleNamespace,
+    unknown_unparsed_args: tuple = (),
+    unknown_parsed_args: dict = None,
+    read_from_bigquery_factory: Callable = None,
+    write_to_bigquery_factory: Callable = None,
+    **kwargs: Any,
+) -> int:
     config = AnchoragePointsConfig.from_namespace(config, version=__version__)
 
-    read_factory = ReadFromBigQuery.get_client_factory(mocked=bool(config.mock_bq_clients))
-    write_factory = WriteToBigQueryWrapper.get_client_factory(mocked=bool(config.mock_bq_clients))
+    if read_from_bigquery_factory is None:
+        read_from_bigquery_factory = ReadFromBigQuery.get_client_factory(
+            mocked=bool(config.mock_bq_clients)
+        )
+    if write_to_bigquery_factory is None:
+        write_to_bigquery_factory = WriteToBigQueryWrapper.get_client_factory(
+            mocked=bool(config.mock_bq_clients)
+        )
+
+    read_factory = read_from_bigquery_factory
+    write_factory = write_to_bigquery_factory
 
     table_config = AnchoragePointsTableConfig(
         table_id=config.bq_out_anchorage_points,
@@ -207,7 +223,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
                 query=query,
                 label=f"Source_{i}",
                 read_from_bigquery_factory=read_factory,
-                read_from_bigquery_kwargs={"bigquery_job_labels": config.labels or {}},
+                read_from_bigquery_kwargs={"bigquery_job_labels": config.labels},
             )
             for i, query in enumerate(create_queries(config))
         ],
@@ -220,7 +236,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
         version=__version__,
         dag=dag,
         unparsed_args=config.unknown_unparsed_args,
-        labels=config.labels or None,
+        labels=config.labels,
         **config.unknown_parsed_args,
         **kwargs,
     )
