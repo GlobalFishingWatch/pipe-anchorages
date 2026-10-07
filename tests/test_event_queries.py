@@ -1,4 +1,4 @@
-from pipe_anchorages.anchorages_pipeline import create_queries
+from pipe_anchorages.pipelines.anchorage_points.main import create_queries
 
 
 class DummyOptions(object):

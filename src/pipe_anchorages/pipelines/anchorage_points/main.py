@@ -6,13 +6,19 @@ from typing import Any
 
 import apache_beam as beam
 from apache_beam.runners import PipelineState
+
 from gfw.common.beam.pipeline.base import Pipeline
+from gfw.common.beam.pipeline.dag import LinearDag
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
 from pipe_anchorages.records import VesselLocationRecord
+from pipe_anchorages.pipelines.anchorage_points.config import AnchoragePointsConfig
 from pipe_anchorages.transforms.sink import AnchorageSink
 from pipe_anchorages.transforms.source import QuerySource
+from pipe_anchorages.version import __version__
+
+logger = logging.getLogger(__name__)
 
 
 def create_queries(config):
@@ -80,48 +86,76 @@ def has_location_record(item):
     return isinstance(rcd, VesselLocationRecord)
 
 
+class AnchoragePointsCore(beam.PTransform):
+    """Turns position messages into anchorage points.
+
+    Groups run()'s inline chain (CreateVesselRecords -> filter location records ->
+    CreateTaggedRecords -> FindAnchoragePoints) into one composite PTransform, since
+    LinearDag's core slot takes exactly one transform. The fishing vessel list is read
+    here too, as a side input of FindAnchoragePoints -- LinearDag's own side_inputs
+    slot would require implementing set_side_inputs, which we don't need yet.
+    """
+
+    def __init__(self, config: AnchoragePointsConfig) -> None:
+        self.min_positions = config.min_positions
+        self.min_duration = datetime.timedelta(
+            minutes=config.stationary_period_min_duration_minutes
+        )
+        self.max_distance_km = config.stationary_period_max_distance_km
+        self.min_unique_vessels = config.min_unique_vessels
+        self.gcs_in_fishing_ssvids = config.gcs_in_fishing_ssvids
+
+    def expand(self, xs):
+        fishing_vessels = xs.pipeline | "ReadFishingVessels" >> beam.io.ReadFromText(
+            self.gcs_in_fishing_ssvids
+        )
+        fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
+
+        return (
+            xs
+            | cmn.CreateVesselRecords()
+            | "FilterOutInfo" >> beam.Filter(has_location_record)
+            | cmn.CreateTaggedRecords(self.min_positions)
+            | FindAnchoragePoints(
+                self.min_duration,
+                self.max_distance_km,
+                self.min_unique_vessels,
+                fishing_vessel_list,
+            )
+        )
+
+
 def run(config: SimpleNamespace, **kwargs: Any) -> int:
+    config = AnchoragePointsConfig.from_namespace(config, version=__version__)
+
     pipeline = Pipeline(
         unparsed_args=config.unknown_unparsed_args,
-        labels=config.labels or None,
+        # Beam's GoogleCloudOptions wants labels as ["key=value"]; handing it the
+        # CLI's dict makes it json-stringify the whole thing, which later crashes
+        # cloud_to_labels() (no "=" to split on).
+        labels=[f"{key}={value}" for key, value in config.labels.items()]
+        if config.labels
+        else None,
         **config.unknown_parsed_args,
         **kwargs,
     )
     cloud_options = pipeline.cloud_options
 
-    queries = create_queries(config)
-
-    p = pipeline.pipeline
-
-    fishing_vessels = p | beam.io.ReadFromText(config.gcs_in_fishing_ssvids)
-    fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
-
-    source = [
-        (p | f"Source_{i}" >> QuerySource(query, cloud_options))
-        for (i, query) in enumerate(queries)
-    ] | beam.Flatten()
-
-    tagged_records = (
-        source
-        | cmn.CreateVesselRecords()
-        | "FilterOutInfo" >> beam.Filter(has_location_record)
-        | cmn.CreateTaggedRecords(config.min_positions)
+    dag = LinearDag(
+        sources=[
+            f"Source_{i}" >> QuerySource(query, cloud_options)
+            for i, query in enumerate(create_queries(config))
+        ],
+        core=AnchoragePointsCore(config),
+        sinks=(AnchorageSink(config.bq_out_anchorage_points, config, cloud_options),),
     )
+    dag.apply(pipeline.pipeline)
 
-    anchorage_points = tagged_records | FindAnchoragePoints(
-        datetime.timedelta(minutes=config.stationary_period_min_duration_minutes),
-        config.stationary_period_max_distance_km,
-        config.min_unique_vessels,
-        fishing_vessel_list,
-    )
-
-    (anchorage_points | AnchorageSink(config.bq_out_anchorage_locations, config, cloud_options))
-
-    result = p.run()
+    result = pipeline.pipeline.run()
 
     success_states = set(
         [PipelineState.DONE, PipelineState.RUNNING, PipelineState.UNKNOWN, PipelineState.PENDING]
     )
 
-    logging.info("returning with result.state=%s" % result.state)
+    logger.info("returning with result.state=%s" % result.state)
     return 0 if result.state in success_states else 1

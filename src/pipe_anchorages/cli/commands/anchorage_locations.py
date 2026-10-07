@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 from gfw.common.cli import Command, Option
 
-from pipe_anchorages import anchorages_pipeline
+from pipe_anchorages.pipelines.anchorage_points.main import run
 
 
 DESCRIPTION = """\
@@ -70,4 +70,4 @@ class AnchorageLocations(Command):
 
     @classmethod
     def run(cls, config: SimpleNamespace, **kwargs: Any) -> Any:
-        return anchorages_pipeline.run(config, **kwargs)
+        return run(config, **kwargs)

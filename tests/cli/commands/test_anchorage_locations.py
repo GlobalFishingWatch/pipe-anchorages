@@ -4,7 +4,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from pipe_anchorages import anchorages_pipeline
+from apache_beam.runners import PipelineState
+
+from pipe_anchorages.pipelines.anchorage_points import main as anchorage_points
+from pipe_anchorages.transforms.sink import AnchorageSink
 from pipe_anchorages.cli import main
 
 
@@ -22,7 +25,7 @@ BASE_ARGS = [
 
 def test_cli_executes_run(mocker):
     mock_run = mocker.patch(
-        "pipe_anchorages.cli.commands.anchorage_locations.anchorages_pipeline.run",
+        "pipe_anchorages.cli.commands.anchorage_locations.run",
         return_value=0,
     )
 
@@ -44,7 +47,7 @@ def test_cli_executes_run(mocker):
 
 def test_cli_requires_gcs_in_fishing_ssvids(mocker):
     mocker.patch(
-        "pipe_anchorages.cli.commands.anchorage_locations.anchorages_pipeline.run",
+        "pipe_anchorages.cli.commands.anchorage_locations.run",
         return_value=0,
     )
     excluded = ("--gcs-in-fishing-ssvids", "gs://bucket/fishing_mmsi.txt")
@@ -76,12 +79,60 @@ def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init
     )
 
     mock_pipeline_cls = capture_pipeline_init(
-        "pipe_anchorages.anchorages_pipeline.Pipeline", anchorages_pipeline.run, config
+        "pipe_anchorages.pipelines.anchorage_points.main.Pipeline",
+        anchorage_points.run,
+        config,
     )
 
     mock_pipeline_cls.assert_called_once_with(
         unparsed_args=[],
-        labels={"team": "pipeline"},
+        labels=["team=pipeline"],
         project="test-project",
         max_num_workers=50,
     )
+
+
+def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
+    # Constructs the whole DAG (sources, core chain, sink) against a throwaway
+    # beam.Pipeline, but patches Pipeline.run so nothing executes -- there is no
+    # BigQuery/GCS access in unit tests. Catches wiring errors in the assembly.
+    # ReadFromText stats its path at construction, so use a local file for it.
+    fishing_ssvids = tmp_path / "fishing_mmsi.txt"
+    fishing_ssvids.write_text("416000001\n")
+
+    config = SimpleNamespace(
+        bq_in_messages="project.dataset.messages",
+        bq_in_segments="project.dataset.segments",
+        bq_out_anchorage_points="project.dataset.anchorage_points",
+        start_date="2024-01-01",
+        end_date="2024-01-07",
+        gcs_in_fishing_ssvids=str(fishing_ssvids),
+        min_positions=200,
+        stationary_period_min_duration_minutes=720,
+        stationary_period_max_distance_km=0.5,
+        min_unique_vessels=20,
+        labels={"team": "pipeline"},
+        unknown_unparsed_args=[],
+        unknown_parsed_args={"project": "test-project"},
+    )
+
+    captured = {}
+    real_linear_dag = anchorage_points.LinearDag
+
+    def capture_linear_dag(*args, **kwargs):
+        captured.update(kwargs)
+        return real_linear_dag(*args, **kwargs)
+
+    mocker.patch.object(anchorage_points, "LinearDag", side_effect=capture_linear_dag)
+    mocker.patch(
+        "apache_beam.pipeline.Pipeline.run",
+        return_value=mocker.Mock(state=PipelineState.RUNNING),
+    )
+
+    assert anchorage_points.run(config) == 0
+
+    # 2024-01-01..2024-01-07 fits in a single 1000-day query chunk.
+    assert len(captured["sources"]) == 1
+    assert isinstance(captured["core"], anchorage_points.AnchoragePointsCore)
+    assert len(captured["sinks"]) == 1
+    assert isinstance(captured["sinks"][0], AnchorageSink)
