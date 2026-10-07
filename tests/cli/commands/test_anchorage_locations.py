@@ -7,7 +7,9 @@ import pytest
 from apache_beam.runners import PipelineState
 
 from pipe_anchorages.pipelines.anchorage_points import main as anchorage_points
-from pipe_anchorages.pipelines.anchorage_points.main import AnchoragePointsSink
+from pipe_anchorages.pipelines.anchorage_points.transforms.core import AnchoragePointsCore
+
+from gfw.common.beam.transforms import WriteToBigQueryWrapper
 from pipe_anchorages.cli import main
 
 
@@ -157,6 +159,6 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
 
     # 2024-01-01..2024-01-07 fits in a single 1000-day query chunk.
     assert len(captured["sources"]) == 1
-    assert isinstance(captured["core"], anchorage_points.AnchoragePointsCore)
+    assert isinstance(captured["core"], AnchoragePointsCore)
     assert len(captured["sinks"]) == 1
-    assert isinstance(captured["sinks"][0], AnchoragePointsSink)
+    assert isinstance(captured["sinks"][0], WriteToBigQueryWrapper)

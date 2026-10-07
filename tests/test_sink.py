@@ -4,7 +4,7 @@ import s2sphere
 from pipe_anchorages import find_anchorage_points
 from pipe_anchorages import common
 from pipe_anchorages.assets import schemas as assets_schemas
-from pipe_anchorages.pipelines.anchorage_points.main import encode_anchorage
+from pipe_anchorages.pipelines.anchorage_points.transforms.core import encode_anchorage
 from pipe_anchorages.transforms import sink
 
 
