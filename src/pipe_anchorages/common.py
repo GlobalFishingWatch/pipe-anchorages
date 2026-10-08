@@ -85,15 +85,6 @@ class CreateTaggedRecordsByDay(beam.PTransform):
         )
 
 
-def mean(iterable):
-    n = 0
-    total = 0.0
-    for x in iterable:
-        total += x
-        n += 1
-    return (total / n) if n else 0
-
-
 class LatLon(namedtuple("LatLon", ["lat", "lon"])):
 
     __slots__ = ()
@@ -104,42 +95,3 @@ class LatLon(namedtuple("LatLon", ["lat", "lon"])):
         if scale is not None:
             cellid = cellid.parent(scale)
         return cellid
-
-
-def add_pipeline_defaults(pipeline_args, name):
-
-    defaults = {
-        "--project": "world-fishing-827",
-        "--staging_location": "gs://machine-learning-dev-ttl-30d/anchorages/{}/output/staging"
-        .format(name),
-        "--temp_location": "gs://machine-learning-dev-ttl-30d/anchorages/temp",
-        "--setup_file": "./setup.py",
-        "--runner": "DataflowRunner",
-        "--max_num_workers": "200",
-        "--disk_size_gb": "100",
-        "--job_name": name,
-    }
-
-    for name, value in defaults.items():
-        if name not in pipeline_args:
-            pipeline_args.extend((name, value))
-
-
-def check_that_pipeline_args_consumed(pipeline):
-    options = pipeline.get_all_options(drop_default=True)
-
-    # Some options get translated on the way in (should be a better way to do this...)
-    translations = {"--worker_machine_type": "--machine_type"}
-    flags = [translations.get(x, x) for x in pipeline._flags]
-
-    dash_flags = [
-        x
-        for x in flags
-        if x.startswith("-")
-        and x.replace("-", "") not in options
-        and x != "--experiments=shuffle_mode=service"
-    ]
-    if dash_flags:
-        print(options)
-        print(dash_flags)
-        raise ValueError("illegal options specified:\n    {}".format("\n    ".join(dash_flags)))
