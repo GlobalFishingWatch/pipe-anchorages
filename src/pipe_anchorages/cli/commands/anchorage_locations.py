@@ -7,7 +7,7 @@ from pipe_anchorages import anchorages_pipeline
 
 
 DESCRIPTION = """\
-Finds candidate anchorage points by clustering vessel positions where they
+Finds candidate anchorage locations by clustering vessel positions where they
 remain stationary near the coast.
 
 Besides the arguments defined here, you can also pass any pipeline option
@@ -17,7 +17,7 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_IN_SEGMENTS = "BigQuery table with segment destinations, partitioned by day."
-HELP_OUT_POINTS = "BigQuery table in which to store the anchorage points."
+HELP_LOCATIONS = "BigQuery table in which to store the anchorage locations."
 HELP_START_DATE = "First date to look for stationary positions."
 HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
 HELP_FISHING_SSVIDS = "Newline-separated list of fishing vessel ids."
@@ -33,11 +33,11 @@ HELP_MIN_UNIQUE_VESSELS = (
 )
 
 
-class AnchoragePoints(Command):
+class AnchorageLocations(Command):
 
     @property
     def name(self):
-        return "anchorage-points"
+        return "anchorage-locations"
 
     @property
     def description(self):
@@ -48,7 +48,7 @@ class AnchoragePoints(Command):
         return [
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option("--bq-in-segments", type=str, required=True, help=HELP_IN_SEGMENTS),
-            Option("--bq-out-anchorage-points", type=str, required=True, help=HELP_OUT_POINTS),
+            Option("--bq-out-anchorage-locations", type=str, required=True, help=HELP_LOCATIONS),
             Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),
             Option("--end-date", type=str, required=True, help=HELP_END_DATE),
