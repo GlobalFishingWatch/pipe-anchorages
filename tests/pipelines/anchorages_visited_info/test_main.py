@@ -14,7 +14,7 @@ def make_config(**overrides):
         bq_input_named_anchorages="project.dataset.named_anchorages",
         bq_output="project.dataset.anchorages_visited_info",
         project="test-project",
-        labels={"team": "pipeline", "env": "dev"},
+        labels={"environment": "development", "stage": "anchorages"},
     )
     config.update(overrides)
     return SimpleNamespace(**config)
@@ -36,7 +36,7 @@ def test_run_writes_the_query_into_the_output_table(bq_client_factory, bq_client
         assert f"project.dataset.{table}" in query_str
     assert job_config.destination.table_id == "anchorages_visited_info"
     assert job_config.write_disposition == "WRITE_TRUNCATE"
-    assert job_config.labels == {"team": "pipeline", "env": "dev"}
+    assert job_config.labels == {"environment": "development", "stage": "anchorages"}
 
 
 def test_run_leaves_the_output_table_unpartitioned_like_production(bq_client_factory, bq_clients):
@@ -55,7 +55,7 @@ def test_run_sets_schema_description_and_labels_on_the_output_table(bq_client_fa
     assert fields == ["schema", "description", "labels"]
     assert [f["name"] for f in table.schema] == SCHEMA_COLUMNS
     assert "ANCHORAGES VISITED INFO" in table.description
-    assert table.labels == {"team": "pipeline", "env": "dev"}
+    assert table.labels == {"environment": "development", "stage": "anchorages"}
 
 
 def test_run_with_dry_run_uses_a_dry_run_client(bq_client_factory, bq_clients, bq_factory_kwargs):

@@ -12,7 +12,7 @@ def make_config(**overrides):
         bq_out_voyages="project.dataset.voyages_c3",
         min_confidence="3",
         project="test-project",
-        labels={"team": "pipeline", "env": "dev"},
+        labels={"environment": "development", "stage": "anchorages"},
     )
     config.update(overrides)
     return SimpleNamespace(**config)
@@ -34,7 +34,7 @@ def test_run_writes_the_query_into_the_output_table(bq_client_factory, bq_client
     assert "confidence >= 3" in query_str
     assert job_config.destination.table_id == "voyages_c3"
     assert job_config.write_disposition == "WRITE_TRUNCATE"
-    assert job_config.labels == {"team": "pipeline", "env": "dev"}
+    assert job_config.labels == {"environment": "development", "stage": "anchorages"}
 
 
 def test_run_creates_the_output_table_partitioned_like_production(bq_client_factory, bq_clients):
@@ -54,7 +54,7 @@ def test_run_sets_schema_description_and_labels_on_the_output_table(bq_client_fa
     assert fields == ["schema", "description", "labels"]
     assert [f["name"] for f in table.schema] == SCHEMA_COLUMNS
     assert "min_confidence" in table.description
-    assert table.labels == {"team": "pipeline", "env": "dev"}
+    assert table.labels == {"environment": "development", "stage": "anchorages"}
 
 
 def test_query_outputs_columns_in_schema_order():

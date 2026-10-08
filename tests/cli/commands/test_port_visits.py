@@ -15,7 +15,7 @@ BASE_ARGS = [
     "--bq-out-port-visits", "project.dataset.port_visits",
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
-    "--labels", "team=test",
+    "--labels", "environment=development", "stage=anchorages",
 ]
 
 

@@ -12,7 +12,7 @@ BASE_ARGS = [
     "named-anchorages",
     "--bq-in-anchorage-locations", "project.dataset.anchorage_locations",
     "--bq-out-named-anchorages", "project.dataset.named_anchorages",
-    "--labels", "team=test",
+    "--labels", "environment=development", "stage=anchorages",
 ]
 
 

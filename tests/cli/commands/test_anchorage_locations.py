@@ -16,7 +16,7 @@ BASE_ARGS = [
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
     "--gcs-in-fishing-ssvids", "gs://bucket/fishing_mmsi.txt",
-    "--labels", "team=test",
+    "--labels", "environment=development", "stage=anchorages",
 ]
 
 

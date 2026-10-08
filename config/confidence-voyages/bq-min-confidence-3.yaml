@@ -6,7 +6,9 @@ bq_out_voyages: "world-fishing-827.scratch_tomas_ttl30d.voyages_c3"
 # General parameters:
 project: world-fishing-827
 
-# Labels for project cost tags
+# Labels for cost tracking (label values: lowercase letters, digits, '_' and '-').
 labels:
-  team: pipelines
-  env: dev
+  environment: development
+  resource_creator: tomas-link
+  project: ais
+  stage: anchorages

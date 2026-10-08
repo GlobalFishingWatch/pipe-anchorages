@@ -52,34 +52,40 @@ def run(args):
         version=__version__,
         examples=[
             "pipe-anchorages anchorages-visited-info -c config/sample-anchorages-visited.json "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
             "pipe-anchorages confidence-voyages "
             "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
             "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827 "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
             "pipe-anchorages port-state-transitions "
             "--bq-in-named-anchorages project.dataset.anchorages "
             "--bq-in-messages project.dataset.messages "
             "--bq-out-port-state-transitions project.dataset.output "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
             "pipe-anchorages port-visits "
             "--bq-in-port-events project.dataset.port_events "
             "--bq-in-segment-info project.dataset.segment_info "
             "--bq-out-port-visits project.dataset.port_visits "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
             "pipe-anchorages anchorage-locations "
             "--bq-in-messages project.dataset.messages "
             "--bq-in-segments project.dataset.segments "
             "--bq-out-anchorage-locations project.dataset.anchorage_locations "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
             "--gcs-in-fishing-ssvids gs://bucket/fishing_mmsi.txt "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
             "pipe-anchorages named-anchorages "
             "--bq-in-anchorage-locations project.dataset.anchorage_locations "
             "--bq-out-named-anchorages project.dataset.named_anchorages "
-            "--labels team=pipelines env=dev",
+            "--labels environment=development resource_creator=tomas-link "
+            "project=ais stage=anchorages",
         ],
         logger_config=LoggerConfig(
             warning_level=[

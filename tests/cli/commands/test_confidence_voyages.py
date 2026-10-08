@@ -12,7 +12,7 @@ BASE_ARGS = [
     "--bq-out-voyages", "project.dataset.voyages_c3",
     "--project", "test-project",
     "--mock-bq-clients",
-    "--labels", "team=test",
+    "--labels", "environment=development", "stage=anchorages",
 ]
 
 

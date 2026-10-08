@@ -18,7 +18,9 @@ setup_file: "./setup.py"
 sdk_container_image: "gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test"
 experiments: ["use_runner_v2"]
 
-# Labels for project cost tags
+# Labels for cost tracking (label values: lowercase letters, digits, '_' and '-').
 labels:
-  team: pipelines
-  env: dev
+  environment: development
+  resource_creator: tomas-link
+  project: ais
+  stage: anchorages
