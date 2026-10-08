@@ -18,11 +18,11 @@ class AnchorageMessage(NamedTuple):
     speed: float
 
 
-class AnchoragePointsQuery(Query):
+class AnchorageLocationsQuery(Query):
     """Encapsulates the anchorage position messages query."""
 
-    NAME = "anchorage_points"
-    JINJA_TEMPLATE_FILENAME = "anchorage_points.sql.j2"
+    NAME = "anchorage_locations"
+    JINJA_TEMPLATE_FILENAME = "anchorage_locations.sql.j2"
 
     def __init__(self, source_messages: str, start_date: date, end_date: date):
         self._source_messages = source_messages

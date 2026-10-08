@@ -12,13 +12,13 @@ from gfw.common.beam.pipeline.dag import LinearDag
 from gfw.common.beam.transforms import ReadFromBigQuery, WriteToBigQueryWrapper
 
 
-from pipe_anchorages.pipelines.anchorage_points.config import AnchoragePointsConfig
-from pipe_anchorages.pipelines.anchorage_points.table_config import (
-    AnchoragePointsTableConfig,
-    AnchoragePointsTableDescription,
+from pipe_anchorages.pipelines.anchorage_locations.config import AnchorageLocationsConfig
+from pipe_anchorages.pipelines.anchorage_locations.table_config import (
+    AnchorageLocationsTableConfig,
+    AnchorageLocationsTableDescription,
 )
-from pipe_anchorages.pipelines.anchorage_points.transforms.core import FindAnchoragePoints
-from pipe_anchorages.queries.anchorage_points import AnchoragePointsQuery
+from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchoragePoints
+from pipe_anchorages.queries.anchorage_locations import AnchorageLocationsQuery
 from pipe_anchorages.version import __version__
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def run(
     write_to_bigquery_factory: Callable = None,
     **kwargs: Any,
 ) -> int:
-    config = AnchoragePointsConfig.from_namespace(config, version=__version__)
+    config = AnchorageLocationsConfig.from_namespace(config, version=__version__)
 
     if read_from_bigquery_factory is None:
         read_from_bigquery_factory = ReadFromBigQuery.get_client_factory(
@@ -43,9 +43,9 @@ def run(
             mocked=bool(config.mock_bq_clients)
         )
 
-    table_config = AnchoragePointsTableConfig(
-        table_id=config.bq_out_anchorage_points,
-        description=AnchoragePointsTableDescription(
+    table_config = AnchorageLocationsTableConfig(
+        table_id=config.bq_out_anchorage_locations,
+        description=AnchorageLocationsTableDescription(
             version=__version__,
             relevant_params={
                 "bq_in_messages": config.bq_in_messages,
@@ -64,7 +64,7 @@ def run(
     dag = LinearDag(
         sources=[
             ReadFromBigQuery.from_query(
-                AnchoragePointsQuery(
+                AnchorageLocationsQuery(
                     source_messages=config.bq_in_messages,
                     start_date=config.start_date,
                     end_date=config.end_date,

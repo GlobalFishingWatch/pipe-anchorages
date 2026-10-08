@@ -5,9 +5,9 @@ from gfw.common.config import PipelineConfig
 
 
 @dataclass(frozen=True, kw_only=True)
-class AnchoragePointsConfig(PipelineConfig):
+class AnchorageLocationsConfig(PipelineConfig):
     bq_in_messages: str
-    bq_out_anchorage_points: str
+    bq_out_anchorage_locations: str
     gcs_in_fishing_ssvids: str
 
     # Defaults must be declared (they shadow PipelineConfig's own start_date/end_date

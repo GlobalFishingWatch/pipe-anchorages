@@ -6,8 +6,8 @@ import pytest
 import apache_beam as beam
 from apache_beam.runners import PipelineState
 
-from pipe_anchorages.pipelines.anchorage_points import main as anchorage_points
-from pipe_anchorages.pipelines.anchorage_points.transforms.core import FindAnchoragePoints
+from pipe_anchorages.pipelines.anchorage_locations import main as anchorage_locations
+from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchoragePoints
 
 from gfw.common.beam.transforms import WriteToBigQueryWrapper
 from pipe_anchorages.cli import main
@@ -103,8 +103,8 @@ def test_run_forwards_config_file_beam_options_to_pipeline(
     )
 
     mock_pipeline_cls = capture_pipeline_init(
-        "pipe_anchorages.pipelines.anchorage_points.main.Pipeline",
-        anchorage_points.run,
+        "pipe_anchorages.pipelines.anchorage_locations.main.Pipeline",
+        anchorage_locations.run,
         config,
     )
 
@@ -129,7 +129,7 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
 
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
-        bq_out_anchorage_points="project.dataset.anchorage_points",
+        bq_out_anchorage_locations="project.dataset.anchorage_locations",
         start_date="2024-01-01",
         end_date="2024-01-07",
         gcs_in_fishing_ssvids=str(fishing_ssvids),
@@ -143,19 +143,19 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
     )
 
     captured = {}
-    real_linear_dag = anchorage_points.LinearDag
+    real_linear_dag = anchorage_locations.LinearDag
 
     def capture_linear_dag(*args, **kwargs):
         captured.update(kwargs)
         return real_linear_dag(*args, **kwargs)
 
-    mocker.patch.object(anchorage_points, "LinearDag", side_effect=capture_linear_dag)
+    mocker.patch.object(anchorage_locations, "LinearDag", side_effect=capture_linear_dag)
     mocker.patch(
         "apache_beam.pipeline.Pipeline.run",
         return_value=mocker.Mock(state=PipelineState.RUNNING),
     )
 
-    assert anchorage_points.run(config) == 0
+    assert anchorage_locations.run(config) == 0
 
     # The single read query covers 2024-01-01..2024-01-07.
     assert len(captured["sources"]) == 1

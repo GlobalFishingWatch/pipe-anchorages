@@ -1,8 +1,8 @@
-from pipe_anchorages.queries.anchorage_points import AnchoragePointsQuery
+from pipe_anchorages.queries.anchorage_locations import AnchorageLocationsQuery
 
 
 def test_query_renders_single_table():
-    query = AnchoragePointsQuery(
+    query = AnchorageLocationsQuery(
         source_messages="SOURCE_TABLE",
         start_date="2016-01-01",
         end_date="2016-01-01",

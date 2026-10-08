@@ -26,7 +26,7 @@ CAVEATS = """\
 
 
 @dataclass
-class AnchoragePointsTableDescription(TableDescription):
+class AnchorageLocationsTableDescription(TableDescription):
     repo_name: str = "pipe-anchorages"
     title: str = "ANCHORAGE POINTS"
     subtitle: str = "Candidate anchorage locations derived from vessel stationary detections"
@@ -35,8 +35,8 @@ class AnchoragePointsTableDescription(TableDescription):
 
 
 @dataclass
-class AnchoragePointsTableConfig(TableConfig):
-    schema_file: str = "anchorage_points.json"
+class AnchorageLocationsTableConfig(TableConfig):
+    schema_file: str = "anchorage_locations.json"
 
     @property
     def schema(self) -> list[dict]:
