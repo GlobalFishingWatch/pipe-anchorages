@@ -1,6 +1,6 @@
 from apache_beam import Map, PTransform, io
 from apache_beam.transforms.window import TimestampedValue
-from pipe_anchorages.objects.namedtuples import epoch
+from pipe_anchorages.core.namedtuples import epoch
 from pipe_anchorages.schema.message_schema import message_schema
 from pipe_anchorages.schema.named_anchorage import build as build_named_anchorage_schema
 from pipe_anchorages.utils.ver import get_pipe_ver
