@@ -17,8 +17,8 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_LOCATIONS = "BigQuery table in which to store the anchorage locations."
-HELP_START_DATE = "First date to look for stationary positions."
-HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
+HELP_START_DATE = "First date (inclusive) to look for stationary positions."
+HELP_END_DATE = "End date (exclusive) to look for stationary positions."
 HELP_FISHING_SSVIDS = "Newline-separated list of fishing vessel ids."
 HELP_MIN_POSITIONS = "Minimum number of positions a segment needs to be considered."
 HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES = (

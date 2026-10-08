@@ -8,7 +8,8 @@ SELECT
 FROM
     `{{ source_messages }}`
 WHERE
-    date(timestamp) BETWEEN '{{ start_date }}' AND '{{ end_date }}'
+    date(timestamp) >= '{{ start_date }}'
+    AND date(timestamp) < '{{ end_date }}'
     AND seg_id IS NOT NULL
     AND lat IS NOT NULL
     AND lon IS NOT NULL

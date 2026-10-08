@@ -143,7 +143,8 @@ def test_run_reads_the_date_range_and_writes_the_output_table(fishing_ssvids):
 
     (read,) = reads
     assert "project.dataset.messages_positions" in read["query"]
-    assert "BETWEEN '2024-01-01' AND '2024-01-07'" in read["query"]
+    assert "date(timestamp) >= '2024-01-01'" in read["query"]
+    assert "date(timestamp) < '2024-01-07'" in read["query"]
     (write,) = writes
     assert write["table"] == "project.dataset.anchorage_locations"
     assert [f["name"] for f in write["schema"]["fields"]] == [

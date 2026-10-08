@@ -5,7 +5,7 @@ def test_query_renders_single_table():
     query = AnchorageLocationsQuery(
         source_messages="SOURCE_TABLE",
         start_date="2016-01-01",
-        end_date="2016-01-01",
+        end_date="2016-01-02",
     )
     expected = """
 SELECT
@@ -18,7 +18,8 @@ SELECT
 FROM
     `SOURCE_TABLE`
 WHERE
-    date(timestamp) BETWEEN '2016-01-01' AND '2016-01-01'
+    date(timestamp) >= '2016-01-01'
+    AND date(timestamp) < '2016-01-02'
     AND seg_id IS NOT NULL
     AND lat IS NOT NULL
     AND lon IS NOT NULL
