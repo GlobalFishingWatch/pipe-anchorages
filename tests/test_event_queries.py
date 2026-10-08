@@ -1,16 +1,6 @@
 from pipe_anchorages.queries.anchorage_points import AnchoragePointsQuery
 
 
-class DummyOptions(object):
-    def __init__(
-        self, start_date, end_date, bq_in_messages="SOURCE_TABLE", bq_in_segments="SEGMENTS_TABLE_"
-    ):
-        self.start_date = start_date
-        self.end_date = end_date
-        self.bq_in_messages = bq_in_messages
-        self.bq_in_segments = bq_in_segments
-
-
 def test_query_renders_single_table():
     query = AnchoragePointsQuery(
         source_messages="SOURCE_TABLE",

@@ -16,7 +16,6 @@ from pipe_anchorages.cli import main
 BASE_ARGS = [
     "anchorage-locations",
     "--bq-in-messages", "project.dataset.messages",
-    "--bq-in-segments", "project.dataset.segments",
     "--bq-out-anchorage-locations", "project.dataset.anchorage_locations",
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
@@ -36,7 +35,6 @@ def test_cli_executes_run(mocker):
     mock_run.assert_called_once()
     config = mock_run.call_args[0][0]
     assert config.bq_in_messages == "project.dataset.messages"
-    assert config.bq_in_segments == "project.dataset.segments"
     assert config.bq_out_anchorage_locations == "project.dataset.anchorage_locations"
     assert config.start_date == "2024-01-01"
     assert config.end_date == "2024-01-07"
@@ -90,7 +88,6 @@ def test_run_forwards_config_file_beam_options_to_pipeline(
     (tmp_path / "fishing_mmsi.txt").write_text("416000001\n")
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
-        bq_in_segments="project.dataset.segments",
         bq_out_anchorage_locations="project.dataset.anchorage_locations",
         start_date="2024-01-01",
         end_date="2024-01-07",
@@ -132,7 +129,6 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
 
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
-        bq_in_segments="project.dataset.segments",
         bq_out_anchorage_points="project.dataset.anchorage_points",
         start_date="2024-01-01",
         end_date="2024-01-07",
@@ -161,7 +157,7 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
 
     assert anchorage_points.run(config) == 0
 
-    # 2024-01-01..2024-01-07 fits in a single 1000-day query chunk.
+    # The single read query covers 2024-01-01..2024-01-07.
     assert len(captured["sources"]) == 1
     assert isinstance(captured["core"], FindAnchoragePoints)
     assert len(captured["sinks"]) == 1

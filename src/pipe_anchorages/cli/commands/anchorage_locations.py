@@ -16,8 +16,7 @@ defined for Apache Beam PipelineOptions class. For more information, see
 """
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
-HELP_IN_SEGMENTS = "BigQuery table with segment destinations, partitioned by day."
-HELP_LOCATIONS = "BigQuery table in which to store the anchorage locations."
+HELP_LOCATIONS = "BigQuery table in which to store the anchorage points."
 HELP_START_DATE = "First date to look for stationary positions."
 HELP_END_DATE = "Last date (exclusive) to look for stationary positions."
 HELP_FISHING_SSVIDS = "Newline-separated list of fishing vessel ids."
@@ -47,7 +46,6 @@ class AnchorageLocations(Command):
     def options(self):
         return [
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
-            Option("--bq-in-segments", type=str, required=True, help=HELP_IN_SEGMENTS),
             Option("--bq-out-anchorage-locations", type=str, required=True, help=HELP_LOCATIONS),
             Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
             Option("--start-date", type=str, required=True, help=HELP_START_DATE),

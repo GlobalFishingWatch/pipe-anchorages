@@ -7,7 +7,6 @@ from gfw.common.config import PipelineConfig
 @dataclass(frozen=True, kw_only=True)
 class AnchoragePointsConfig(PipelineConfig):
     bq_in_messages: str
-    bq_in_segments: str
     bq_out_anchorage_points: str
     gcs_in_fishing_ssvids: str
 

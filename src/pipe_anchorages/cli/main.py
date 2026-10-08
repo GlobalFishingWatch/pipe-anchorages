@@ -75,7 +75,6 @@ def run(args):
             "project=ais stage=anchorages",
             "pipe-anchorages anchorage-locations "
             "--bq-in-messages project.dataset.messages "
-            "--bq-in-segments project.dataset.segments "
             "--bq-out-anchorage-locations project.dataset.anchorage_locations "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
             "--gcs-in-fishing-ssvids gs://bucket/fishing_mmsi.txt "

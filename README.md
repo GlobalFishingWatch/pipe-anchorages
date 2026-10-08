@@ -212,8 +212,7 @@ Example:
 
 ```shell
 pipe-anchorages anchorage-locations \
-    --bq-in-messages world-fishing-827.pipe_production_v20201001.position_messages_ \
-    --bq-in-segments world-fishing-827.pipe_production_v20201001.segments_ \
+    --bq-in-messages world-fishing-827.pipe_ais_v3_internal.messages_positions \
     --bq-out-anchorage-locations world-fishing-827.scratch_ttl30d.anchorage_locations \
     --start-date 2024-01-01 --end-date 2024-01-31 \
     --gcs-in-fishing-ssvids gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \

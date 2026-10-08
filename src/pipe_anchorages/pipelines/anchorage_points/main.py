@@ -49,7 +49,6 @@ def run(
             version=__version__,
             relevant_params={
                 "bq_in_messages": config.bq_in_messages,
-                "bq_in_segments": config.bq_in_segments,
                 "start_date": config.start_date,
                 "end_date": config.end_date,
                 "min_positions": config.min_positions,
