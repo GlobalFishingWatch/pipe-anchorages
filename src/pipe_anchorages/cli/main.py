@@ -11,7 +11,7 @@ from pipe_anchorages.version import __version__
 from pipe_anchorages.cli.commands import (
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
-    TransitionMessages,
+    PortStateTransitions,
 )
 
 
@@ -31,7 +31,7 @@ def run(args):
         subcommands=[
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
-            TransitionMessages,
+            PortStateTransitions,
         ],
         options=[  # Common options for all subcommands.
             Option(
@@ -44,10 +44,10 @@ def run(args):
             "pipe-anchorages confidence-voyages "
             "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
             "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
-            "pipe-anchorages transition-messages "
+            "pipe-anchorages port-state-transitions "
             "--bq-in-named-anchorages project.dataset.anchorages "
             "--bq-in-messages project.dataset.messages "
-            "--bq-out-transition-messages project.dataset.output "
+            "--bq-out-port-state-transitions project.dataset.output "
             "--start-date 2024-01-01 --end-date 2024-01-07",
         ],
         logger_config=LoggerConfig(
@@ -90,7 +90,7 @@ SUBCOMMANDS = {
     "name_anchorages": run_name_anchorages,
     "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
     "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
-    "thin_port_messages": lambda args: run(["transition-messages"] + args),
+    "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
 }
 
 

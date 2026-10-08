@@ -63,10 +63,10 @@ def anchorage_query(config):
 
 def prepare_output_tables(config, cloud_options, start_date, end_date):
     output_table = DatePartitionedTable(
-        table_id=config.bq_out_transition_messages,
+        table_id=config.bq_out_port_state_transitions,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
-* Creates filtered position messages flagging candidate port transitions.
+* Position messages around candidate port transitions, gaps and day edges (port-visits input).
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
 * Sources: {config.bq_in_messages}
 * Anchorage table: {config.bq_in_named_anchorages}
@@ -143,7 +143,7 @@ def run(config: SimpleNamespace, **kwargs: Any) -> int:
             start_date=start_date,
             end_date=end_date,
         )
-        | "writeThinnedRecords" >> MessageSink(config.bq_out_transition_messages)
+        | "writeThinnedRecords" >> MessageSink(config.bq_out_port_state_transitions)
     )
 
     prepare_output_tables(config, cloud_options, start_date, end_date)

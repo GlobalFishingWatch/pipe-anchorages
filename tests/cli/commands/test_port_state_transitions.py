@@ -11,14 +11,14 @@ from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages import thin_port_messages_pipeline
 from pipe_anchorages.cli import main
-from pipe_anchorages.cli.commands.transition_messages import TransitionMessages
+from pipe_anchorages.cli.commands.port_state_transitions import PortStateTransitions
 
 
 BASE_ARGS = [
-    "transition-messages",
+    "port-state-transitions",
     "--bq-in-named-anchorages", "project.dataset.anchorages",
     "--bq-in-messages", "project.dataset.messages",
-    "--bq-out-transition-messages", "project.dataset.output",
+    "--bq-out-port-state-transitions", "project.dataset.output",
     "--start-date", "2024-01-01",
     "--end-date", "2024-01-07",
 ]
@@ -26,7 +26,7 @@ BASE_ARGS = [
 
 def test_cli_executes_run(mocker):
     mock_run = mocker.patch(
-        "pipe_anchorages.cli.commands.transition_messages.thin_port_messages_pipeline.run",
+        "pipe_anchorages.cli.commands.port_state_transitions.thin_port_messages_pipeline.run",
         return_value=0,
     )
 
@@ -36,7 +36,7 @@ def test_cli_executes_run(mocker):
     config = mock_run.call_args[0][0]
     assert config.bq_in_named_anchorages == "project.dataset.anchorages"
     assert config.bq_in_messages == "project.dataset.messages"
-    assert config.bq_out_transition_messages == "project.dataset.output"
+    assert config.bq_out_port_state_transitions == "project.dataset.output"
     assert config.start_date == "2024-01-01"
     assert config.end_date == "2024-01-07"
     assert config.wait_for_job is False
@@ -49,7 +49,7 @@ def test_cli_executes_run(mocker):
 
 def test_cli_requires_named_anchorages_table(mocker):
     mocker.patch(
-        "pipe_anchorages.cli.commands.transition_messages.thin_port_messages_pipeline.run",
+        "pipe_anchorages.cli.commands.port_state_transitions.thin_port_messages_pipeline.run",
         return_value=0,
     )
     args = [
@@ -65,7 +65,7 @@ def test_transition_options_are_shared_with_port_visits():
     # port-visits imports and reuses this method rather than redeclaring the
     # same 5 Options, so the two commands can't drift apart. Locking in the
     # exact flag names/defaults here protects that shared contract.
-    flags = {opt.flags[0]: opt for opt in TransitionMessages.transition_options()}
+    flags = {opt.flags[0]: opt for opt in PortStateTransitions.transition_options()}
 
     assert set(flags) == {
         "--anchorage-entry-dist-km",
@@ -133,7 +133,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
         bq_in_named_anchorages="project.dataset.anchorages",
-        bq_out_transition_messages="project.dataset.output",
+        bq_out_port_state_transitions="project.dataset.output",
         start_date="2024-01-01",
         end_date="2024-01-07",
         ssvid_filter=None,
