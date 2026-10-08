@@ -1,0 +1,7 @@
+# Query parameters:
+bq_in_port_visits: "world-fishing-827.machine_learning_dev_ttl_120d.port_visits_v20220927_"
+min_confidence: "3"
+bq_out_voyages: "world-fishing-827.scratch_tomas_ttl30d.voyages_c3"
+
+# General parameters:
+project: world-fishing-827

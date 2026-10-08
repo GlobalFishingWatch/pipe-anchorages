@@ -8,7 +8,7 @@ from gfw.common.cli.actions import NestedKeyValueAction
 from gfw.common.cli.formatting import default_formatter
 
 from pipe_anchorages.version import __version__
-from pipe_anchorages.cli.commands import AnchoragesVisitedInfo
+from pipe_anchorages.cli.commands import AnchoragesVisitedInfo, ConfidenceVoyages
 
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,7 @@ def run(args):
         formatter=default_formatter(max_pos=120),
         subcommands=[
             AnchoragesVisitedInfo,
+            ConfidenceVoyages,
         ],
         options=[  # Common options for all subcommands.
             Option(
@@ -35,6 +36,9 @@ def run(args):
         version=__version__,
         examples=[
             "pipe-anchorages anchorages-visited-info -c config/sample-anchorages-visited.json",
+            "pipe-anchorages confidence-voyages "
+            "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
+            "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
         ],
         logger_config=LoggerConfig(
             warning_level=[
@@ -54,11 +58,6 @@ def run(args):
 
 # FROM NOW ON: LEGACY ENTRY POINT.
 # TODO: REMOVE AFTER MIGRATING THE REST OF THE COMMANDS.
-
-def run_generate_confidence_voyages(args):
-    from pipe_anchorages.confidence_voyages import run as run_confidence_voyages
-    run_confidence_voyages(args)
-
 
 def run_thin_port_messages(args):
     from pipe_anchorages.thin_port_messages import run as run_thin_port_messages
@@ -85,8 +84,8 @@ SUBCOMMANDS = {
     "port_visits": run_port_visits,
     "anchorages": run_anchorages,
     "name_anchorages": run_name_anchorages,
-    "generate_confidence_voyages": run_generate_confidence_voyages,
-    "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args)
+    "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
+    "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
 }
 
 
@@ -95,20 +94,15 @@ def main():
     # run(sys.argv[1:])
 
     # TODO: Remove the following after the commands are migrated.
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Running %s", sys.argv)
+    # Only the still-unmigrated legacy commands need the old dispatch; anything else
+    # (new-style kebab-case command names, --help, --version, ...) goes through the
+    # real framework, which already handles usage/errors on its own.
+    args = sys.argv[1:]
 
-    if len(sys.argv) < 2:
-        logging.info(
-            "No subcommand specified. Run pipeline [SUBCOMMAND], where subcommand is one of %s",
-            SUBCOMMANDS.keys(),
-        )
-        exit(1)
-
-    subcommand = sys.argv[1]
-    subcommand_args = sys.argv[2:]
-
-    SUBCOMMANDS[subcommand](subcommand_args)
+    if args and args[0] in SUBCOMMANDS:
+        SUBCOMMANDS[args[0]](args[1:])
+    else:
+        run(args)
 
 
 if __name__ == "__main__":

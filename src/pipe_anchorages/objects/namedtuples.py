@@ -2,10 +2,9 @@ import json as ujson
 import apache_beam as beam
 from apache_beam import typehints
 import datetime
-import pytz
 
 
-epoch = datetime.datetime.utcfromtimestamp(0).replace(tzinfo=pytz.utc)
+epoch = datetime.datetime.fromtimestamp(0, datetime.UTC)
 
 
 def datetime_to_s(x):
