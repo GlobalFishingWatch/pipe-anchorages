@@ -1,12 +1,10 @@
-import datetime
 import logging
 
 import apache_beam as beam
 
 from pipe_anchorages import common as cmn
-from pipe_anchorages.find_anchorage_points import FindAnchoragePoints
+from pipe_anchorages.find_anchorage_points import GroupStationaryPeriodsByS2Cell
 from pipe_anchorages.records import VesselLocationRecord
-from pipe_anchorages.pipelines.anchorage_points.config import AnchoragePointsConfig
 
 logger = logging.getLogger(__name__)
 
@@ -34,42 +32,42 @@ def encode_anchorage(anchorage) -> dict:
     }
 
 
-class AnchoragePointsCore(beam.PTransform):
+class FindAnchoragePoints(beam.PTransform):
     """Turns position messages into anchorage table records (row dicts).
 
     Groups the inline chain (CreateVesselRecords -> filter location records ->
-    CreateTaggedRecords -> FindAnchoragePoints -> encode) into one composite
-    PTransform, since LinearDag's core slot takes exactly one transform. The
-    fishing vessel list is read here too, as a side input of
-    FindAnchoragePoints -- LinearDag's own side_inputs slot would require
-    implementing set_side_inputs, which we don't need yet.
+    CreateTaggedRecords -> GroupStationaryPeriodsByS2Cell -> encode) into one
+    composite PTransform, since LinearDag's core slot takes exactly one
+    transform. The fishing vessel list is NOT read here: it arrives as a side
+    input that LinearDag applies from `side_inputs=` and delivers via
+    `set_side_inputs`, which this class implements.
+
+    Constructor params are the raw config fields, not a config object.
     """
 
-    def __init__(self, config: AnchoragePointsConfig) -> None:
-        self.min_positions = config.min_positions
-        self.min_duration = datetime.timedelta(
-            minutes=config.stationary_period_min_duration_minutes
-        )
-        self.max_distance_km = config.stationary_period_max_distance_km
-        self.min_unique_vessels = config.min_unique_vessels
-        self.gcs_in_fishing_ssvids = config.gcs_in_fishing_ssvids
+    def __init__(self, min_positions, min_duration, max_distance_km, min_unique_vessels) -> None:
+        self.min_positions = min_positions
+        self.min_duration = min_duration
+        self.max_distance_km = max_distance_km
+        self.min_unique_vessels = min_unique_vessels
+        self._fishing_vessels = None
+
+    def set_side_inputs(self, side_inputs):
+        self._fishing_vessels = side_inputs
 
     def expand(self, xs):
-        fishing_vessels = xs.pipeline | "ReadFishingVessels" >> beam.io.ReadFromText(
-            self.gcs_in_fishing_ssvids
-        )
-        fishing_vessel_list = beam.pvalue.AsList(fishing_vessels)
+        fishing_vessel_list = beam.pvalue.AsList(self._fishing_vessels)
 
         return (
             xs
             | cmn.CreateVesselRecords()
             | "FilterOutInfo" >> beam.Filter(has_location_record)
             | cmn.CreateTaggedRecords(self.min_positions)
-            | FindAnchoragePoints(
+            | GroupStationaryPeriodsByS2Cell(
                 self.min_duration,
                 self.max_distance_km,
                 self.min_unique_vessels,
                 fishing_vessel_list,
             )
-            | beam.Map(encode_anchorage)
+            | "EncodeAnchorages" >> beam.Map(encode_anchorage)
         )

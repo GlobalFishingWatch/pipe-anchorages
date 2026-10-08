@@ -3,11 +3,11 @@ import argparse
 from types import SimpleNamespace
 
 import pytest
-
+import apache_beam as beam
 from apache_beam.runners import PipelineState
 
 from pipe_anchorages.pipelines.anchorage_points import main as anchorage_points
-from pipe_anchorages.pipelines.anchorage_points.transforms.core import AnchoragePointsCore
+from pipe_anchorages.pipelines.anchorage_points.transforms.core import FindAnchoragePoints
 
 from gfw.common.beam.transforms import WriteToBigQueryWrapper
 from pipe_anchorages.cli import main
@@ -80,18 +80,22 @@ def test_cli_requires_gcs_in_fishing_ssvids(mocker):
         main.run(args)
 
 
-def test_run_forwards_config_file_beam_options_to_pipeline(capture_pipeline_init, mocker):
+def test_run_forwards_config_file_beam_options_to_pipeline(
+    capture_pipeline_init, mocker, tmp_path
+):
     # Same forwarding contract as thin_port_messages_pipeline.run()/port_visits_pipeline.run():
     # config-file keys that aren't one of this command's own Options land in
     # config.unknown_parsed_args, and run() must forward that dict into
     # Pipeline(**options), matching pipe-gaps' PipelineFactory.
+    (tmp_path / "fishing_mmsi.txt").write_text("416000001\n")
     config = SimpleNamespace(
         bq_in_messages="project.dataset.messages",
         bq_in_segments="project.dataset.segments",
         bq_out_anchorage_locations="project.dataset.anchorage_locations",
         start_date="2024-01-01",
         end_date="2024-01-07",
-        gcs_in_fishing_ssvids="gs://bucket/fishing_mmsi.txt",
+        gcs_in_fishing_ssvids=str(tmp_path / "fishing_mmsi.txt"),
+
         min_positions=200,
         stationary_period_min_duration_minutes=720,
         stationary_period_max_distance_km=0.5,
@@ -159,6 +163,7 @@ def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
 
     # 2024-01-01..2024-01-07 fits in a single 1000-day query chunk.
     assert len(captured["sources"]) == 1
-    assert isinstance(captured["core"], AnchoragePointsCore)
+    assert isinstance(captured["core"], FindAnchoragePoints)
     assert len(captured["sinks"]) == 1
     assert isinstance(captured["sinks"][0], WriteToBigQueryWrapper)
+    assert isinstance(captured["side_inputs"], beam.io.ReadFromText)

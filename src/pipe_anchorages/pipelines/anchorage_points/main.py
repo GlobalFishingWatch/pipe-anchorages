@@ -17,7 +17,7 @@ from pipe_anchorages.pipelines.anchorage_points.table_config import (
     AnchoragePointsTableConfig,
     AnchoragePointsTableDescription,
 )
-from pipe_anchorages.pipelines.anchorage_points.transforms.core import AnchoragePointsCore
+from pipe_anchorages.pipelines.anchorage_points.transforms.core import FindAnchoragePoints
 from pipe_anchorages.version import __version__
 
 logger = logging.getLogger(__name__)
@@ -131,7 +131,15 @@ def run(
             )
             for i, query in enumerate(create_queries(config))
         ],
-        core=AnchoragePointsCore(config),
+        core=FindAnchoragePoints(
+            min_positions=config.min_positions,
+            min_duration=datetime.timedelta(
+                minutes=config.stationary_period_min_duration_minutes
+            ),
+            max_distance_km=config.stationary_period_max_distance_km,
+            min_unique_vessels=config.min_unique_vessels,
+        ),
+        side_inputs=beam.io.ReadFromText(config.gcs_in_fishing_ssvids),
         sinks=(
             WriteToBigQueryWrapper(
                 table=table_config.table_id,

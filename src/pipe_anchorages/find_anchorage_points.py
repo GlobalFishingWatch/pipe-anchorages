@@ -17,7 +17,7 @@ StationaryPeriod = namedtuple(
 ActiveAndStationary = namedtuple("ActiveAndStationary", ["active_records", "stationary_periods"])
 
 
-class FindAnchoragePoints(beam.PTransform):
+class GroupStationaryPeriodsByS2Cell(beam.PTransform):
 
     def __init__(self, min_duration, max_distance, min_unique_vessels, fishing_vessel_list):
         self.min_duration = min_duration
