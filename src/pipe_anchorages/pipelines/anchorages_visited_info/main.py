@@ -58,21 +58,18 @@ def run(
     )
 
     logger.info("Running query...")
-    query_result = bq.run_query(
+    bq.run_query(
         query.render(),
         destination=table_config.table_id,
         write_disposition="WRITE_TRUNCATE",
         create_disposition="CREATE_IF_NEEDED",
+        partition_type=table_config.partition_type,
+        partition_field=table_config.partition_field,
+        clustering_fields=table_config.clustering_fields,
+        schema=table_config.schema,
+        description=table_config.description.render(),
         labels=config.labels,
     )
-    query_result.query_job.result()
-
-    # TODO: Move this to BigQueryHelper.
-    logger.info("Updating table schema and description...")
-    table = bq.client.get_table(table_config.table_id)
-    table.schema = table_config.schema
-    table.description = table_config.description.render()
-    table = bq.client.update_table(table, ["schema", "description"])
     logger.info("Done.")
     logger.info("You can check the results in:")
     logger.info(f"{table_config.table_id}")

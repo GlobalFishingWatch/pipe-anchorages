@@ -40,9 +40,13 @@ def test_cli_writes_output_partitioned_like_production(mocker):
     kwargs = run_query.call_args.kwargs
     assert kwargs["destination"] == "project.dataset.voyages_c3"
     assert kwargs["write_disposition"] == "WRITE_TRUNCATE"
-    assert kwargs["time_partitioning"].type_ == "MONTH"
-    assert kwargs["time_partitioning"].field == "trip_start"
-    assert kwargs["clustering_fields"] == ["trip_start"]
+    assert kwargs["partition_type"] == "MONTH"
+    assert kwargs["partition_field"] == "trip_start"
+    assert tuple(kwargs["clustering_fields"]) == ("trip_start",)
+    assert [f["name"] for f in kwargs["schema"]] == [
+        f["name"] for f in schemas.get_schema("confidence_voyages.json")
+    ]
+    assert kwargs["description"]
 
 
 def test_query_outputs_columns_in_schema_order():
