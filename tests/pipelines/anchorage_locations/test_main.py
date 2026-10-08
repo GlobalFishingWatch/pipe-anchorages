@@ -9,7 +9,7 @@ from apache_beam.testing.util import assert_that
 from gfw.common.beam.transforms.bigquery import FakeReadFromBigQuery
 
 from pipe_anchorages.assets import schemas
-from pipe_anchorages.pipelines.anchorage_locations.main import run
+from pipe_anchorages.pipelines.anchorage_locations.main import AnchorageLocationsQuery, run
 
 # The in-process runner: DirectRunner would pick Prism, which runs as a subprocess and stages an
 # sdist of the package in the working directory.
@@ -150,3 +150,30 @@ def test_run_reads_the_date_range_and_writes_the_output_table(fishing_ssvids):
     assert [f["name"] for f in write["schema"]["fields"]] == [
         f["name"] for f in schemas.get_schema("anchorage_locations.json")
     ]
+
+
+def test_query_renders_single_table():
+    query = AnchorageLocationsQuery(
+        source_messages="SOURCE_TABLE",
+        start_date="2016-01-01",
+        end_date="2016-01-02",
+    )
+    expected = """
+SELECT
+    ssvid AS ident,
+    lat,
+    lon,
+    CAST(UNIX_MICROS(timestamp) AS FLOAT64) / 1000000 AS timestamp,
+    destination,
+    speed
+FROM
+    `SOURCE_TABLE`
+WHERE
+    date(timestamp) >= '2016-01-01'
+    AND date(timestamp) < '2016-01-02'
+    AND seg_id IS NOT NULL
+    AND lat IS NOT NULL
+    AND lon IS NOT NULL
+    AND speed IS NOT NULL
+"""
+    assert query.render() == expected.strip("\n")
