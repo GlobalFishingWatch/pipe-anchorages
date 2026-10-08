@@ -193,8 +193,7 @@ class NamedAnchorageSink(PTransform):
 Created by the anchorages_pipeline: {self.ver}.
 Creates the named anchorage table.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
-* Sources: {self.args.input_table}
-* Configuration: {self.args.config}
+* Source: {self.args.bq_in_anchorage_locations}
 * Shapefile used: {self.args.shapefile}
         """
 

@@ -12,6 +12,7 @@ from pipe_anchorages.cli.commands import (
     AnchorageLocations,
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
+    NamedAnchorages,
     PortStateTransitions,
     PortVisits,
 )
@@ -34,6 +35,7 @@ def run(args):
             AnchorageLocations,
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
+            NamedAnchorages,
             PortStateTransitions,
             PortVisits,
         ],
@@ -64,6 +66,9 @@ def run(args):
             "--bq-out-anchorage-locations project.dataset.anchorage_locations "
             "--start-date 2024-01-01 --end-date 2024-01-07 "
             "--gcs-in-fishing-ssvids gs://bucket/fishing_mmsi.txt",
+            "pipe-anchorages named-anchorages "
+            "--bq-in-anchorage-locations project.dataset.anchorage_locations "
+            "--bq-out-named-anchorages project.dataset.named_anchorages",
         ],
         logger_config=LoggerConfig(
             warning_level=[
@@ -81,38 +86,8 @@ def run(args):
     return cli.execute(args)
 
 
-# FROM NOW ON: LEGACY ENTRY POINT.
-# TODO: REMOVE AFTER MIGRATING THE REST OF THE COMMANDS.
-
-def run_name_anchorages(args):
-    from pipe_anchorages.name_anchorages import run as run_name_anchorages
-    run_name_anchorages(args)
-
-
-SUBCOMMANDS = {
-    "name_anchorages": run_name_anchorages,
-    "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
-    "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
-    "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
-    "port_visits": lambda args: run(["port-visits"] + args),
-    "anchorages": lambda args: run(["anchorage-locations"] + args),
-}
-
-
 def main():
-    # This is the only line needed after the rest of the CLI commands are migrated.
-    # run(sys.argv[1:])
-
-    # TODO: Remove the following after the commands are migrated.
-    # Only the still-unmigrated legacy commands need the old dispatch; anything else
-    # (new-style kebab-case command names, --help, --version, ...) goes through the
-    # real framework, which already handles usage/errors on its own.
-    args = sys.argv[1:]
-
-    if args and args[0] in SUBCOMMANDS:
-        SUBCOMMANDS[args[0]](args[1:])
-    else:
-        run(args)
+    run(sys.argv[1:])
 
 
 if __name__ == "__main__":

@@ -1,11 +1,14 @@
 from __future__ import absolute_import, print_function, division
 
 import os
-import yaml
 import logging
 
 from collections import namedtuple
 from importlib.resources import files
+from types import SimpleNamespace
+from typing import Any
+
+from gfw.common.beam.pipeline.base import Pipeline
 
 from pipe_anchorages.assets.data import EEZ
 from pipe_anchorages.assets.data import port_lists
@@ -19,10 +22,8 @@ from .transforms.sink import NamedAnchorageSink
 from .get_override_list import get_override_list
 from .port_info_finder import PortInfoFinder
 from .port_info_finder import normalize_label
-from .options.name_anchorage_options import NameAnchorageOptions
 
 import apache_beam as beam
-from apache_beam.options.pipeline_options import GoogleCloudOptions
 from apache_beam.runners import PipelineState
 
 inf = float("inf")
@@ -173,33 +174,44 @@ class CreateOverrideAnchorages(beam.PTransform):
         )
 
 
-def create_query(args):
+def create_query(config):
     template = """
     SELECT * FROM `{table}`
     """
-    return template.format(table=args.input_table)
+    return template.format(table=config.bq_in_anchorage_locations)
 
 
-def run(options):
-    known_args = options.view_as(NameAnchorageOptions)
-    cloud_args = options.view_as(GoogleCloudOptions)
+def run(config: SimpleNamespace, **kwargs: Any) -> int:
+    pipeline = Pipeline(
+        unparsed_args=config.unknown_unparsed_args,
+        labels=config.labels or None,
+        **config.unknown_parsed_args,
+        **kwargs,
+    )
+    cloud_options = pipeline.cloud_options
 
-    p = beam.Pipeline(options=options)
+    p = pipeline.pipeline
 
-    source = p | QuerySource(create_query(known_args), cloud_args)
+    source = p | QuerySource(create_query(config), cloud_options)
 
-    with open(known_args.config) as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
+    port_info_config = {
+        "override_path": config.anchorage_overrides,
+        "port_list_paths": list(config.reference_ports) + list(config.reference_places),
+        "label_distance_km": config.label_distance_km,
+        "sublabel_distance_km": config.sublabel_distance_km,
+    }
 
     existing_anchorages = (
         source
         | beam.Map(NamedAnchoragePoint.from_msg)
-        | AddNamesToAnchorages(known_args.shapefile, config)
+        | AddNamesToAnchorages(config.shapefile, port_info_config)
     )
 
-    used_s2ids = beam.pvalue.AsList(existing_anchorages | FindUsedS2ids(config["override_path"]))
+    used_s2ids = beam.pvalue.AsList(
+        existing_anchorages | FindUsedS2ids(config.anchorage_overrides)
+    )
 
-    new_anchorages = p | CreateOverrideAnchorages(config["override_path"], used_s2ids)
+    new_anchorages = p | CreateOverrideAnchorages(config.anchorage_overrides, used_s2ids)
 
     named_anchorages = (
         (existing_anchorages, new_anchorages)
@@ -209,7 +221,7 @@ def run(options):
         )
     )
 
-    (named_anchorages | NamedAnchorageSink(known_args.output_table, known_args, cloud_args))
+    (named_anchorages | NamedAnchorageSink(config.bq_out_named_anchorages, config, cloud_options))
 
     result = p.run()
 
@@ -224,8 +236,3 @@ def run(options):
 
     logging.info("returning with result.state=%s" % result.state)
     return 0 if result.state in success_states else 1
-
-
-if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
-    run()
