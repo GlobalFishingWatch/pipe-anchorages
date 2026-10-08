@@ -32,7 +32,7 @@ def encode_anchorage(anchorage) -> dict:
     }
 
 
-class FindAnchoragePoints(beam.PTransform):
+class FindAnchorageLocations(beam.PTransform):
     """Turns position messages into anchorage table records (row dicts).
 
     Groups the inline chain (CreateVesselRecords -> filter location records ->

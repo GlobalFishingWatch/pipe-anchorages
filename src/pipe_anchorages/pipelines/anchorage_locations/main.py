@@ -17,7 +17,7 @@ from pipe_anchorages.pipelines.anchorage_locations.table_config import (
     AnchorageLocationsTableConfig,
     AnchorageLocationsTableDescription,
 )
-from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchoragePoints
+from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchorageLocations
 from pipe_anchorages.queries.anchorage_locations import AnchorageLocationsQuery
 from pipe_anchorages.version import __version__
 
@@ -74,7 +74,7 @@ def run(
                 read_from_bigquery_kwargs={"bigquery_job_labels": config.labels},
             ),
         ],
-        core=FindAnchoragePoints(
+        core=FindAnchorageLocations(
             min_positions=config.min_positions,
             min_duration=datetime.timedelta(
                 minutes=config.stationary_period_min_duration_minutes
