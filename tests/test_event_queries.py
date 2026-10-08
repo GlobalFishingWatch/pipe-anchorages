@@ -3,12 +3,12 @@ from pipe_anchorages.anchorages_pipeline import create_queries
 
 class DummyOptions(object):
     def __init__(
-        self, start_date, end_date, messages_table="SOURCE_TABLE", segments_table="SEGMENTS_TABLE_"
+        self, start_date, end_date, bq_in_messages="SOURCE_TABLE", bq_in_segments="SEGMENTS_TABLE_"
     ):
         self.start_date = start_date
         self.end_date = end_date
-        self.messages_table = messages_table
-        self.segments_table = segments_table
+        self.bq_in_messages = bq_in_messages
+        self.bq_in_segments = bq_in_segments
 
 
 def test_create_queries_1():
