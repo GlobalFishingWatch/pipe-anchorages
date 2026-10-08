@@ -8,7 +8,11 @@ from gfw.common.cli.actions import NestedKeyValueAction
 from gfw.common.cli.formatting import default_formatter
 
 from pipe_anchorages.version import __version__
-from pipe_anchorages.cli.commands import AnchoragesVisitedInfo, ConfidenceVoyages
+from pipe_anchorages.cli.commands import (
+    AnchoragesVisitedInfo,
+    ConfidenceVoyages,
+    PortStateTransitions,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -27,6 +31,7 @@ def run(args):
         subcommands=[
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
+            PortStateTransitions,
         ],
         options=[  # Common options for all subcommands.
             Option(
@@ -39,6 +44,11 @@ def run(args):
             "pipe-anchorages confidence-voyages "
             "--bq-in-port-visits project.dataset.port_visits --min-confidence 3 "
             "--bq-out-voyages project.dataset.voyages_c3 --project world-fishing-827",
+            "pipe-anchorages port-state-transitions "
+            "--bq-in-named-anchorages project.dataset.anchorages "
+            "--bq-in-messages project.dataset.messages "
+            "--bq-out-port-state-transitions project.dataset.output "
+            "--start-date 2024-01-01 --end-date 2024-01-07",
         ],
         logger_config=LoggerConfig(
             warning_level=[
@@ -59,11 +69,6 @@ def run(args):
 # FROM NOW ON: LEGACY ENTRY POINT.
 # TODO: REMOVE AFTER MIGRATING THE REST OF THE COMMANDS.
 
-def run_thin_port_messages(args):
-    from pipe_anchorages.thin_port_messages import run as run_thin_port_messages
-    run_thin_port_messages(args)
-
-
 def run_port_visits(args):
     from pipe_anchorages.port_visits import run as run_port_visits
     run_port_visits(args)
@@ -80,12 +85,12 @@ def run_name_anchorages(args):
 
 
 SUBCOMMANDS = {
-    "thin_port_messages": run_thin_port_messages,
     "port_visits": run_port_visits,
     "anchorages": run_anchorages,
     "name_anchorages": run_name_anchorages,
     "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
     "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
+    "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
 }
 
 

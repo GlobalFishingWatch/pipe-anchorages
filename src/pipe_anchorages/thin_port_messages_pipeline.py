@@ -1,13 +1,17 @@
 import datetime
 import logging
 
+from types import SimpleNamespace
+from typing import Any
+
 from google.cloud import bigquery
 
 import apache_beam as beam
-from apache_beam.options.pipeline_options import GoogleCloudOptions, StandardOptions
+from apache_beam.options.pipeline_options import StandardOptions
 from apache_beam.runners import PipelineState
+from gfw.common.beam.pipeline.base import Pipeline
+
 from pipe_anchorages import common as cmn
-from pipe_anchorages.options.thin_port_messages_options import ThinPortMessagesOptions
 from pipe_anchorages.schema.message_schema import message_schema
 from pipe_anchorages.transforms.create_tagged_anchorages import CreateTaggedAnchorages
 from pipe_anchorages.transforms.sink import MessageSink
@@ -19,7 +23,7 @@ from pipe_anchorages.utils.ver import get_pipe_ver
 logger = logging.getLogger(__name__)
 
 
-def create_queries(args, start_date, end_date):
+def create_queries(config, start_date, end_date):
     template = """
     SELECT seg_id as ident, ssvid, lat, lon, speed,
             CAST(UNIX_MICROS(timestamp) AS FLOAT64) / 1000000 AS timestamp
@@ -29,19 +33,19 @@ def create_queries(args, start_date, end_date):
     """
     start_window = start_date
     shift = 1000
-    if args.ssvid_filter is None:
+    if config.ssvid_filter is None:
         filter_text = ""
     else:
-        filter_core = args.ssvid_filter
+        filter_core = config.ssvid_filter
         if filter_core.startswith("@"):
-            with open(args.ssvid_filter[1:]) as f:
+            with open(config.ssvid_filter[1:]) as f:
                 filter_core = f.read()
         filter_text = f"AND ssvid in ({filter_core})"
 
     while start_window <= end_date:
         end_window = min(start_window + datetime.timedelta(days=shift), end_date)
         query = template.format(
-            table=args.input_table,
+            table=config.bq_in_messages,
             filter_text=filter_text,
             start=start_window,
             end=end_window,
@@ -50,22 +54,22 @@ def create_queries(args, start_date, end_date):
         start_window = end_window + datetime.timedelta(days=1)
 
 
-def anchorage_query(args):
+def anchorage_query(config):
     return f"""
     SELECT lat as anchor_lat, lon as anchor_lon, s2id as anchor_id, label
-    FROM `{args.anchorage_table}`
+    FROM `{config.bq_in_named_anchorages}`
     """
 
 
-def prepare_output_tables(pipe_options, cloud_options, start_date, end_date):
+def prepare_output_tables(config, cloud_options, start_date, end_date):
     output_table = DatePartitionedTable(
-        table_id=pipe_options.output_table,
+        table_id=config.bq_out_port_state_transitions,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
-* Creates raw thinned messages in out port events.
+* Position messages around candidate port transitions, gaps and day edges (port-visits input).
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
-* Sources: {pipe_options.input_table}
-* Anchorage table: {pipe_options.anchorage_table}
+* Sources: {config.bq_in_messages}
+* Anchorage table: {config.bq_in_named_anchorages}
 * Last processing date range: {start_date} - {end_date}
         """,
         schema=message_schema["fields"],
@@ -77,7 +81,7 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
         bq_client=bigquery.Client(
             project=cloud_options.project,
         ),
-        labels=dict([entry.split("=") for entry in cloud_options.labels]),
+        labels=config.labels or {},
     )
 
     bq_helper.ensure_table_exists(output_table)
@@ -88,18 +92,27 @@ Created by the anchorages_pipeline: {get_pipe_ver()}.
     bq_helper.run_query(output_table.clear_query(start_date, end_date))
 
 
-def run(options):
-    known_args = options.view_as(ThinPortMessagesOptions)
-    cloud_options = options.view_as(GoogleCloudOptions)
+def run(config: SimpleNamespace, **kwargs: Any) -> int:
+    pipeline = Pipeline(
+        unparsed_args=config.unknown_unparsed_args,
+        labels=config.labels or None,
+        **config.unknown_parsed_args,
+        **kwargs,
+    )
+    cloud_options = pipeline.cloud_options
 
-    start_date = datetime.datetime.strptime(known_args.start_date, "%Y-%m-%d").date()
-    end_date = datetime.datetime.strptime(known_args.end_date, "%Y-%m-%d").date()
+    start_date = datetime.datetime.strptime(config.start_date, "%Y-%m-%d").date()
+    end_date = datetime.datetime.strptime(config.end_date, "%Y-%m-%d").date()
 
-    p = beam.Pipeline(options=options)
+    p = pipeline.pipeline
 
-    config = cmn.load_config(known_args.config)
+    # Ensure that S2 Cell sizes are large enough that we don't miss ports.
+    anchorage_visit_max_distance = max(
+        config.anchorage_entry_dist_km, config.anchorage_exit_dist_km
+    )
+    assert anchorage_visit_max_distance * cmn.VISIT_SAFETY_FACTOR < 2 * cmn.approx_visit_cell_size
 
-    queries = create_queries(known_args, start_date, end_date)
+    queries = create_queries(config, start_date, end_date)
 
     sources = [
         (p | f"Read_{i}" >> QuerySource(query, cloud_options)) for (i, query) in enumerate(queries)
@@ -114,7 +127,7 @@ def run(options):
 
     anchorages = (
         p
-        | "ReadAnchorages" >> QuerySource(anchorage_query(known_args), cloud_options)
+        | "ReadAnchorages" >> QuerySource(anchorage_query(config), cloud_options)
         | CreateTaggedAnchorages()
     )
 
@@ -122,18 +135,18 @@ def run(options):
         tagged_records
         | "thinRecords" >> SmartThinRecords(
             anchorages=anchorages,
-            anchorage_entry_dist=config["anchorage_entry_distance_km"],
-            anchorage_exit_dist=config["anchorage_exit_distance_km"],
-            stopped_begin_speed=config["stopped_begin_speed_knots"],
-            stopped_end_speed=config["stopped_end_speed_knots"],
-            min_gap_minutes=config["minimum_port_gap_duration_minutes"],
+            anchorage_entry_dist=config.anchorage_entry_dist_km,
+            anchorage_exit_dist=config.anchorage_exit_dist_km,
+            stopped_begin_speed=config.stopping_speed_knots,
+            stopped_end_speed=config.starting_speed_knots,
+            min_gap_minutes=config.min_anchorage_gap_minutes,
             start_date=start_date,
             end_date=end_date,
         )
-        | "writeThinnedRecords" >> MessageSink(known_args.output_table)
+        | "writeThinnedRecords" >> MessageSink(config.bq_out_port_state_transitions)
     )
 
-    prepare_output_tables(known_args, cloud_options, start_date, end_date)
+    prepare_output_tables(config, cloud_options, start_date, end_date)
     result = p.run()
 
     success_states = set(
@@ -145,7 +158,8 @@ def run(options):
         ]
     )
 
-    if known_args.wait_for_job or options.view_as(StandardOptions).runner == "DirectRunner":
+    runner = pipeline.pipeline_options.view_as(StandardOptions).runner
+    if config.wait_for_job or runner == "DirectRunner":
         result.wait_until_finish()
 
     logging.info("returning with result.state=%s" % result.state)
