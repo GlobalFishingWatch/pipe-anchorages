@@ -8,3 +8,8 @@ bq_output: "world-fishing-827.scratch_tomas_ttl30d.anchorages_visited_info"
 # General parameters:
 dry_run: false
 project: world-fishing-827
+
+# Labels for project cost tags
+labels:
+  team: pipelines
+  env: dev

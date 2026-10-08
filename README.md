@@ -216,7 +216,8 @@ pipe-anchorages anchorage-locations \
     --bq-in-segments world-fishing-827.pipe_production_v20201001.segments_ \
     --bq-out-anchorage-locations world-fishing-827.scratch_ttl30d.anchorage_locations \
     --start-date 2024-01-01 --end-date 2024-01-31 \
-    --gcs-in-fishing-ssvids gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt
+    --gcs-in-fishing-ssvids gs://machine-learning-dev-ttl-120d/fishing_mmsi.txt \
+    --labels team=pipelines env=dev
 ```
 
 ### Config files

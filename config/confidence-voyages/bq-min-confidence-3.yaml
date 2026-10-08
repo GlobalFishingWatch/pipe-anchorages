@@ -5,3 +5,8 @@ bq_out_voyages: "world-fishing-827.scratch_tomas_ttl30d.voyages_c3"
 
 # General parameters:
 project: world-fishing-827
+
+# Labels for project cost tags
+labels:
+  team: pipelines
+  env: dev

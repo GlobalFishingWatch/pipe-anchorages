@@ -17,3 +17,8 @@ staging_location: "gs://machine-learning-dev-ttl-120d/anchorages/anchorages/outp
 temp_location: "gs://machine-learning-dev-ttl-120d/anchorages/temp"
 setup_file: "./setup.py"
 requirements_file: "requirements-worker-frozen.txt"
+
+# Labels for project cost tags
+labels:
+  team: pipelines
+  env: dev

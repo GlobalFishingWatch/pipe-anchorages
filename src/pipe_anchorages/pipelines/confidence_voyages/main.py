@@ -50,7 +50,7 @@ def run(
     query = ConfidenceVoyagesQuery(config)
     bq = BigQueryHelper(bq_client_factory, project=config.project)
 
-    labels = config.labels or {}
+    labels = config.labels
     table_config = ConfidenceVoyagesTableConfig(
         table_id=config.bq_out_voyages,
         description=ConfidenceVoyagesTableDescription(
