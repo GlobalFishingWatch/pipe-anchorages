@@ -6,7 +6,7 @@ from pipe_anchorages import common as cmn
 from pipe_anchorages.records import VesselLocationRecord
 
 from .create_tagged_records import CreateTaggedRecords
-from .group_stationary_periods_by_s2_cell import GroupStationaryPeriodsByS2Cell
+from .create_anchorage_locations import CreateAnchorageLocations
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ class FindAnchorageLocations(beam.PTransform):
     """Turns position messages into anchorage table records (row dicts).
 
     Groups the inline chain (CreateVesselRecords -> filter location records ->
-    CreateTaggedRecords -> GroupStationaryPeriodsByS2Cell -> encode) into one
+    CreateTaggedRecords -> CreateAnchorageLocations -> encode) into one
     composite PTransform, since LinearDag's core slot takes exactly one
     transform. The fishing vessel list is NOT read here: it arrives as a side
     input that LinearDag applies from `side_inputs=` and delivers via
@@ -65,7 +65,7 @@ class FindAnchorageLocations(beam.PTransform):
             | cmn.CreateVesselRecords()
             | "FilterOutInfo" >> beam.Filter(has_location_record)
             | CreateTaggedRecords(self.min_positions)
-            | GroupStationaryPeriodsByS2Cell(
+            | CreateAnchorageLocations(
                 self.min_duration,
                 self.max_distance_km,
                 self.min_unique_vessels,

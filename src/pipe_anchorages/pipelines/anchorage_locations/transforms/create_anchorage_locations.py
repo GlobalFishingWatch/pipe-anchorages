@@ -31,7 +31,7 @@ CellVisits = tuple[
 pairs that fall in it."""
 
 
-class GroupStationaryPeriodsByS2Cell(beam.PTransform):
+class CreateAnchorageLocations(beam.PTransform):
     """Turns vessel tracks into one :class:`AnchorageLocation` per S2 cell where vessels stay.
 
     Input: one :data:`VesselTrack` per vessel (see ``CreateTaggedRecords``). Output: one
