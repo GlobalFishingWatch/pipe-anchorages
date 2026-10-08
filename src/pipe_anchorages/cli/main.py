@@ -12,6 +12,7 @@ from pipe_anchorages.cli.commands import (
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
     PortStateTransitions,
+    PortVisits,
 )
 
 
@@ -32,6 +33,7 @@ def run(args):
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
             PortStateTransitions,
+            PortVisits,
         ],
         options=[  # Common options for all subcommands.
             Option(
@@ -48,6 +50,11 @@ def run(args):
             "--bq-in-named-anchorages project.dataset.anchorages "
             "--bq-in-messages project.dataset.messages "
             "--bq-out-port-state-transitions project.dataset.output "
+            "--start-date 2024-01-01 --end-date 2024-01-07",
+            "pipe-anchorages port-visits "
+            "--bq-in-port-events project.dataset.port_events "
+            "--bq-in-segment-info project.dataset.segment_info "
+            "--bq-out-port-visits project.dataset.port_visits "
             "--start-date 2024-01-01 --end-date 2024-01-07",
         ],
         logger_config=LoggerConfig(
@@ -69,11 +76,6 @@ def run(args):
 # FROM NOW ON: LEGACY ENTRY POINT.
 # TODO: REMOVE AFTER MIGRATING THE REST OF THE COMMANDS.
 
-def run_port_visits(args):
-    from pipe_anchorages.port_visits import run as run_port_visits
-    run_port_visits(args)
-
-
 def run_anchorages(args):
     from pipe_anchorages.anchorages import run as run_anchorages
     run_anchorages(args)
@@ -85,12 +87,12 @@ def run_name_anchorages(args):
 
 
 SUBCOMMANDS = {
-    "port_visits": run_port_visits,
     "anchorages": run_anchorages,
     "name_anchorages": run_name_anchorages,
     "anchorages_visited_info": lambda args: run(["anchorages-visited-info"] + args),
     "generate_confidence_voyages": lambda args: run(["confidence-voyages"] + args),
     "thin_port_messages": lambda args: run(["port-state-transitions"] + args),
+    "port_visits": lambda args: run(["port-visits"] + args),
 }
 
 

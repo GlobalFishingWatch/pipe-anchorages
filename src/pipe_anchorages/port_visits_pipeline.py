@@ -2,15 +2,19 @@ import datetime
 import logging
 import math
 
+from types import SimpleNamespace
+from typing import Any
+
 from google.cloud import bigquery
 import pytz
 
 import apache_beam as beam
-from apache_beam.options.pipeline_options import GoogleCloudOptions, StandardOptions
+from apache_beam.options.pipeline_options import StandardOptions
 from apache_beam.runners import PipelineState
+from gfw.common.beam.pipeline.base import Pipeline
+
 from pipe_anchorages import common as cmn
 from pipe_anchorages.objects.namedtuples import _datetime_to_s
-from pipe_anchorages.options.port_visits_options import PortVisitsOptions
 from pipe_anchorages.schema.port_visit import port_visit_schema
 from pipe_anchorages.transforms.create_in_out_events import CreateInOutEvents
 from pipe_anchorages.transforms.create_port_visits import CreatePortVisits
@@ -21,7 +25,7 @@ from pipe_anchorages.utils.bqtools import BigQueryHelper, DatePartitionedTable
 from pipe_anchorages.utils.ver import get_pipe_ver
 
 
-def create_queries(args, start_date, end_date):
+def create_queries(config, start_date, end_date):
     template = """
     SELECT vids.ssvid,
            vids.vessel_id,
@@ -35,18 +39,18 @@ def create_queries(args, start_date, end_date):
      {condition}
     """
 
-    if args.bad_segs is None:
+    if config.bad_segs is None:
         condition = ""
     else:
-        condition = f"  AND seg_id NOT IN (SELECT seg_id FROM {args.bad_segs})"
+        condition = f"  AND seg_id NOT IN (SELECT seg_id FROM {config.bad_segs})"
 
     start_window = start_date
     shift = 1000
     while start_window <= end_date:
         end_window = min(start_window + datetime.timedelta(days=shift), end_date)
         yield template.format(
-            table=args.thinned_message_table,
-            vid_table=args.vessel_id_table,
+            table=config.bq_in_port_state_transitions,
+            vid_table=config.bq_in_segment_info,
             condition=condition,
             start=start_window,
             end=end_window,
@@ -96,18 +100,17 @@ def strdate_to_utcdatetime(strdate):
     return datetime.datetime.strptime(strdate, "%Y-%m-%d").replace(tzinfo=pytz.utc)
 
 
-def prepare_output_tables(pipe_options, cloud_options, start_date, end_date):
+def prepare_output_tables(config, cloud_options, start_date, end_date):
     output_table = DatePartitionedTable(
-        table_id=pipe_options.output_table,
+        table_id=config.bq_out_port_visits,
         description=f"""
 Created by the anchorages_pipeline: {get_pipe_ver()}.
 Creates the visits to port table.
 * https://github.com/GlobalFishingWatch/anchorages_pipeline
-* Sources: {pipe_options.thinned_message_table}
-* Vessel id to join identification: {pipe_options.vessel_id_table}
-* Configuration file: {pipe_options.config}
-* Skip bad segments: {"Yes" if pipe_options.bad_segs else "No"}
-* Segments more than this distance apart will not be joined when creating visits: {pipe_options.max_inter_seg_dist_nm}
+* Sources: {config.bq_in_port_state_transitions}
+* Vessel id to join identification: {config.bq_in_segment_info}
+* Skip bad segments: {"Yes" if config.bad_segs else "No"}
+* Segments more than this distance apart will not be joined when creating visits: {config.max_inter_seg_dist_nm}
 * Date end: {end_date}
         """,  # noqa: E501
         schema=port_visit_schema["fields"],
@@ -118,31 +121,40 @@ Creates the visits to port table.
         bq_client=bigquery.Client(
             project=cloud_options.project,
         ),
-        labels=dict([entry.split("=") for entry in cloud_options.labels]),
+        labels=config.labels or {},
     )
 
     bq_helper.ensure_table_exists(output_table)
     bq_helper.update_table(output_table)
 
 
-def run(options):
-    visit_args = options.view_as(PortVisitsOptions)
-    cloud_args = options.view_as(GoogleCloudOptions)
+def run(config: SimpleNamespace, **kwargs: Any) -> int:
+    pipeline = Pipeline(
+        unparsed_args=config.unknown_unparsed_args,
+        labels=config.labels or None,
+        **config.unknown_parsed_args,
+        **kwargs,
+    )
+    cloud_options = pipeline.cloud_options
 
-    config = cmn.load_config(visit_args.config)
+    # Ensure that S2 Cell sizes are large enough that we don't miss ports.
+    anchorage_visit_max_distance = max(
+        config.anchorage_entry_dist_km, config.anchorage_exit_dist_km
+    )
+    assert anchorage_visit_max_distance * cmn.VISIT_SAFETY_FACTOR < 2 * cmn.approx_visit_cell_size
 
-    pipeline = beam.Pipeline(options=options)
+    p = pipeline.pipeline
 
-    start_time = strdate_to_utcdatetime(visit_args.start_date)
-    end_time = strdate_to_utcdatetime(visit_args.end_date)
+    start_time = strdate_to_utcdatetime(config.start_date)
+    end_time = strdate_to_utcdatetime(config.end_date)
 
     start_date = start_time.date()
     end_date = end_time.date()
 
-    queries = create_queries(visit_args, start_date, end_date)
+    queries = create_queries(config, start_date, end_date)
 
     sources = [
-        (pipeline | f"ReadThinnedMessagesJoinedVesselId_{i}" >> QuerySource(query, cloud_args))
+        (p | f"ReadThinnedMessagesJoinedVesselId_{i}" >> QuerySource(query, cloud_options))
         for (i, query) in enumerate(queries)
     ]
 
@@ -152,20 +164,20 @@ def run(options):
         | beam.Map(from_msg)
         | beam.GroupByKey()
         | CreateInOutEvents(
-            anchorage_entry_dist=config["anchorage_entry_distance_km"],
-            anchorage_exit_dist=config["anchorage_exit_distance_km"],
-            stopped_begin_speed=config["stopped_begin_speed_knots"],
-            stopped_end_speed=config["stopped_end_speed_knots"],
-            min_gap_minutes=config["minimum_port_gap_duration_minutes"],
+            anchorage_entry_dist=config.anchorage_entry_dist_km,
+            anchorage_exit_dist=config.anchorage_exit_dist_km,
+            stopped_begin_speed=config.stopping_speed_knots,
+            stopped_end_speed=config.starting_speed_knots,
+            min_gap_minutes=config.min_anchorage_gap_minutes,
             end_time=end_time,
         )
-        | CreatePortVisits(visit_args.max_inter_seg_dist_nm)
+        | CreatePortVisits(config.max_inter_seg_dist_nm)
         | beam.Map(visit_to_msg)
-        | VisitsSink(visit_args.output_table)
+        | VisitsSink(config.bq_out_port_visits)
     )
 
-    prepare_output_tables(visit_args, cloud_args, start_date, end_date)
-    result = pipeline.run()
+    prepare_output_tables(config, cloud_options, start_date, end_date)
+    result = p.run()
 
     success_states = set(
         [
@@ -176,7 +188,8 @@ def run(options):
         ]
     )
 
-    if visit_args.wait_for_job or options.view_as(StandardOptions).runner == "DirectRunner":
+    runner = pipeline.pipeline_options.view_as(StandardOptions).runner
+    if config.wait_for_job or runner == "DirectRunner":
         result.wait_until_finish()
 
     logging.info("returning with result.state=%s" % result.state)
