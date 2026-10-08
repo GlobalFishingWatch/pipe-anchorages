@@ -67,7 +67,7 @@ def run(args):
             "--start-date 2024-01-01 --end-date 2024-01-07 "
             "--gcs-in-fishing-ssvids gs://bucket/fishing_mmsi.txt",
             "pipe-anchorages named-anchorages "
-            "--bq-in-anchorage-points project.dataset.anchorage_points "
+            "--bq-in-anchorage-locations project.dataset.anchorage_locations "
             "--bq-out-named-anchorages project.dataset.named_anchorages",
         ],
         logger_config=LoggerConfig(

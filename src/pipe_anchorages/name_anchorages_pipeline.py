@@ -178,7 +178,7 @@ def create_query(config):
     template = """
     SELECT * FROM `{table}`
     """
-    return template.format(table=config.bq_in_anchorage_points)
+    return template.format(table=config.bq_in_anchorage_locations)
 
 
 def run(config: SimpleNamespace, **kwargs: Any) -> int:

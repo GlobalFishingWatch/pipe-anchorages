@@ -11,7 +11,7 @@ from pipe_anchorages.cli import main
 
 BASE_ARGS = [
     "named-anchorages",
-    "--bq-in-anchorage-points", "project.dataset.anchorage_points",
+    "--bq-in-anchorage-locations", "project.dataset.anchorage_locations",
     "--bq-out-named-anchorages", "project.dataset.named_anchorages",
 ]
 
@@ -26,7 +26,7 @@ def test_cli_executes_run(mocker):
 
     mock_run.assert_called_once()
     config = mock_run.call_args[0][0]
-    assert config.bq_in_anchorage_points == "project.dataset.anchorage_points"
+    assert config.bq_in_anchorage_locations == "project.dataset.anchorage_locations"
     assert config.bq_out_named_anchorages == "project.dataset.named_anchorages"
     assert config.shapefile == "EEZ_Land_v3_202030.shp"
     assert config.label_distance_km == 4.0
@@ -61,7 +61,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     mock_pipeline_cls = mocker.patch("pipe_anchorages.name_anchorages_pipeline.Pipeline")
 
     config = SimpleNamespace(
-        bq_in_anchorage_points="project.dataset.anchorage_points",
+        bq_in_anchorage_locations="project.dataset.anchorage_locations",
         bq_out_named_anchorages="project.dataset.named_anchorages",
         shapefile="EEZ_Land_v3_202030.shp",
         label_distance_km=4.0,

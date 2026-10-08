@@ -7,7 +7,7 @@ from pipe_anchorages import name_anchorages_pipeline
 
 
 DESCRIPTION = """\
-Assigns human-readable names to anchorage points by looking up the nearest
+Assigns human-readable names to anchorage locations by looking up the nearest
 known place (an anchorage-specific manual correction first, then a reference
 list of real ports, then a broader reference list of any named place) within
 a configurable distance.
@@ -17,7 +17,7 @@ defined for Apache Beam PipelineOptions class. For more information, see
     https://cloud.google.com/dataflow/docs/reference/pipeline-options#python.\n
 """
 
-HELP_IN_POINTS = "BigQuery table with unnamed anchorage points to assign names to."
+HELP_IN_LOCATIONS = "BigQuery table with unnamed anchorage locations to assign names to."
 HELP_OUT_NAMED = "BigQuery table in which to store the named anchorages."
 HELP_SHAPEFILE = "Path to the shapefile used to assign a country (iso3) to each anchorage."
 HELP_LABEL_DIST_KM = (
@@ -53,7 +53,7 @@ class NamedAnchorages(Command):
     @property
     def options(self):
         return [
-            Option("--bq-in-anchorage-points", type=str, required=True, help=HELP_IN_POINTS),
+            Option("--bq-in-anchorage-locations", type=str, required=True, help=HELP_IN_LOCATIONS),
             Option("--bq-out-named-anchorages", type=str, required=True, help=HELP_OUT_NAMED),
             Option("--shapefile", type=str, default="EEZ_Land_v3_202030.shp", help=HELP_SHAPEFILE),
             Option("--label-distance-km", type=float, default=4.0, help=HELP_LABEL_DIST_KM),

@@ -1,5 +1,5 @@
 # Query parameters:
-bq_in_anchorage_points: "machine_learning_dev_ttl_120d.unnamed_anchorages_test"
+bq_in_anchorage_locations: "machine_learning_dev_ttl_120d.unnamed_anchorages_test"
 bq_out_named_anchorages: "world-fishing-827.scratch_tomas_ttl30d.named_anchorages"
 
 # Apache Beam / Dataflow options:
