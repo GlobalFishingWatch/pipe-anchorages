@@ -3,8 +3,10 @@ import logging
 import apache_beam as beam
 
 from pipe_anchorages import common as cmn
-from pipe_anchorages.find_anchorage_points import GroupStationaryPeriodsByS2Cell
 from pipe_anchorages.records import VesselLocationRecord
+
+from .create_tagged_records import CreateTaggedRecords
+from .group_stationary_periods_by_s2_cell import GroupStationaryPeriodsByS2Cell
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +64,7 @@ class FindAnchorageLocations(beam.PTransform):
             xs
             | cmn.CreateVesselRecords()
             | "FilterOutInfo" >> beam.Filter(has_location_record)
-            | cmn.CreateTaggedRecords(self.min_positions)
+            | CreateTaggedRecords(self.min_positions)
             | GroupStationaryPeriodsByS2Cell(
                 self.min_duration,
                 self.max_distance_km,
