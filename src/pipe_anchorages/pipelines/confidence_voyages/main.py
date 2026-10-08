@@ -3,6 +3,8 @@ from types import SimpleNamespace
 from typing import Callable
 from functools import cached_property
 
+from google.cloud import bigquery
+
 from gfw.common.bigquery.helper import BigQueryHelper
 from gfw.common.query import Query
 
@@ -48,9 +50,9 @@ def run(
     query = ConfidenceVoyagesQuery(config)
     bq = BigQueryHelper(bq_client_factory, project=config.project)
 
+    labels = config.labels or {}
     table_config = ConfidenceVoyagesTableConfig(
         table_id=config.bq_out_voyages,
-        partition_field="trip_start",
         description=ConfidenceVoyagesTableDescription(
             version=__version__,
             relevant_params={
@@ -68,7 +70,12 @@ def run(
         destination=table_config.table_id,
         write_disposition="WRITE_TRUNCATE",
         create_disposition="CREATE_IF_NEEDED",
-        labels=config.labels or {},
+        time_partitioning=bigquery.TimePartitioning(
+            type_=table_config.partition_type,
+            field=table_config.partition_field
+        ),
+        clustering_fields=list(table_config.clustering_fields),
+        labels=labels,
     )
     query_result.query_job.result()
 
@@ -77,7 +84,8 @@ def run(
     table = bq.client.get_table(table_config.table_id)
     table.schema = table_config.schema
     table.description = table_config.description.render()
-    table = bq.client.update_table(table, ["schema", "description"])
+    table.labels = labels
+    table = bq.client.update_table(table, ["schema", "description", "labels"])
     logger.info("Done.")
     logger.info("You can check the results in:")
     logger.info(f"{table_config.table_id}")

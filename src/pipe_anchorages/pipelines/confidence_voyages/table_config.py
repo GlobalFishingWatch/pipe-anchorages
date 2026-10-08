@@ -47,6 +47,10 @@ class ConfidenceVoyagesTableDescription(TableDescription):
 @dataclass
 class ConfidenceVoyagesTableConfig(TableConfig):
     schema_file: str = "confidence_voyages.json"
+    # Same layout as the production voyages_c* tables.
+    partition_type: str = "MONTH"
+    partition_field: str = "trip_start"
+    clustering_fields: tuple[str, ...] = ("trip_start",)
 
     @property
     def schema(self) -> list[dict]:
