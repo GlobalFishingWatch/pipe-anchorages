@@ -11,8 +11,8 @@ from pipe_anchorages.version import __version__
 from pipe_anchorages.cli.commands import (
     AnchoragesVisitedInfo,
     ConfidenceVoyages,
-    PortVisits,
     PortStateTransitions,
+    PortVisits,
 )
 
 
@@ -32,8 +32,8 @@ def run(args):
         subcommands=[
             AnchoragesVisitedInfo,
             ConfidenceVoyages,
-            PortVisits,
             PortStateTransitions,
+            PortVisits,
         ],
         options=[  # Common options for all subcommands.
             Option(

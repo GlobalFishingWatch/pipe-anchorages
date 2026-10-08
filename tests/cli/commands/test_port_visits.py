@@ -11,7 +11,7 @@ from pipe_anchorages.cli import main
 
 BASE_ARGS = [
     "port-visits",
-    "--bq-in-transition-messages", "project.dataset.transition_messages",
+    "--bq-in-port-state-transitions", "project.dataset.port_state_transitions",
     "--bq-in-segment-info", "project.dataset.segment_info",
     "--bq-out-port-visits", "project.dataset.port_visits",
     "--start-date", "2024-01-01",
@@ -29,7 +29,7 @@ def test_cli_executes_run(mocker):
 
     mock_run.assert_called_once()
     config = mock_run.call_args[0][0]
-    assert config.bq_in_transition_messages == "project.dataset.transition_messages"
+    assert config.bq_in_port_state_transitions == "project.dataset.port_state_transitions"
     assert config.bq_in_segment_info == "project.dataset.segment_info"
     assert config.bq_out_port_visits == "project.dataset.port_visits"
     assert config.start_date == "2024-01-01"
@@ -44,15 +44,15 @@ def test_cli_executes_run(mocker):
     assert config.min_anchorage_gap_minutes == 240.0
 
 
-def test_cli_requires_transition_messages_table(mocker):
+def test_cli_requires_port_state_transitions_table(mocker):
     mocker.patch(
         "pipe_anchorages.cli.commands.port_visits.port_visits_pipeline.run",
         return_value=0,
     )
-    excluded = ("--bq-in-transition-messages", "project.dataset.transition_messages")
+    excluded = ("--bq-in-port-state-transitions", "project.dataset.port_state_transitions")
     args = [a for a in BASE_ARGS if a not in excluded]
 
-    with pytest.raises(argparse.ArgumentTypeError, match="bq_in_transition_messages"):
+    with pytest.raises(argparse.ArgumentTypeError, match="bq_in_port_state_transitions"):
         main.run(args)
 
 
@@ -73,7 +73,7 @@ def test_run_forwards_config_file_beam_options_to_pipeline(mocker):
     mock_pipeline_cls = mocker.patch("pipe_anchorages.port_visits_pipeline.Pipeline")
 
     config = SimpleNamespace(
-        bq_in_transition_messages="project.dataset.transition_messages",
+        bq_in_port_state_transitions="project.dataset.port_state_transitions",
         bq_in_segment_info="project.dataset.segment_info",
         bq_out_port_visits="project.dataset.port_visits",
         start_date="2024-01-01",
