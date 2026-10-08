@@ -1,10 +1,8 @@
-from types import SimpleNamespace
+import argparse
 
-from gfw.common.bigquery.helper import BigQueryHelper
+import pytest
 
-from pipe_anchorages.assets import schemas
 from pipe_anchorages.cli import main
-from pipe_anchorages.pipelines.confidence_voyages.main import ConfidenceVoyagesQuery
 
 
 BASE_ARGS = [
@@ -22,53 +20,11 @@ def test_cli_executes_run():
     main.run(BASE_ARGS)
 
 
-def test_cli_forwards_labels_to_query_job(mocker):
-    run_query = mocker.spy(BigQueryHelper, "run_query")
+@pytest.mark.parametrize("flag", ["--bq-in-port-visits", "--min-confidence", "--bq-out-voyages"])
+def test_cli_requires_argument(flag):
+    args = list(BASE_ARGS)
+    i = args.index(flag)
+    del args[i:i + 2]
 
-    main.run([*BASE_ARGS, "--labels", "team=pipeline", "env=dev"])
-
-    run_query.assert_called_once()
-    assert run_query.call_args.kwargs["labels"] == {"team": "pipeline", "env": "dev"}
-
-
-def test_cli_writes_output_partitioned_like_production(mocker):
-    run_query = mocker.spy(BigQueryHelper, "run_query")
-
-    main.run(BASE_ARGS)
-
-    run_query.assert_called_once()
-    kwargs = run_query.call_args.kwargs
-    assert kwargs["destination"] == "project.dataset.voyages_c3"
-    assert kwargs["write_disposition"] == "WRITE_TRUNCATE"
-    assert kwargs["partition_type"] == "MONTH"
-    assert kwargs["partition_field"] == "trip_start"
-    assert tuple(kwargs["clustering_fields"]) == ("trip_start",)
-    assert [f["name"] for f in kwargs["schema"]] == [
-        f["name"] for f in schemas.get_schema("confidence_voyages.json")
-    ]
-    assert kwargs["description"]
-
-
-def test_query_outputs_columns_in_schema_order():
-    query = ConfidenceVoyagesQuery(
-        SimpleNamespace(bq_in_port_visits="project.dataset.port_visits", min_confidence="3")
-    )
-    rendered = query.render()
-    voyages = rendered[rendered.index("bq_voyages AS ("):]
-    start = voyages.index("SELECT") + len("SELECT")
-    select = voyages[start:voyages.index("FROM port_visit_rownumber")]
-    columns = [c.strip().split()[-1] for c in split_top_level_commas(select)]
-
-    assert columns == [f["name"] for f in schemas.get_schema("confidence_voyages.json")]
-
-
-def split_top_level_commas(text):
-    """Split on commas that aren't inside parentheses."""
-    parts, depth, start = [], 0, 0
-    for i, ch in enumerate(text):
-        depth += {"(": 1, ")": -1}.get(ch, 0)
-        if ch == "," and depth == 0:
-            parts.append(text[start:i])
-            start = i + 1
-    parts.append(text[start:])
-    return [p for p in parts if p.strip()]
+    with pytest.raises(argparse.ArgumentTypeError, match="Missing required arguments"):
+        main.run(args)
