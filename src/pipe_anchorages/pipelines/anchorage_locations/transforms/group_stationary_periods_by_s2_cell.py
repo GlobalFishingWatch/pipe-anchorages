@@ -7,7 +7,7 @@ import apache_beam as beam
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.distance import distance
-from pipe_anchorages.find_anchorage_points import AnchoragePoint
+from pipe_anchorages.core.anchorage_location import AnchorageLocation
 from pipe_anchorages.records import VesselLocationRecord
 
 StationaryPeriod = namedtuple(
@@ -32,10 +32,10 @@ pairs that fall in it."""
 
 
 class GroupStationaryPeriodsByS2Cell(beam.PTransform):
-    """Turns vessel tracks into one :class:`AnchoragePoint` per S2 cell where vessels stay.
+    """Turns vessel tracks into one :class:`AnchorageLocation` per S2 cell where vessels stay.
 
     Input: one :data:`VesselTrack` per vessel (see ``CreateTaggedRecords``). Output: one
-    :class:`AnchoragePoint` per anchorage-scale S2 cell (``ANCHORAGES_S2_SCALE``, cells of about
+    :class:`AnchorageLocation` per anchorage-scale S2 cell (``ANCHORAGES_S2_SCALE``, cells of about
     0.5 km) with enough vessels staying in it.
 
     1. Each vessel's track is split into stationary periods and active records
@@ -43,7 +43,7 @@ class GroupStationaryPeriodsByS2Cell(beam.PTransform):
     2. Stationary periods are keyed by the S2 cell of their mean location, and active records by
        the S2 cell of their location; both are grouped per cell.
     3. Each cell with at least one stationary period is summarized into an
-       :class:`AnchoragePoint` (visits, vessels, fishing vessels, stationary and active
+       :class:`AnchorageLocation` (visits, vessels, fishing vessels, stationary and active
        vessel-days, drift radius, top destination); cells with only active records are dropped.
     4. Cells where fewer than ``min_unique_vessels`` distinct vessels stayed are dropped (vessels
        that were only active in the cell don't count).
@@ -160,17 +160,17 @@ class GroupStationaryPeriodsByS2Cell(beam.PTransform):
 
     def create_anchorage_pts(
         self, item: CellVisits, fishing_vessel_list: Iterable[str]
-    ) -> list[AnchoragePoint]:
-        """Summarizes a cell's visits into an :class:`AnchoragePoint`, if it has any stay."""
+    ) -> list[AnchorageLocation]:
+        """Summarizes a cell's visits into an :class:`AnchorageLocation`, if it has any stay."""
         if self.fishing_vessel_set is None:
             self.fishing_vessel_set = set(fishing_vessel_list)
-        value = AnchoragePoint.from_cell_visits(item, self.fishing_vessel_set)
+        value = AnchorageLocation.from_cell_visits(item, self.fishing_vessel_set)
         if value is None:
             return []
 
         return [value]
 
-    def has_enough_vessels(self, item: AnchoragePoint) -> bool:
+    def has_enough_vessels(self, item: AnchorageLocation) -> bool:
         """Whether at least ``min_unique_vessels`` distinct vessels stayed in the cell."""
         return len(item.vessels) >= self.min_unique_vessels
 

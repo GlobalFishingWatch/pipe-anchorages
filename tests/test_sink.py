@@ -1,7 +1,7 @@
 import six
 import s2sphere
 
-from pipe_anchorages import find_anchorage_points
+from pipe_anchorages.core.anchorage_location import AnchorageLocation
 from pipe_anchorages import common
 from pipe_anchorages.assets import schemas as assets_schemas
 from pipe_anchorages.pipelines.anchorage_locations.transforms.core import encode_anchorage
@@ -25,7 +25,7 @@ class TestAnchorageSink(object):
         cls, token, ssvids, total_visits=10, mean_drift_radius=0.2, top_destination=""
     ):
         token = six.text_type(token)
-        return find_anchorage_points.AnchoragePoint(
+        return AnchorageLocation(
             mean_location=cls.LatLon_from_S2Token(token),
             total_visits=total_visits,
             vessels=tuple(ssvids),

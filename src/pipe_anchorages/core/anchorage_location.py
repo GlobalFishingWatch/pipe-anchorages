@@ -4,13 +4,13 @@ import s2sphere
 import math
 from collections import namedtuple, Counter
 
-from . import common as cmn
-from .port_name_filter import normalized_valid_names
+from pipe_anchorages import common as cmn
+from pipe_anchorages.port_name_filter import normalized_valid_names
 
 
-class AnchoragePoint(
+class AnchorageLocation(
     namedtuple(
-        "AnchoragePoint",
+        "AnchorageLocation",
         [
             "mean_location",
             "total_visits",
@@ -74,7 +74,7 @@ class AnchoragePoint(
             else:
                 top_destination = ""
 
-            return AnchoragePoint(
+            return AnchorageLocation(
                 mean_location=loc,
                 total_visits=n,
                 vessels=frozenset(vessels),
