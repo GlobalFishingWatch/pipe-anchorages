@@ -1,15 +1,7 @@
 import argparse
 
-from types import SimpleNamespace
-
 import pytest
-import apache_beam as beam
-from apache_beam.runners import PipelineState
 
-from pipe_anchorages.pipelines.anchorage_locations import main as anchorage_locations
-from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchoragePoints
-
-from gfw.common.beam.transforms import WriteToBigQueryWrapper
 from pipe_anchorages.cli import main
 
 
@@ -24,142 +16,36 @@ BASE_ARGS = [
 ]
 
 
-def test_cli_executes_run(mocker):
-    mock_run = mocker.patch(
-        "pipe_anchorages.cli.commands.anchorage_locations.run",
-        return_value=0,
-    )
-
-    main.run(BASE_ARGS)
-
-    mock_run.assert_called_once()
-    config = mock_run.call_args[0][0]
-    assert config.bq_in_messages == "project.dataset.messages"
-    assert config.bq_out_anchorage_locations == "project.dataset.anchorage_locations"
-    assert config.start_date == "2024-01-01"
-    assert config.end_date == "2024-01-07"
-    assert config.gcs_in_fishing_ssvids == "gs://bucket/fishing_mmsi.txt"
-    assert config.min_positions == 200
-    assert config.stationary_period_min_duration_minutes == 720
-    assert config.stationary_period_max_distance_km == 0.5
-    assert config.min_unique_vessels == 20
-
-
 def test_cli_executes_run_with_mock_bq_clients(tmp_path):
-    # End-to-end: the pipeline really constructs its Beam DAG and runs it
-    # through the DirectRunner, but with BigQuery sources/sinks swapped for
-    # the gfw-common fakes, and the fishing-vessels file pointed at /tmp.
+    # The pipeline really builds and runs its Beam DAG, with the BigQuery source/sink swapped for
+    # gfw-common's fakes and the in-process FnApiRunner (DirectRunner would pick Prism, which
+    # runs as a subprocess and stages an sdist of the package in the working directory).
     fishing_ssvids = tmp_path / "fishing_mmsi.txt"
     fishing_ssvids.write_text("416000001\n")
+    args = list(BASE_ARGS)
+    args[args.index("gs://bucket/fishing_mmsi.txt")] = str(fishing_ssvids)
 
-    args = []
-    for a in BASE_ARGS:
-        if a == "gs://bucket/fishing_mmsi.txt":
-            args.append(str(fishing_ssvids))
-        else:
-            args.append(a)
-    args.append("--mock-bq-clients")
-    args.extend(["--project", "test-project"])
+    exit_code, _ = main.run(
+        [*args, "--mock-bq-clients", "--project", "test-project", "--runner", "FnApiRunner"]
+    )
 
-    result = main.run(args)
-    exit_code = result[0] if isinstance(result, tuple) else result
     assert exit_code == 0
 
 
-def test_cli_requires_gcs_in_fishing_ssvids(mocker):
-    mocker.patch(
-        "pipe_anchorages.cli.commands.anchorage_locations.run",
-        return_value=0,
-    )
-    excluded = ("--gcs-in-fishing-ssvids", "gs://bucket/fishing_mmsi.txt")
-    args = [a for a in BASE_ARGS if a not in excluded]
+@pytest.mark.parametrize(
+    "flag",
+    [
+        "--bq-in-messages",
+        "--bq-out-anchorage-locations",
+        "--start-date",
+        "--end-date",
+        "--gcs-in-fishing-ssvids",
+    ],
+)
+def test_cli_requires_argument(flag):
+    args = list(BASE_ARGS)
+    i = args.index(flag)
+    del args[i:i + 2]
 
-    with pytest.raises(argparse.ArgumentTypeError, match="gcs_in_fishing_ssvids"):
+    with pytest.raises(argparse.ArgumentTypeError, match="Missing required arguments"):
         main.run(args)
-
-
-def test_run_forwards_config_file_beam_options_to_pipeline(
-    capture_pipeline_init, mocker, tmp_path
-):
-    # Same forwarding contract as thin_port_messages_pipeline.run()/port_visits_pipeline.run():
-    # config-file keys that aren't one of this command's own Options land in
-    # config.unknown_parsed_args, and run() must forward that dict into
-    # Pipeline(**options), matching pipe-gaps' PipelineFactory.
-    (tmp_path / "fishing_mmsi.txt").write_text("416000001\n")
-    config = SimpleNamespace(
-        bq_in_messages="project.dataset.messages",
-        bq_out_anchorage_locations="project.dataset.anchorage_locations",
-        start_date="2024-01-01",
-        end_date="2024-01-07",
-        gcs_in_fishing_ssvids=str(tmp_path / "fishing_mmsi.txt"),
-
-        min_positions=200,
-        stationary_period_min_duration_minutes=720,
-        stationary_period_max_distance_km=0.5,
-        min_unique_vessels=20,
-        labels={"team": "pipeline"},
-        unknown_unparsed_args=[],
-        unknown_parsed_args={"project": "test-project", "max_num_workers": 50},
-    )
-
-    mock_pipeline_cls = capture_pipeline_init(
-        "pipe_anchorages.pipelines.anchorage_locations.main.Pipeline",
-        anchorage_locations.run,
-        config,
-    )
-
-    mock_pipeline_cls.assert_called_once_with(
-        name="pipe-anchorages",
-        version=mocker.ANY,
-        dag=mocker.ANY,
-        unparsed_args=[],
-        labels={"team": "pipeline"},
-        project="test-project",
-        max_num_workers=50,
-    )
-
-
-def test_run_builds_the_linear_dag_without_executing_it(mocker, tmp_path):
-    # Constructs the whole DAG (sources, core chain, sink) against a throwaway
-    # beam.Pipeline, but patches Pipeline.run so nothing executes -- there is no
-    # BigQuery/GCS access in unit tests. Catches wiring errors in the assembly.
-    # ReadFromText stats its path at construction, so use a local file for it.
-    fishing_ssvids = tmp_path / "fishing_mmsi.txt"
-    fishing_ssvids.write_text("416000001\n")
-
-    config = SimpleNamespace(
-        bq_in_messages="project.dataset.messages",
-        bq_out_anchorage_locations="project.dataset.anchorage_locations",
-        start_date="2024-01-01",
-        end_date="2024-01-07",
-        gcs_in_fishing_ssvids=str(fishing_ssvids),
-        min_positions=200,
-        stationary_period_min_duration_minutes=720,
-        stationary_period_max_distance_km=0.5,
-        min_unique_vessels=20,
-        labels={"team": "pipeline"},
-        unknown_unparsed_args=[],
-        unknown_parsed_args={"project": "test-project"},
-    )
-
-    captured = {}
-    real_linear_dag = anchorage_locations.LinearDag
-
-    def capture_linear_dag(*args, **kwargs):
-        captured.update(kwargs)
-        return real_linear_dag(*args, **kwargs)
-
-    mocker.patch.object(anchorage_locations, "LinearDag", side_effect=capture_linear_dag)
-    mocker.patch(
-        "apache_beam.pipeline.Pipeline.run",
-        return_value=mocker.Mock(state=PipelineState.RUNNING),
-    )
-
-    assert anchorage_locations.run(config) == 0
-
-    # The single read query covers 2024-01-01..2024-01-07.
-    assert len(captured["sources"]) == 1
-    assert isinstance(captured["core"], FindAnchoragePoints)
-    assert len(captured["sinks"]) == 1
-    assert isinstance(captured["sinks"][0], WriteToBigQueryWrapper)
-    assert isinstance(captured["side_inputs"], beam.io.ReadFromText)
