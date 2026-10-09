@@ -1,8 +1,8 @@
+import dataclasses
 import datetime
-from datetime import date
-from functools import cached_property
+from dataclasses import dataclass
 from types import SimpleNamespace
-from typing import Any, Callable, NamedTuple
+from typing import Any, Callable
 
 import apache_beam as beam
 
@@ -23,43 +23,22 @@ from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAn
 from pipe_anchorages.version import __version__
 
 
-class AnchorageMessage(NamedTuple):
-    """Output type of the anchorage position messages query."""
-
-    ident: str
-    lat: float
-    lon: float
-    timestamp: float
-    destination: str
-    speed: float
-
-
+@dataclass
 class MessagesQuery(Query):
-    """Encapsulates the position messages query."""
+    """Position messages in [start_date, end_date) (YYYY-MM-DD), one row per position.
 
-    NAME = "messages"
-    JINJA_TEMPLATE_FILENAME = "messages.sql.j2"
+    Its fields are the template's variables (see template_vars).
+    """
 
-    def __init__(self, source_messages: str, start_date: date, end_date: date):
-        self._source_messages = source_messages
-        self._start_date = start_date
-        self._end_date = end_date
+    source_messages: str
+    start_date: str
+    end_date: str
 
-    @cached_property
-    def output_type(self) -> type[NamedTuple]:
-        return AnchorageMessage
+    template_filename = "messages.sql.j2"
 
-    @cached_property
-    def template_filename(self) -> str:
-        return self.JINJA_TEMPLATE_FILENAME
-
-    @cached_property
+    @property
     def template_vars(self) -> dict:
-        return {
-            "source_messages": self._source_messages,
-            "start_date": self._start_date,
-            "end_date": self._end_date,
-        }
+        return dataclasses.asdict(self)
 
 
 def run(
