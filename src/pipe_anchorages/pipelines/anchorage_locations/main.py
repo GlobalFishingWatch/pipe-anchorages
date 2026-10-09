@@ -10,9 +10,12 @@ from apache_beam.runners import PipelineState
 
 from gfw.common.beam.pipeline.base import Pipeline
 from gfw.common.beam.pipeline.dag import LinearDag
+from gfw.common.beam.pipeline.hooks import create_table_hook
 from gfw.common.beam.transforms import ReadFromBigQuery, WriteToBigQueryWrapper
+from gfw.common.bigquery.helper import BigQueryHelper
 from gfw.common.query import Query
 
+from pipe_anchorages.hooks import update_table_metadata_hook
 from pipe_anchorages.pipelines.anchorage_locations.config import AnchorageLocationsConfig
 from pipe_anchorages.pipelines.anchorage_locations.table_config import (
     AnchorageLocationsTableConfig,
@@ -69,6 +72,7 @@ def run(
     unknown_parsed_args: dict = None,
     read_from_bigquery_factory: Callable = None,
     write_to_bigquery_factory: Callable = None,
+    bq_client_factory: Callable = None,
     **kwargs: Any,
 ) -> int:
     config = AnchorageLocationsConfig.from_namespace(config, version=__version__)
@@ -81,6 +85,8 @@ def run(
         write_to_bigquery_factory = WriteToBigQueryWrapper.get_client_factory(
             mocked=bool(config.mock_bq_clients)
         )
+    if bq_client_factory is None:
+        bq_client_factory = BigQueryHelper.get_client_factory(mocked=bool(config.mock_bq_clients))
 
     table_config = AnchorageLocationsTableConfig(
         table_id=config.bq_out_anchorage_locations,
@@ -128,11 +134,7 @@ def run(
                 schema=table_config.schema,
                 write_to_bigquery_factory=write_to_bigquery_factory,
                 write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE,
-                additional_bq_parameters={
-                    "destinationTableProperties": {
-                        "description": table_config.description.render()
-                    },
-                },
+                create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER,
             ),
         ),
     )
@@ -141,6 +143,8 @@ def run(
         name="pipe-anchorages",
         version=__version__,
         dag=dag,
+        pre_hooks=[create_table_hook(table_config, mock=bool(config.mock_bq_clients))],
+        post_hooks=[update_table_metadata_hook(table_config, config.labels, bq_client_factory)],
         unparsed_args=config.unknown_unparsed_args,
         labels=config.labels,
         **config.unknown_parsed_args,

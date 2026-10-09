@@ -7,6 +7,7 @@ import pytest
 from apache_beam.testing.util import assert_that
 
 from gfw.common.beam.transforms.bigquery import FakeReadFromBigQuery
+from gfw.common.bigquery.helper import BigQueryHelper
 
 from pipe_anchorages.assets import schemas
 from pipe_anchorages.pipelines.anchorage_locations.main import AnchorageLocationsQuery, run
@@ -63,7 +64,9 @@ def fishing_ssvids(tmp_path):
     return write
 
 
-def run_pipeline(rows, check, fishing_ssvids_path, reads=None, writes=None, **overrides):
+def run_pipeline(
+    rows, check, fishing_ssvids_path, reads=None, writes=None, bq_client_factory=None, **overrides
+):
     """Runs the pipeline on `rows` (shaped like the query's output) and checks what it writes."""
 
     def read_factory(**kwargs):
@@ -87,6 +90,7 @@ def run_pipeline(rows, check, fishing_ssvids_path, reads=None, writes=None, **ov
         stationary_period_min_duration_minutes=60,
         stationary_period_max_distance_km=0.5,
         labels={"environment": "development", "stage": "anchorages"},
+        mock_bq_clients=True,
         unknown_unparsed_args=[],
         unknown_parsed_args={"project": "test-project"},
     )
@@ -96,6 +100,7 @@ def run_pipeline(rows, check, fishing_ssvids_path, reads=None, writes=None, **ov
         SimpleNamespace(**config),
         read_from_bigquery_factory=read_factory,
         write_to_bigquery_factory=write_factory,
+        bq_client_factory=bq_client_factory or BigQueryHelper.get_client_factory(mocked=True),
         runner=RUNNER,
     )
 
@@ -150,6 +155,24 @@ def test_run_reads_the_date_range_and_writes_the_output_table(fishing_ssvids):
     assert [f["name"] for f in write["schema"]["fields"]] == [
         f["name"] for f in schemas.get_schema("anchorage_locations.json")
     ]
+
+
+def test_run_writes_without_creating_the_table_and_describes_it_after(
+    fishing_ssvids, bq_clients, bq_client_factory
+):
+    writes = []
+
+    run_pipeline([], check_no_rows, fishing_ssvids(), writes=writes,
+                 bq_client_factory=bq_client_factory)
+
+    (write,) = writes
+    assert write["create_disposition"] == beam.io.BigQueryDisposition.CREATE_NEVER
+    assert "additional_bq_parameters" not in write
+    (update_client,) = bq_clients
+    (updated, fields), _ = update_client.update_table.call_args
+    assert fields == ["description", "labels"]
+    assert "ANCHORAGE POINTS" in updated.description
+    assert updated.labels == {"environment": "development", "stage": "anchorages"}
 
 
 def test_query_renders_single_table():
