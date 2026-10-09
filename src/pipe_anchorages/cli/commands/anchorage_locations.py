@@ -1,7 +1,7 @@
 from typing import Any
 from types import SimpleNamespace
 
-from gfw.common.cli import Command, Option
+from gfw.common.cli import Command, Option, date_range_options
 
 from pipe_anchorages.pipelines.anchorage_locations.main import run
 
@@ -17,8 +17,6 @@ defined for Apache Beam PipelineOptions class. For more information, see
 
 HELP_IN_MESSAGES = "BigQuery table to pull position messages from."
 HELP_LOCATIONS = "BigQuery table in which to store the anchorage locations."
-HELP_START_DATE = "First date (inclusive) to look for stationary positions."
-HELP_END_DATE = "End date (exclusive) to look for stationary positions."
 HELP_FISHING_SSVIDS = "Newline-separated list of fishing vessel ids."
 HELP_MIN_POSITIONS = "Minimum number of positions a segment needs to be considered."
 HELP_STATIONARY_PERIOD_MIN_DURATION_MINUTES = (
@@ -48,8 +46,7 @@ class AnchorageLocations(Command):
             Option("--bq-in-messages", type=str, required=True, help=HELP_IN_MESSAGES),
             Option("--bq-out-anchorage-locations", type=str, required=True, help=HELP_LOCATIONS),
             Option("--gcs-in-fishing-ssvids", type=str, required=True, help=HELP_FISHING_SSVIDS),
-            Option("--start-date", type=str, required=True, help=HELP_START_DATE),
-            Option("--end-date", type=str, required=True, help=HELP_END_DATE),
+            *date_range_options(),
             Option("--min-positions", type=int, default=200, help=HELP_MIN_POSITIONS),
             Option("--min-unique-vessels", type=int, default=20, help=HELP_MIN_UNIQUE_VESSELS),
             Option(

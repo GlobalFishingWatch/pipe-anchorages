@@ -3,8 +3,7 @@ import sys
 import logging
 
 from gfw.common.logging import LoggerConfig
-from gfw.common.cli import CLI, Option
-from gfw.common.cli.actions import NestedKeyValueAction
+from gfw.common.cli import CLI, labels_option
 from gfw.common.cli.formatting import default_formatter
 
 from pipe_anchorages.version import __version__
@@ -23,7 +22,6 @@ logger = logging.getLogger(__name__)
 
 NAME = "pipe-anchorages"
 DESCRIPTION = "Tools for finding anchorages and associated port-visit events."
-HELP_LABELS = "Labels to audit costs over the queries."
 
 
 def run(args):
@@ -39,16 +37,7 @@ def run(args):
             PortStateTransitions,
             PortVisits,
         ],
-        options=[  # Common options for all subcommands.
-            Option(
-                "--labels",
-                type=str,
-                nargs="*",
-                action=NestedKeyValueAction,
-                required=True,
-                help=HELP_LABELS,
-            ),
-        ],
+        options=[labels_option()],  # Common options for all subcommands.
         version=__version__,
         examples=[
             "pipe-anchorages anchorages-visited-info -c config/sample-anchorages-visited.json "

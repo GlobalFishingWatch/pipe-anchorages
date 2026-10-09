@@ -25,14 +25,14 @@ from pipe_anchorages.version import __version__
 
 @dataclass
 class MessagesQuery(Query):
-    """Position messages in [start_date, end_date) (YYYY-MM-DD), one row per position.
+    """Position messages in [start_date, end_date), one row per position.
 
     Its fields are the template's variables (see template_vars).
     """
 
     source_messages: str
-    start_date: str
-    end_date: str
+    start_date: datetime.date
+    end_date: datetime.date
 
     template_filename = "messages.sql.j2"
 
@@ -50,7 +50,7 @@ def run(
     bq_client_factory: Callable = None,
     **kwargs: Any,
 ) -> None:
-    config = AnchorageLocationsConfig.from_namespace(config, version=__version__)
+    config = AnchorageLocationsConfig.from_namespace(config)
 
     if read_from_bigquery_factory is None:
         read_from_bigquery_factory = ReadFromBigQuery.get_client_factory(
@@ -115,8 +115,6 @@ def run(
     )
 
     pipeline = Pipeline(
-        name="pipe-anchorages",
-        version=__version__,
         dag=dag,
         pre_hooks=[create_table_hook(table_config, mock=config.mock_bq_clients)],
         post_hooks=[update_table_metadata_hook(table_config, config.labels, bq_client_factory)],
