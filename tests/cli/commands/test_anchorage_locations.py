@@ -25,11 +25,9 @@ def test_cli_executes_run_with_mock_bq_clients(tmp_path):
     args = list(BASE_ARGS)
     args[args.index("gs://bucket/fishing_mmsi.txt")] = str(fishing_ssvids)
 
-    exit_code, _ = main.run(
+    main.run(
         [*args, "--mock-bq-clients", "--project", "test-project", "--runner", "FnApiRunner"]
     )
-
-    assert exit_code == 0
 
 
 @pytest.mark.parametrize(

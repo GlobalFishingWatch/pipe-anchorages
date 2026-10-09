@@ -126,19 +126,19 @@ def check_no_rows(rows):
 def test_run_finds_the_anchorage_where_vessels_stay(fishing_ssvids):
     check = functools.partial(check_one_anchorage, fishing_vessels=0)
 
-    assert run_pipeline(TWO_VESSELS_AT_ONE_ANCHORAGE, check, fishing_ssvids()) == 0
+    run_pipeline(TWO_VESSELS_AT_ONE_ANCHORAGE, check, fishing_ssvids())
 
 
 def test_run_counts_fishing_vessels_from_the_side_input(fishing_ssvids):
     check = functools.partial(check_one_anchorage, fishing_vessels=1)
 
-    assert run_pipeline(TWO_VESSELS_AT_ONE_ANCHORAGE, check, fishing_ssvids("111")) == 0
+    run_pipeline(TWO_VESSELS_AT_ONE_ANCHORAGE, check, fishing_ssvids("111"))
 
 
 def test_run_skips_anchorages_with_too_few_vessels(fishing_ssvids):
-    assert run_pipeline(
+    run_pipeline(
         TWO_VESSELS_AT_ONE_ANCHORAGE, check_no_rows, fishing_ssvids(), min_unique_vessels=3
-    ) == 0
+    )
 
 
 def test_run_reads_the_date_range_and_writes_the_output_table(fishing_ssvids):

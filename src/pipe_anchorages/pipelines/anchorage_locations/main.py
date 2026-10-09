@@ -1,12 +1,10 @@
 import datetime
-import logging
 from datetime import date
 from functools import cached_property
 from types import SimpleNamespace
 from typing import Any, Callable, NamedTuple
 
 import apache_beam as beam
-from apache_beam.runners import PipelineState
 
 from gfw.common.beam.pipeline.base import Pipeline
 from gfw.common.beam.pipeline.dag import LinearDag
@@ -23,8 +21,6 @@ from pipe_anchorages.pipelines.anchorage_locations.table_config import (
 )
 from pipe_anchorages.pipelines.anchorage_locations.transforms.core import FindAnchorageLocations
 from pipe_anchorages.version import __version__
-
-logger = logging.getLogger(__name__)
 
 
 class AnchorageMessage(NamedTuple):
@@ -74,7 +70,7 @@ def run(
     write_to_bigquery_factory: Callable = None,
     bq_client_factory: Callable = None,
     **kwargs: Any,
-) -> int:
+) -> None:
     config = AnchorageLocationsConfig.from_namespace(config, version=__version__)
 
     if read_from_bigquery_factory is None:
@@ -151,14 +147,4 @@ def run(
         **kwargs,
     )
 
-    result, _ = pipeline.run()
-
-    success_states = {
-        PipelineState.DONE,
-        PipelineState.RUNNING,
-        PipelineState.UNKNOWN,
-        PipelineState.PENDING,
-    }
-
-    logger.info("returning with result.state=%s" % result.state)
-    return 0 if result.state in success_states else 1
+    pipeline.run()
