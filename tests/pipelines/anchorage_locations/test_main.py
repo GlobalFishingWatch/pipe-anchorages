@@ -10,7 +10,7 @@ from gfw.common.beam.transforms.bigquery import FakeReadFromBigQuery
 from gfw.common.bigquery.helper import BigQueryHelper
 
 from pipe_anchorages.assets import schemas
-from pipe_anchorages.pipelines.anchorage_locations.main import AnchorageLocationsQuery, run
+from pipe_anchorages.pipelines.anchorage_locations.main import MessagesQuery, run
 
 # The in-process runner: DirectRunner would pick Prism, which runs as a subprocess and stages an
 # sdist of the package in the working directory.
@@ -176,7 +176,7 @@ def test_run_writes_without_creating_the_table_and_describes_it_after(
 
 
 def test_query_renders_single_table():
-    query = AnchorageLocationsQuery(
+    query = MessagesQuery(
         source_messages="SOURCE_TABLE",
         start_date="2016-01-01",
         end_date="2016-01-02",

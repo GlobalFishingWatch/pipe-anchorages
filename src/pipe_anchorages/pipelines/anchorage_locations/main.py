@@ -38,11 +38,11 @@ class AnchorageMessage(NamedTuple):
     speed: float
 
 
-class AnchorageLocationsQuery(Query):
-    """Encapsulates the anchorage position messages query."""
+class MessagesQuery(Query):
+    """Encapsulates the position messages query."""
 
-    NAME = "anchorage_locations"
-    JINJA_TEMPLATE_FILENAME = "anchorage_locations.sql.j2"
+    NAME = "messages"
+    JINJA_TEMPLATE_FILENAME = "messages.sql.j2"
 
     def __init__(self, source_messages: str, start_date: date, end_date: date):
         self._source_messages = source_messages
@@ -109,7 +109,7 @@ def run(
     dag = LinearDag(
         sources=[
             ReadFromBigQuery.from_query(
-                AnchorageLocationsQuery(
+                MessagesQuery(
                     source_messages=config.bq_in_messages,
                     start_date=config.start_date,
                     end_date=config.end_date,
