@@ -7,30 +7,29 @@ from gfw.common.bigquery.helper import BigQueryHelper
 from gfw.common.query import Query
 
 from pipe_anchorages.version import __version__
-from pipe_anchorages.pipelines.anchorages_visited_info.config import AnchoragesVisitedInfoConfig
-from pipe_anchorages.pipelines.anchorages_visited_info.table_config import (
-    AnchoragesVisitedInfoTableConfig,
-    AnchoragesVisitedInfoTableDescription
+from pipe_anchorages.pipelines.confidence_voyages.config import ConfidenceVoyagesConfig
+from pipe_anchorages.pipelines.confidence_voyages.table_config import (
+    CONFIDENCE_MEANING,
+    ConfidenceVoyagesTableConfig,
+    ConfidenceVoyagesTableDescription,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class AnchoragesVisitedInfoQuery(Query):
-    def __init__(self, config: AnchoragesVisitedInfoConfig) -> None:
+class ConfidenceVoyagesQuery(Query):
+    def __init__(self, config: ConfidenceVoyagesConfig) -> None:
         self.config = config
 
     @cached_property
     def template_filename(self) -> str:
-        return "anchorages_visited_info.sql.j2"
+        return "confidence_voyages.sql.j2"
 
     @cached_property
     def template_vars(self) -> dict:
         return {
-            "source_loitering": self.config.bq_input_loitering,
-            "source_encounters": self.config.bq_input_encounters,
-            "source_ais_gaps": self.config.bq_input_ais_gaps,
-            "source_named_anchorages": self.config.bq_input_named_anchorages,
+            "port_visits_table": self.config.bq_in_port_visits,
+            "min_confidence": self.config.min_confidence,
         }
 
 
@@ -41,19 +40,24 @@ def run(
     bq_client_factory: Callable = None,
 ) -> None:
 
-    config = AnchoragesVisitedInfoConfig.from_namespace(config, version=__version__)
+    config = ConfidenceVoyagesConfig.from_namespace(config, version=__version__)
 
     if bq_client_factory is None:
-        bq_client_factory = BigQueryHelper.get_client_factory(config.mock_bq_clients)
+        bq_client_factory = BigQueryHelper.get_client_factory(mocked=config.mock_bq_clients)
 
-    query = AnchoragesVisitedInfoQuery(config)
-    bq = BigQueryHelper(bq_client_factory, dry_run=config.dry_run, project=config.project)
+    query = ConfidenceVoyagesQuery(config)
+    bq = BigQueryHelper(bq_client_factory, project=config.project)
 
-    table_config = AnchoragesVisitedInfoTableConfig(
-        table_id=config.bq_output,
-        description=AnchoragesVisitedInfoTableDescription(
+    table_config = ConfidenceVoyagesTableConfig(
+        table_id=config.bq_out_voyages,
+        description=ConfidenceVoyagesTableDescription(
             version=__version__,
-            relevant_params={}
+            relevant_params={
+                "source_port_visits": config.bq_in_port_visits,
+                "min_confidence": (
+                    f"{config.min_confidence} ({CONFIDENCE_MEANING[config.min_confidence]})"
+                ),
+            },
         ),
     )
 

@@ -10,6 +10,7 @@ BASE_ARGS = [
     "--bq-output", "project.dataset.output",
     "--project", "test-project",
     "--mock-bq-clients",
+    "--labels", "environment=development", "stage=anchorages",
 ]
 
 

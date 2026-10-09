@@ -20,3 +20,10 @@ temp_location: "gs://machine-learning-dev-ttl-30d/anchorages/temp"
 setup_file: "./setup.py"
 sdk_container_image: "gcr.io/world-fishing-827/pipe-anchorage/worker:tim_test"
 experiments: ["use_runner_v2"]
+
+# Labels for cost tracking (label values: lowercase letters, digits, '_' and '-').
+labels:
+  environment: development
+  resource_creator: tomas-link
+  project: ais
+  stage: anchorages

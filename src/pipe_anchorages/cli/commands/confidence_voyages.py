@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 from gfw.common.cli import Command, Option
 
-from pipe_anchorages.confidence_voyages import run
+from pipe_anchorages.pipelines.confidence_voyages.main import run
 
 
 DESCRIPTION = """\
@@ -17,6 +17,7 @@ HELP_BQ_IN_PORT_VISITS = "BigQuery table with port visits (Format str, ex: datas
 HELP_MIN_CONFIDENCE = "The minimal confidence to detect the voyages (Format str, ex: 3)."
 HELP_BQ_OUT_VOYAGES = "BigQuery table in which to store the voyages (ex: project.dataset.table)."
 HELP_PROJECT = "The GCP project billed for the processing of this step."
+HELP_MOCK_BQ_CLIENTS = "If passed, mocks the BQ clients [Useful for development]."
 
 
 class ConfidenceVoyages(Command):
@@ -42,6 +43,7 @@ class ConfidenceVoyages(Command):
                 choices=["2", "3", "4"],
                 help=HELP_MIN_CONFIDENCE,
             ),
+            Option("--mock-bq-clients", type=bool, help=HELP_MOCK_BQ_CLIENTS),
         ]
 
     @classmethod
