@@ -41,6 +41,7 @@ class PortVisitsTableConfig(TableConfig):
     partition_type: str = "MONTH"
     partition_field: str = "end_timestamp"
     clustering_fields: tuple[str, ...] = ("end_timestamp",)
+    require_partition_filter: bool = True
 
     @property
     def schema(self) -> list[dict]:

@@ -165,6 +165,7 @@ def test_output_table_layout():
 
     assert (params["partition_type"], params["partition_field"]) == ("MONTH", "end_timestamp")
     assert params["clustering_fields"] == ("end_timestamp",)
+    assert params["require_partition_filter"] is True
 
 
 def test_query_renders_without_bad_segs():
