@@ -153,7 +153,7 @@ def test_run_detects_a_visit_with_entry_stop_and_exit(bq_clients, bq_client_fact
     assert created.labels == labels
     assert create_kwargs["exists_ok"] is True
     (updated, fields), _ = update_client.update_table.call_args
-    assert fields == ["description", "labels"]
+    assert fields == ["description", "labels", "require_partition_filter"]
     assert "PORT VISITS" in updated.description
     assert updated.labels == labels
 

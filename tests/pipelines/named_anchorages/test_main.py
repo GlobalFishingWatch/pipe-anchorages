@@ -166,7 +166,7 @@ def test_run_names_the_anchorage_locations_and_adds_the_overrides(bq_clients, bq
     assert created.labels == labels
     assert create_kwargs["exists_ok"] is True
     (updated, fields), _ = update_client.update_table.call_args
-    assert fields == ["description", "labels"]
+    assert fields == ["description", "labels", "require_partition_filter"]
     assert "NAMED ANCHORAGES" in updated.description
     assert "project.dataset.anchorage_locations" in updated.description
     assert updated.labels == labels
