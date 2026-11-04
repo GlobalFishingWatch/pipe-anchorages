@@ -151,6 +151,6 @@ def test_run_finds_the_anchorage_where_vessels_stay(fishing_ssvids, bq_clients, 
     assert created.labels == labels
     assert create_kwargs["exists_ok"] is True
     (updated, fields), _ = update_client.update_table.call_args
-    assert fields == ["description", "labels"]
+    assert fields == ["description", "labels", "require_partition_filter"]
     assert "ANCHORAGE POINTS" in updated.description
     assert updated.labels == labels

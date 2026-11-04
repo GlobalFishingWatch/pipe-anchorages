@@ -15,7 +15,7 @@ namespaces = false
 
 [project]
 name = "pipe-anchorages"
-version = "5.0.0"
+version = "5.0.1"
 description = "Tools for finding anchorages and associated port-visit events."
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -35,7 +35,7 @@ requires-python = ">= 3.12"
 dependencies = [
   "apache-beam[gcp]~=2.76",
   "Fiona<2",
-  "gfw-common[bq,beam]~=0.22.0",
+  "gfw-common[bq,beam]~=0.25.0",
   "numpy~=2.0",
   "pyyaml~=6.0",
   "s2sphere~=0.2",
@@ -46,7 +46,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/GlobalFishingWatch/pipe-anchorages"
 Documentation = "https://globalfishingwatch.github.io/pipe-anchorages/"
-Changelog = "https://github.com/GlobalFishingWatch/pipe-anchorages/blob/main/CHANGES.md"
+Changelog = "https://github.com/GlobalFishingWatch/pipe-anchorages/blob/main/docs/OLD_CHANGELOG.md"
 Repository = "https://github.com/GlobalFishingWatch/pipe-anchorages"
 Issues = "https://github.com/GlobalFishingWatch/pipe-anchorages/issues"
 

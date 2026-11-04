@@ -8,7 +8,7 @@ import apache_beam as beam
 
 from gfw.common.beam.pipeline.base import Pipeline
 from gfw.common.beam.pipeline.dag import LinearDag
-from gfw.common.beam.pipeline.hooks import create_table_hook, update_table_metadata_hook
+from gfw.common.beam.pipeline.hooks import create_table_hook, update_table_hook
 from gfw.common.beam.transforms import ReadFromBigQuery, WriteToBigQueryWrapper
 from gfw.common.bigquery.helper import BigQueryHelper
 from gfw.common.datetime import datetime_from_date
@@ -138,7 +138,7 @@ def run(
             )
         ],
         post_hooks=[
-            update_table_metadata_hook(
+            update_table_hook(
                 table_config, labels=config.labels, bq_client_factory=bq_client_factory
             )
         ],

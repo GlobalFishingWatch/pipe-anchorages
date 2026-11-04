@@ -176,7 +176,7 @@ def test_run_keeps_the_positions_around_port_state_transitions(bq_clients, bq_cl
     )
     assert delete_kwargs["job_config"].labels == labels
     (updated, fields), _ = update_client.update_table.call_args
-    assert fields == ["description", "labels"]
+    assert fields == ["description", "labels", "require_partition_filter"]
     assert "PORT STATE TRANSITIONS" in updated.description
     assert updated.labels == labels
 
