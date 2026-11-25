@@ -79,7 +79,7 @@ install-test: upgrade-pip
 
 .PHONY: install  ## Install the package in editable mode & all dependencies for local development.
 install: upgrade-pip
-	${PIP} install -e .[lint,dev,build]
+	${PIP} install -e . --group lint --group dev --group build
 	make install-test
 
 .PHONY: test  ## Run all unit tests exporting coverage.xml report.

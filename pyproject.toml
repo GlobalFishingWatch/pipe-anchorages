@@ -11,7 +11,11 @@ exclude = ["tests*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"assets" = ["*"]
+"pipe_anchorages" = ["assets/**/*"]
+
+# Keep stray bytecode in assets/ out of the wheel.
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__", "*.py[cod]"]
 
 [project]
 name = "pipe-anchorages"
@@ -53,8 +57,9 @@ Issues = "https://github.com/GlobalFishingWatch/pipe-anchorages/issues"
 [project.scripts]
 pipe-anchorages = "pipe_anchorages.cli.main:main"
 
-[project.optional-dependencies]
-
+# Development dependencies (PEP 735). Not published with the package, and installed on their own,
+# without the project dependencies.
+[dependency-groups]
 # Linting and code quality tools
 lint = [
   "black~=25.1",               # Code formatting tool.
