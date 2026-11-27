@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: 3.12
+          python-version: 3.13
 
       - name: Install flake8
         run: pip --disable-pip-version-check install flake8
@@ -30,9 +30,9 @@ jobs:
       fail-fast: true
       matrix:
         os: ["ubuntu-latest"]
-        # 3.12 is covered by tests-in-docker (same version the Dockerfile builds on);
+        # 3.13 is covered by tests-in-docker (same version the Dockerfile builds on);
         # no need to run it twice.
-        python-version: ["3.13"]
+        python-version: ["3.14"]
     env:
       VENV: .venv
       PACKAGE: pipe_anchorages
@@ -43,15 +43,26 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          # cache option make the step fail if you don´t have requirements.txt or pyproject.toml on root.
-          # https://github.com/actions/setup-python/issues/807.
 
       - name: Install UV
         run: make uv
 
       - name: Create virtual environment
-        run: uv venv $VENV
+        # make uv pins .python-version to 3.13; --python makes the venv use the matrix version.
+        run: uv venv --python ${{ matrix.python-version }} $VENV
+
+      - name: Cache uv
+        # The packages are installed with uv, which keeps its own cache, not pip's.
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml', 'requirements.txt', 'requirements-test.txt') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ matrix.python-version }}-
+
+      - name: Install GDAL
+        # Fiona has no wheel for Python 3.14, so it is built from source against GDAL.
+        run: sudo apt-get update && sudo apt-get install -y libgdal-dev
 
       - name: Install package with test dependencies
         run: |
@@ -78,15 +89,26 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   tests-in-docker:
-    name: tests - Python 3.12 on Docker
+    name: tests - Python 3.13 on Docker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@v6
 
-      - name: Build docker image
-        run: make docker-build
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build the test image
+        # Only the test image is built, and its layers are cached between runs: a push that
+        # does not touch the requirements reuses the layers of the dependencies.
+        uses: docker/bake-action@v6
+        with:
+          # bake-action builds from the Git context by default, which ignores the .dockerignore.
+          source: .
+          files: docker-compose.yaml
+          targets: test
+          load: true
+          set: |
+            *.cache-from=type=gha,scope=test-image
+            *.cache-to=type=gha,scope=test-image,mode=max
 
       - name: Run tests
         run: make docker-test

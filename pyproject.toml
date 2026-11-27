@@ -19,7 +19,7 @@ namespaces = false
 
 [project]
 name = "pipe-anchorages"
-version = "5.0.1"
+version = "5.1.0"
 description = "Tools for finding anchorages and associated port-visit events."
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -31,13 +31,13 @@ maintainers = [
 ]
 classifiers = [
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 
 ]
-requires-python = ">= 3.12"
+requires-python = ">= 3.13"
 dependencies = [
-  "apache-beam[gcp]~=2.76",
+  "apache-beam[gcp]~=2.78",
   "Fiona<2",
   "gfw-common[bq,beam]~=0.25.0",
   "numpy~=2.0",
@@ -92,7 +92,7 @@ build = [
 fix = true
 line-length = 99
 src = ["src", "tests"]
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -128,7 +128,7 @@ known-first-party = ["gfw", "tests"]
 convention = "google"
 
 [tool.black]
-target-version = ["py312"]
+target-version = ["py313"]
 line-length = 99
 
 [tool.isort]
