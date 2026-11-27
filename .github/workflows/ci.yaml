@@ -43,9 +43,6 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          # cache option make the step fail if you don´t have requirements.txt or pyproject.toml on root.
-          # https://github.com/actions/setup-python/issues/807.
 
       - name: Install UV
         run: make uv
@@ -53,6 +50,15 @@ jobs:
       - name: Create virtual environment
         # make uv pins .python-version to 3.13; --python makes the venv use the matrix version.
         run: uv venv --python ${{ matrix.python-version }} $VENV
+
+      - name: Cache uv
+        # The packages are installed with uv, which keeps its own cache, not pip's.
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml', 'requirements.txt', 'requirements-test.txt') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ matrix.python-version }}-
 
       - name: Install GDAL
         # Fiona has no wheel for Python 3.14, so it is built from source against GDAL.
