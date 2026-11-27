@@ -25,9 +25,8 @@ class VisitLocationRecord(NamedTuple):
     port_lon: Optional[float]
     port_lat: Optional[float]
 
-    # No type hints: Beam maps it, and would infer coders from them.
     @classmethod
-    def from_msg(cls, msg):
+    def from_msg(cls, msg: dict) -> "VisitLocationRecord":
         """Builds a VisitLocationRecord from a row of port-visits' query.
 
         A missing port_dist (no anchorage nearby) becomes infinity.

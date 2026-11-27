@@ -1,7 +1,7 @@
 from collections import Counter, namedtuple
 from datetime import datetime, timedelta
 from itertools import groupby
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 import apache_beam as beam
 from pipe_anchorages import common as cmn
@@ -145,8 +145,9 @@ class CreateInOutEvents(beam.PTransform, InOutEventsBase):
             psuedo_rcd = rcd._replace(timestamp=self.last_possible_timestamp)
             yield from self._yield_gap_beg(psuedo_rcd, last_timestamp, active_port_rcd)
 
-    # No type hints: Beam would infer coders from them (see core.py).
-    def create_in_out_events(self, grouped_records):
+    def create_in_out_events(
+        self, grouped_records: tuple[Any, Iterable[VisitLocationRecord]]
+    ) -> tuple[Any, list[VisitEvent]]:
         """Returns (vessel_id, events) for a (vessel_id, records) pair."""
         identity, records = grouped_records
         return identity, list(self._create_in_out_events(records))

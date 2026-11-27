@@ -1,5 +1,4 @@
 from collections import namedtuple
-from .namedtuples import NamedtupleCoder
 
 PortVisit = namedtuple(
     "PortVisit",
@@ -20,11 +19,3 @@ PortVisit = namedtuple(
         "confidence",
     ],
 )
-
-
-class PortVisitCoder(NamedtupleCoder):
-    target = PortVisit
-    time_fields = ["start_timestamp", "end_timestamp"]
-
-
-PortVisitCoder.register()
