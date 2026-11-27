@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Any, Sequence
 
 import apache_beam as beam
 
@@ -10,8 +10,7 @@ from .create_override_anchorages import CreateOverrideAnchorages
 from .find_used_s2ids import FindUsedS2ids
 
 
-# No type hints on the functions Beam maps: it would infer coders from them.
-def named_anchorage_to_msg(anchorage):
+def named_anchorage_to_msg(anchorage: NamedAnchorageLocation) -> dict[str, Any]:
     """Converts a NamedAnchorageLocation into a row of the output table."""
     return {
         "lat": anchorage.mean_location.lat,
@@ -34,7 +33,7 @@ def named_anchorage_to_msg(anchorage):
     }
 
 
-def is_not_removed(anchorage, overrides_source):
+def is_not_removed(anchorage: NamedAnchorageLocation, overrides_source: str) -> bool:
     """False for the anchorages the overrides remove (label REMOVE, label_source
     `overrides_source`)."""
     return not (anchorage.label == "REMOVE" and anchorage.label_source == overrides_source)

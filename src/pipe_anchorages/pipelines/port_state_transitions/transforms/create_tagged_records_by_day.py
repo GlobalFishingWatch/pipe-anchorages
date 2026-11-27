@@ -1,3 +1,5 @@
+from typing import Any, Iterable
+
 import apache_beam as beam
 
 from pipe_anchorages.transforms.shrink_group_by import ShrinkGroupBy
@@ -16,16 +18,15 @@ class CreateTaggedRecordsByDay(beam.PTransform):
         self.record_type = record_type
         self.keys = keys
 
-    # No type hints on the methods Beam maps: it would infer coders from them.
-    def record_date(self, record):
+    def record_date(self, record) -> str:
         return str(record.timestamp.date())
 
-    def order_by_timestamp(self, item):
+    def order_by_timestamp(self, item: tuple[Any, Iterable]) -> tuple[Any, list]:
         key, records = item
         records = sorted(records, key=lambda x: (x.timestamp, x.speed, x.location))
         return key, records
 
-    def dedup_by_timestamp(self, item):
+    def dedup_by_timestamp(self, item: tuple[Any, Iterable]) -> tuple[Any, list]:
         key, source = item
         seen = set()
         sink = []
@@ -35,7 +36,7 @@ class CreateTaggedRecordsByDay(beam.PTransform):
                 seen.add(x.timestamp)
         return (key, sink)
 
-    def tag_records(self, item):
+    def tag_records(self, item: tuple[Any, Iterable]) -> tuple[Any, list]:
         """Gives each record an empty destination.
 
         Port-state-transitions has no info records to take a destination from: its rows have

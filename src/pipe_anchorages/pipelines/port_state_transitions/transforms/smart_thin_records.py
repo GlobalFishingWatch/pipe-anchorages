@@ -8,7 +8,10 @@ import apache_beam as beam
 from pipe_anchorages import common as cmn
 
 from pipe_anchorages.core.visit_location_record import VisitLocationRecord
+from pipe_anchorages.records import VesselLocationRecord
 from pipe_anchorages.transforms.in_out_events import InOutEventsBase
+
+from .anchorage_arrays import AnchorageArrays
 
 
 class SmartThinRecords(beam.PTransform, InOutEventsBase):
@@ -58,8 +61,11 @@ class SmartThinRecords(beam.PTransform, InOutEventsBase):
         assert isinstance(end_date, datetime.date)
         self.end_date = end_date
 
-    # No type hints: Beam maps this method, and would infer coders from them.
-    def thin(self, grouped_records, anchorage_map):
+    def thin(
+        self,
+        grouped_records: tuple[tuple[str, str], list[VesselLocationRecord]],
+        anchorage_map: dict[str, AnchorageArrays],
+    ) -> list[VisitLocationRecord]:
         """Returns the records to keep of one segment-day, sorted by timestamp.
 
         `anchorage_map` maps each S2 token to the AnchorageArrays of the anchorages within reach

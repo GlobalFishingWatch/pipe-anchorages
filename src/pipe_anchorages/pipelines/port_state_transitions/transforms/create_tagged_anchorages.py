@@ -1,5 +1,7 @@
 from __future__ import absolute_import, print_function, division
 
+from typing import Iterator
+
 import apache_beam as beam
 
 from pipe_anchorages import common as cmn
@@ -15,15 +17,16 @@ class CreateTaggedAnchorages(beam.PTransform):
     their S2 cell to find the anchorages within reach.
     """
 
-    # No type hints on the methods Beam maps: it would infer coders from them.
-    def dict_to_psuedo_anchorage(self, obj):
+    def dict_to_psuedo_anchorage(self, obj: dict) -> PseudoAnchorage:
         return PseudoAnchorage(
             mean_location=cmn.LatLon(obj["anchor_lat"], obj["anchor_lon"]),
             s2id=obj["anchor_id"],
             port_name=obj["label"],
         )
 
-    def tag_anchorage_with_s2ids(self, anchorage):
+    def tag_anchorage_with_s2ids(
+        self, anchorage: PseudoAnchorage
+    ) -> Iterator[tuple[str, PseudoAnchorage]]:
         central_cell_id = anchorage.mean_location.S2CellId(cmn.VISITS_S2_SCALE)
         ids = {anchorage.s2id}
         ids.add(central_cell_id.to_token())

@@ -20,9 +20,8 @@ class NamedAnchorageLocation(
 
     __slots__ = ()
 
-    # No type hints: Beam maps it, and would infer coders from them.
     @staticmethod
-    def from_msg(msg):
+    def from_msg(msg: dict) -> "NamedAnchorageLocation":
         """Builds a NamedAnchorageLocation, with no names yet, from an anchorage locations row."""
         # A copy: Beam's elements mustn't be modified, other transforms may read them too.
         msg = msg.copy()

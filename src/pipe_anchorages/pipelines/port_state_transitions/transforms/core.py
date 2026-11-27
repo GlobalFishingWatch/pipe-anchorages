@@ -1,7 +1,10 @@
+from typing import Any
+
 import apache_beam as beam
 
 from pipe_anchorages import common as cmn
 from pipe_anchorages.core.namedtuples import datetime_to_s
+from pipe_anchorages.core.visit_location_record import VisitLocationRecord
 from pipe_anchorages.records import VesselLocationRecord
 
 from .anchorage_arrays import to_anchorage_arrays
@@ -10,8 +13,7 @@ from .create_tagged_records_by_day import CreateTaggedRecordsByDay
 from .smart_thin_records import SmartThinRecords
 
 
-# No type hints on the functions Beam maps: it would infer coders from them.
-def record_to_msg(x):
+def record_to_msg(x: VisitLocationRecord) -> dict[str, Any]:
     """Converts a VisitLocationRecord into a row of the output table."""
     x = x._asdict()
     if x["timestamp"] is not None:

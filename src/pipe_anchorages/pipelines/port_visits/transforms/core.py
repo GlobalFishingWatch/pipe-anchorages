@@ -1,6 +1,9 @@
+from typing import Any
+
 import apache_beam as beam
 
 from pipe_anchorages.core.namedtuples import _datetime_to_s
+from pipe_anchorages.core.port_visit import PortVisit
 from pipe_anchorages.core.visit_event import VisitEvent
 from pipe_anchorages.core.visit_location_record import VisitLocationRecord
 from pipe_anchorages.transforms.shrink_group_by import ShrinkGroupBy
@@ -9,7 +12,7 @@ from .create_in_out_events import CreateInOutEvents
 from .create_port_visits import CreatePortVisits
 
 
-def event_to_msg(x: VisitEvent) -> dict:
+def event_to_msg(x: VisitEvent) -> dict[str, Any]:
     """Converts a VisitEvent into a row of the output table's `events` field."""
     x = x._asdict()
     x["timestamp"] = _datetime_to_s(x["timestamp"])
@@ -19,9 +22,7 @@ def event_to_msg(x: VisitEvent) -> dict:
     return x
 
 
-# No type hints on the functions Beam maps: it would infer coders from them, and the
-# registered PortVisitCoder can't encode a visit's events.
-def visit_to_msg(x):
+def visit_to_msg(x: PortVisit) -> dict[str, Any]:
     """Converts a PortVisit into a row of the output table."""
     x = x._asdict()
     x["events"] = [event_to_msg(y) for y in x["events"]]

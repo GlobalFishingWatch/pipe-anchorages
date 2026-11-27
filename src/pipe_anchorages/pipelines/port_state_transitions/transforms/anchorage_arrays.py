@@ -1,5 +1,8 @@
+from typing import Iterable
+
 import numpy as np
 
+from pipe_anchorages.core.pseudo_anchorage import PseudoAnchorage
 from pipe_anchorages.distance import distances
 
 
@@ -28,8 +31,9 @@ class AnchorageArrays:
         return self.anchorages[i], float(km[i])
 
 
-# No type hints: Beam maps it, and would infer coders from them.
-def to_anchorage_arrays(item):
+def to_anchorage_arrays(
+    item: tuple[str, Iterable[PseudoAnchorage]],
+) -> tuple[str, AnchorageArrays]:
     """Converts a (S2 token, anchorages) pair of CreateTaggedAnchorages into AnchorageArrays."""
     token, anchorages = item
     return token, AnchorageArrays(anchorages)

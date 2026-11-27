@@ -1,8 +1,10 @@
 from importlib.resources import files
+from typing import Iterator
 
 import apache_beam as beam
 
 from pipe_anchorages.assets.data import port_lists
+from pipe_anchorages.core.named_anchorage_location import NamedAnchorageLocation
 from pipe_anchorages.get_override_list import get_override_list
 
 
@@ -19,8 +21,7 @@ class FindUsedS2ids(beam.PTransform):
             for row in get_override_list(files(port_lists).joinpath(self.override_path))
         )
 
-    # No type hints on the methods Beam maps: it would infer coders from them.
-    def find_used_s2ids(self, named_anchorage):
+    def find_used_s2ids(self, named_anchorage: NamedAnchorageLocation) -> Iterator[str]:
         """Yields the s2id of `named_anchorage` if it's in the overrides list."""
         if named_anchorage.s2id in self.s2ids_in_overrides:
             yield named_anchorage.s2id

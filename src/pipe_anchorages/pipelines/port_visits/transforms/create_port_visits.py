@@ -1,7 +1,7 @@
 import hashlib
 import logging
 import math
-from typing import Iterator
+from typing import Any, Iterator
 
 import apache_beam as beam
 from pipe_anchorages.core.port_visit import PortVisit
@@ -126,8 +126,9 @@ class CreatePortVisits(beam.PTransform):
         dist_nm = math.hypot(dlat, scale * dlon) * 60
         return dist_nm > self.max_interseg_dist_nm
 
-    # No type hints: Beam would infer coders from them (PortVisitCoder can't encode events).
-    def create_port_visits(self, tagged_events):
+    def create_port_visits(
+        self, tagged_events: tuple[Any, list[VisitEvent]]
+    ) -> Iterator[PortVisit]:
         """Yields the visits of one vessel's (grouping id, events) pair.
 
         N.B. `evt.event_type in "PORT_ENTRY"` is a substring check, not an equality one;

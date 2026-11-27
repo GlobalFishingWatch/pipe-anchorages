@@ -1,4 +1,5 @@
 from importlib.resources import files
+from typing import Iterable, Iterator
 
 import apache_beam as beam
 
@@ -21,8 +22,9 @@ class CreateOverrideAnchorages(beam.PTransform):
         self.override_path = override_path
         self.used_s2ids = used_s2ids
 
-    # No type hints on the methods Beam maps: it would infer coders from them.
-    def create_override_anchorages(self, dummy, used_s2ids):
+    def create_override_anchorages(
+        self, dummy: None, used_s2ids: Iterable[str]
+    ) -> Iterator[NamedAnchorageLocation]:
         """Yields the overrides' anchorages whose s2id isn't in `used_s2ids`."""
         used_s2ids = set(used_s2ids)
         for row in get_override_list(files(port_lists).joinpath(self.override_path)):

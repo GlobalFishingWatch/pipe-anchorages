@@ -42,8 +42,7 @@ class AddNamesToAnchorages(beam.PTransform):
             self._port_info_finder = PortInfoFinder.from_config(self.config)
         return self._port_info_finder
 
-    # No type hints on the methods Beam maps: it would infer coders from them.
-    def add_best_label(self, anchorage):
+    def add_best_label(self, anchorage: NamedAnchorageLocation) -> NamedAnchorageLocation:
         """Returns `anchorage` with the label, sublabel, iso3 and label_source of its place."""
         port_info, source = self.port_info_finder.find(anchorage.mean_location)
         if port_info is None:
@@ -64,7 +63,7 @@ class AddNamesToAnchorages(beam.PTransform):
         map["label_source"] = source
         return NamedAnchorageLocation(**map)
 
-    def add_iso3(self, named_anchorage):
+    def add_iso3(self, named_anchorage: NamedAnchorageLocation) -> NamedAnchorageLocation:
         """Returns `named_anchorage` with its EEZ's iso3 if it has none, and China's override."""
         if named_anchorage.iso3 is None:
             finder = get_iso3_finder(files(EEZ).joinpath(self.shapefile_path))

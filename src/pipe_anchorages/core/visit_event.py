@@ -1,7 +1,5 @@
 from collections import namedtuple
 
-from .namedtuples import NamedtupleCoder
-
 VisitEvent = namedtuple(
     "VisitEvent",
     [
@@ -18,11 +16,3 @@ VisitEvent = namedtuple(
         "last_timestamp",
     ],
 )
-
-
-class VisitEventCoder(NamedtupleCoder):
-    target = VisitEvent
-    time_fields = ["timestamp", "last_timestamp"]
-
-
-VisitEventCoder.register()
