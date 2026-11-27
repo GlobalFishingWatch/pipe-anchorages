@@ -8,7 +8,7 @@
      <img alt="Coverage" src="https://codecov.io/github/globalfishingwatch/pipe-anchorages/branch/main/graph/badge.svg?token=FSPWG081MD"/>
   </a>
   <a>
-    <img alt="Python versions" src="https://img.shields.io/badge/python-3.12%20%7C%203.13%20%7C%203.14-blue">
+    <img alt="Python versions" src="https://img.shields.io/badge/python-3.13%20%7C%203.14-blue">
   </a>
   <a>
     <img alt="Last release" src="https://img.shields.io/github/v/release/GlobalFishingWatch/pipe-anchorages">

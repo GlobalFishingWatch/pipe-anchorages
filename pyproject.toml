@@ -31,12 +31,11 @@ maintainers = [
 ]
 classifiers = [
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 
 ]
-requires-python = ">= 3.12"
+requires-python = ">= 3.13"
 dependencies = [
   "apache-beam[gcp]~=2.78",
   "Fiona<2",
@@ -93,7 +92,7 @@ build = [
 fix = true
 line-length = 99
 src = ["src", "tests"]
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -129,7 +128,7 @@ known-first-party = ["gfw", "tests"]
 convention = "google"
 
 [tool.black]
-target-version = ["py312"]
+target-version = ["py313"]
 line-length = 99
 
 [tool.isort]
