@@ -54,6 +54,10 @@ jobs:
         # make uv pins .python-version to 3.13; --python makes the venv use the matrix version.
         run: uv venv --python ${{ matrix.python-version }} $VENV
 
+      - name: Install GDAL
+        # Fiona has no wheel for Python 3.14, so it is built from source against GDAL.
+        run: sudo apt-get update && sudo apt-get install -y libgdal-dev
+
       - name: Install package with test dependencies
         run: |
           . $VENV/bin/activate
