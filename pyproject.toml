@@ -37,7 +37,7 @@ classifiers = [
 ]
 requires-python = ">= 3.12"
 dependencies = [
-  "apache-beam[gcp]~=2.76",
+  "apache-beam[gcp]~=2.78",
   "Fiona<2",
   "gfw-common[bq,beam]~=0.25.0",
   "numpy~=2.0",
